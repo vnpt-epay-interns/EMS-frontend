@@ -28,4 +28,15 @@
         padding: 0 30px;
         padding: 10px;
     }
+
+    .logo img {
+        object-fit: contain;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 </style>
