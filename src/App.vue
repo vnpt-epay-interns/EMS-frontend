@@ -1,10 +1,11 @@
+
 <script setup>
 import Register from './views/auth/Register/Register.vue';
 import SelectingRolePage from './views/auth/Register/SelectingRolePage.vue';
 </script>
 
 <template>
-  <SelectingRolePage />
+  <Register />
 </template>
 
 <style>
@@ -20,4 +21,6 @@ import SelectingRolePage from './views/auth/Register/SelectingRolePage.vue';
   font-family: 'Poppins', sans-serif;
   ;
 }
+
+    
 </style>
