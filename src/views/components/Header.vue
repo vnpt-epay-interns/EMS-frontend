@@ -5,7 +5,7 @@
 <template>
     <header>
         <div class="logo">
-            <img src="" alt="">
+            <img src="../../assets/logo/logo1.png" alt="">
         </div>
         <div class="project_description_container">
             <div class="short-hand">
