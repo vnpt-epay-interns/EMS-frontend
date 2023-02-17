@@ -2,7 +2,7 @@
 import RegisterForm from './RegisterForm.vue';
 </script>
 <template>
-
+    <div id="logo"></div>
     <div class="register">
         <div class="register__container">
             <div class="register__container__header">
@@ -22,6 +22,7 @@ import RegisterForm from './RegisterForm.vue';
 </template>
 
 <style scoped>
+
     * {
         margin: 0;
         padding: 0;

@@ -1,9 +1,10 @@
 <script setup>
 import Register from './views/auth/Register/Register.vue';
+import SelectingRolePage from './views/auth/Register/SelectingRolePage.vue';
 </script>
 
 <template>
-  <Register />
+  <SelectingRolePage />
 </template>
 
 <style>
