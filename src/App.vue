@@ -1,6 +1,19 @@
 <script setup>
+  import Register from './views/auth/Register/Register.vue';
 </script>
 
-<template></template>
+<template>
+    <Register />
+</template>
 
-<style scoped></style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+
+:root {
+  --primary: #263159;
+}
+  * {
+        margin: 0;
+        padding: 0;
+    }
+</style>
