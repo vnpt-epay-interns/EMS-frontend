@@ -1,9 +1,9 @@
 <script setup>
-  import Register from './views/auth/Register/Register.vue';
+import Register from './views/auth/Register/Register.vue';
 </script>
 
 <template>
-    <Register />
+  <Register />
 </template>
 
 <style>
@@ -12,8 +12,11 @@
 :root {
   --primary: #263159;
 }
-  * {
-        margin: 0;
-        padding: 0;
-    }
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  ;
+}
 </style>

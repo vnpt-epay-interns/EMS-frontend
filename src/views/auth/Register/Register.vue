@@ -31,13 +31,12 @@ import RegisterForm from './RegisterForm.vue';
         height: 100vh;
         display: flex;
         justify-content: center;
-        font-family: 'Poppins', sans-serif;
 
     }
 
     .register__container {
         width: 35%;
-        max-width: 1000px;
+        max-width: 800px;
         background: white;
         padding: 20px 50px;
     }
