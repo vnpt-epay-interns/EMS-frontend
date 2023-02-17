@@ -5,7 +5,7 @@
                 <label for="email" class="login__container__body__form__group__label">Email</label>
                 <div class="input_container">
                     <input type="email" id="email" class="login__container__body__form__group__input" placeholder="Email" v-model="email" />
-                    <img src="" alt="">
+                    <font-awesome-icon icon="fa-solid fa-xmark" />
                 </div>
             </div>
             <div class="login__container__body__form__group">
