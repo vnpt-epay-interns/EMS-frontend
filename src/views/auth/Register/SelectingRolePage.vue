@@ -4,10 +4,10 @@ import Header from '../../components/Header.vue';
 </script>
 
 <template>
-            <Header />
 
     <main> 
         <div class="selecting-role">
+            <Header />
             <h1>Choose the account type</h1>
             <p>Please choose your role in the organization</p>
             <div class="role-container">
@@ -31,7 +31,6 @@ import Header from '../../components/Header.vue';
 <style scoped>
     main {
         background-color: var(--primary);
-        text-align: center;
         height: 100vh;
         display: flex;
         justify-content: center;
@@ -39,8 +38,6 @@ import Header from '../../components/Header.vue';
     }
 
     .selecting-role {
-        /* margin-top: 50px; */
-        padding-top: 100px;
         width: 35%;
         max-width: 800px;
         background: white;

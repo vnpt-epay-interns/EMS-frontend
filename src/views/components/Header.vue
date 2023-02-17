@@ -20,10 +20,7 @@
     display: flex;
     gap: 10px;
     width: fit-content;
-    position: absolute;
-    top: 20px;
-    right: 50%;
-    transform: translateX(50%);
+    margin: 10px auto 30px auto;     
 }
 
 img {
