@@ -58,7 +58,7 @@ function toggleShowPassword() {
     margin: 40px 0;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-gap: 30px 20px
+    grid-gap: 20px 20px
 }
 
 .input-email {

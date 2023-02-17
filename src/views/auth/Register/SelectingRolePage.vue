@@ -1,9 +1,12 @@
 <script setup>
+import Header from '../../components/Header.vue';
 
 </script>
 
 <template>
-    <main>
+            <Header />
+
+    <main> 
         <div class="selecting-role">
             <h1>Choose the account type</h1>
             <p>Please choose your role in the organization</p>
@@ -32,17 +35,19 @@
         height: 100vh;
         display: flex;
         justify-content: center;
+        /* margin-top: 100px */
     }
 
     .selecting-role {
-        padding: 20px 50px;
+        /* margin-top: 50px; */
+        padding-top: 100px;
         width: 35%;
         max-width: 800px;
         background: white;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 50px;
+        gap: 20px;
     }
 
     .role-container {
@@ -60,7 +65,7 @@
         margin-bottom: 5px;
         cursor: pointer;
         filter: grayscale();
-        transition: all 0.1s ease-in-out;
+        transition: all 0.3s ease-in-out;
     }
 
     .human-icon:hover {

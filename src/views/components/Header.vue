@@ -1,42 +1,44 @@
-<script setup>
+<template>
+    <div class="logo">
+        <img src="../../assets/logo/logo1.png" alt="">
+        <div class="name">
+            <h2>EMS</h2>
+            <h4>Employee Management System</h4>
+        </div>
+    </div>
+</template>
+
+<script>
+
 
 </script>
 
-<template>
-    <header>
-        <div class="logo">
-            <img src="../../assets/logo/logo1.png" alt="">
-        </div>
-        <div class="project_description_container">
-            <div class="short-hand">
-                EMS
-            </div>
-            <div class="long-hand">
-                Employee Management System
-            </div>
-        </div>
-    </header>
-</template>
-
 <style scoped>
-    header {
-        display: flex;
-        justify-content: flex-start;
-        gap: 10px;
-        align-items: center;
-        width: 100%;
-        padding: 0 30px;
-        padding: 10px;
-    }
+.logo {
+    width: 35%;
+    max-width: 800px;   
+    display: flex;
+    gap: 10px;
+    width: fit-content;
+    position: absolute;
+    top: 20px;
+    right: 50%;
+    transform: translateX(50%);
+}
 
-    .logo img {
-        object-fit: contain;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background-color: #fff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+img {
+    width: 50px;
+    height: auto;
+}
+
+.name {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+h2, h4{
+    margin: 0;
+    font-size: 10px;
+}
 </style>

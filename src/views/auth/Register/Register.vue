@@ -1,7 +1,9 @@
 <script setup>
+import Header from '../../components/Header.vue';
 import RegisterForm from './RegisterForm.vue';
 </script>
 <template>
+    <Header />
     <div id="logo"></div>
     <div class="register">
         <div class="register__container">
@@ -35,11 +37,17 @@ import RegisterForm from './RegisterForm.vue';
 
     }
 
+    h1 {
+        text-align: center;
+        font-size: 25px;
+        /* border-bottom: 1px solid #ccc; */
+    }
     .register__container {
         width: 35%;
         max-width: 800px;
         background: white;
         padding: 20px 50px;
+        padding-top: 100px;
     }
 
     
