@@ -1,9 +1,9 @@
 <script setup>
-    import Login from '@/views/auth/Login/Login.vue'
+    import ManagerCode from './views/auth/Register/ManagerCode.vue';
 </script>
 
 <template>
-    <Login />
+    <ManagerCode />
 </template>
 
 <style>
@@ -13,7 +13,8 @@
     --primary: #263159;
     }
     * {
-            margin: 0;
-            padding: 0;
-        }
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+    }
 </style>
