@@ -1,6 +1,16 @@
+
+<template>
+
+    <Header />
+</template>
 <script setup>
+
+import Header from './views/components/Header.vue'
+    
 </script>
 
-<template></template>
 
-<style scoped></style>
+
+<style scoped>
+
+</style>
