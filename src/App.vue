@@ -2,60 +2,62 @@
 <template>
     <div class="app">
         <Sidebar />
-
         <router-view>
 
         </router-view>
-    </div>
+        <User />
+</div>
+
+
 </template>
 
 <script setup>
 
-import Header from './views/components/Header.vue'
-import Sidebar from './views/components/Sidebar.vue'
-
-
+// import Header from './views/components/Header.vue'
+// import Sidebar from './views/components/Sidebar.vue'
+import User from './views/components/User.vue'
 </script>
 
 
 
 <style lang="scss">
-:root {
-    ---primary: #4ade80;
-    --grey: #64748b;
-    --dark: #1e293b;
-    --dark-alt: #334155;
-    --sidebar-width: 300px;
-}
+// :root {
+//     ---primary: #4ade80;
+//     --grey: #64748b;
+//     --dark: #1e293b;
+//     --dark-alt: #334155;
+//     --sidebar-width: 300px;
+// }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+// * {
+//     margin: 0;
+//     padding: 0;
+//     box-sizing: border-box;
+// }
 
-body {
-    background: var(--light);
-}
+// body {
+//     background: var(--light);
+// }
 
-button {
-    cursor: pointer;
-    appearance: none;
-    border: none;
-    outline: none;
-    background: none;
-}
+// button {
+//     cursor: pointer;
+//     appearance: none;
+//     border: none;
+//     outline: none;
+//     background: none;
+// }
 
-.app {
-    display: flex;
+// .app {
+//     display: flex;
 
-    main {
-        flex: 1 1 0;
-        padding: 2rem;
-        @media (max-width: 768px) {
-            padding: 6rem;
-        }
-    }
+//     main {
+//         flex: 1 1 0;
+//         padding: 2rem;
+//         @media (max-width: 768px) {
+//             padding: 6rem;
+//         }
+//     }
 
-}
+// }
+
 </style>
