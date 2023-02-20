@@ -7,20 +7,14 @@
             <h3 class="user__name">John Doe</h3>
             <p class="user__role">Administrator</p>
         </div>
-        <div class="user_detail">
-            <div class="fullName">
-                <p class="firstName">First Name</p>
-                <p class="lastName">Last Name</p>
-            </div>
-            <p class="email">Email</p>
-        </div>
+        <ProfileDetail />
     </div>
 </template>
 
 <script setup>
 
     import avatarURL from '../../assets/avatar/avatar1.jpg'
-
+    import ProfileDetail from './ProfileDetail.vue'
 
 </script>
  
