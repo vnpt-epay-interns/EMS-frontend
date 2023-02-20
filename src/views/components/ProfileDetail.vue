@@ -70,10 +70,13 @@ label {
 button {
     background-color: #263159;
     color: white;
-    padding: 19px 142px;
+    padding: 15px 50px;
     border-bottom-right-radius: 15px;
     border-bottom-left-radius: 15px;
     border-top-right-radius: 15px;
-    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+    font-size: 15px;
 }
+
+
 </style>

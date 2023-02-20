@@ -20,7 +20,7 @@
  
 <style>
 .user {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Inter', sans-serif;
     display: flex;
     flex-direction: column;
     justify-content: center;
