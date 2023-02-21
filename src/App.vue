@@ -1,4 +1,3 @@
-
 <script setup>
 import Register from './views/auth/Register/Register.vue';
 import SelectingRolePage from './views/auth/Register/SelectingRolePage.vue';
@@ -22,6 +21,4 @@ import { RouterView } from 'vue-router';
   padding: 0;
   font-family: 'Poppins', sans-serif;
 }
-
-    
 </style>
