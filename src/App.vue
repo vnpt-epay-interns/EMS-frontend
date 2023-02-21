@@ -2,10 +2,11 @@
 <script setup>
 import Register from './views/auth/Register/Register.vue';
 import SelectingRolePage from './views/auth/Register/SelectingRolePage.vue';
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
-  <Register />
+  <RouterView />
 </template>
 
 <style>

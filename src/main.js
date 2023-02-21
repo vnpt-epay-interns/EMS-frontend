@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import router from './router/index'
 import './assets/main.css'
 
 /* import the fontawesome core */
@@ -15,5 +16,6 @@ import { faArrowRight, faUserSecret, faXmark, faEye, faEyeSlash } from '@fortawe
 library.add(faUserSecret, faArrowRight, faXmark, faEye, faEyeSlash )
 
 createApp(App)
+.use(router)
 .component('font-awesome-icon', FontAwesomeIcon)
 .mount('#app')
