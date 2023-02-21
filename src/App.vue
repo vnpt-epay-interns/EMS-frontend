@@ -14,6 +14,7 @@ import { RouterView } from 'vue-router';
 
 :root {
   --primary: #263159;
+  --primary-hover: #40559f;
 }
 
 * {
