@@ -1,9 +1,9 @@
 <script setup>
-    import ManagerCode from './views/auth/Register/ManagerCode.vue';
+    import Report from "./views/Report.vue";
 </script>
 
 <template>
-    <ManagerCode />
+    <Report />
 </template>
 
 <style>
@@ -16,4 +16,5 @@
         padding: 0;
         font-family: 'Poppins', sans-serif;
     }
+
 </style>

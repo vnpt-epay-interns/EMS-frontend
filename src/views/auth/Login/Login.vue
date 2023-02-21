@@ -35,14 +35,13 @@
         max-width: 800px;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        gap: 20px;
         align-items: center;
         background: #fff;
         padding: 0 30px 0;
     }
 
     .login {
-        margin-bottom: 56px;
         font-style: normal;
     }
 

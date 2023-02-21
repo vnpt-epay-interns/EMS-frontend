@@ -62,7 +62,6 @@
         color: #667085;
     }
     .content {
-        padding-top: 100px;
         display: flex;
         flex-direction: column;
         justify-content: center;

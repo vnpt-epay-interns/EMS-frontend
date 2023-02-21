@@ -3,6 +3,7 @@
 
     const email = ref('')
     const showPassword = ref(false)
+    const active = ref(false)
 
     const togglePassword = () => {
         showPassword.value = !showPassword.value
