@@ -161,6 +161,7 @@
         display: grid;
         justify-content: space-between;
         grid-template-columns: 150px 150px;
+        row-gap: 20px;
     }
 
     footer {

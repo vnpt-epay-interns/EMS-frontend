@@ -1,9 +1,9 @@
 <script setup>
-    import Report from "./views/Report.vue";
+    import Task from "./views/Task.vue";
 </script>
 
 <template>
-    <Report />
+    <Task />
 </template>
 
 <style>
