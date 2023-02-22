@@ -15,13 +15,16 @@
 
 <style scoped>
 .logo {
+    width: 35%;
+    max-width: 800px;   
     display: flex;
     gap: 10px;
-    align-items: center;
+    width: fit-content;
+    margin: 10px auto 30px auto;     
 }
 
 img {
-    width: 100px;
+    width: 50px;
     height: auto;
 }
 
@@ -33,5 +36,6 @@ img {
 
 h2, h4{
     margin: 0;
+    font-size: 10px;
 }
 </style>

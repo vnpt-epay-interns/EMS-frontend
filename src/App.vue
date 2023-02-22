@@ -1,26 +1,18 @@
 
-<template>
-    <div class="app">
-        <Sidebar />
-        <router-view>
-
-        </router-view>
-        <User />
-</div>
-
-
-</template>
-
 <script setup>
-
-// import Header from './views/components/Header.vue'
-// import Sidebar from './views/components/Sidebar.vue'
-import User from './views/components/User.vue'
+import Register from './views/auth/Register/Register.vue';
+import SelectingRolePage from './views/auth/Register/SelectingRolePage.vue';
+import { RouterView } from 'vue-router';
 </script>
 
+<template>
+  <RouterView />
+</template>
 
+<style lang="scss" scoped>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
 
-<style lang="scss">
+/* //<style >
 // :root {
 //     ---primary: #4ade80;
 //     --grey: #64748b;
@@ -59,5 +51,15 @@ import User from './views/components/User.vue'
 //     }
 
 // }
+//======= */
+:root {
+  --primary: #263159;
+  --primary-hover: #40559f;
+}
 
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
 </style>
