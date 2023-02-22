@@ -1,18 +1,26 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+import HomePage from '../views/pages/HomePage.vue'
 import Login from '../views/auth/Login/Login.vue'
 import Register from '../views/auth/Register/Register.vue'
 import ViewReportDetails from '../views/pages/ViewReportDetails.vue'
 import ViewAllReports from '../views/pages/ViewAllReports.vue'
 import ViewAllWorkingSchedules from '../views/pages/ViewAllWorkingSchedules.vue'
+import TaskPage from '../views/pages/TaskPage.vue'
+import WriteReportPage from '../views/pages/WriteReportPage.vue'
+import EnterManagerCodePage from '../views/pages/EnterManagerCodePage.vue'
+import SelectRolePage from '../views/pages/SelectRolePage.vue'
 
-import Report from '../views/components/Report.vue'
+
 export default createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/',
-            component: ViewAllWorkingSchedules
+            component: HomePage
+        },
+        {
+            path: '/home',
+            redirect: '/'
         },
         {
             path: '/login',
@@ -29,6 +37,26 @@ export default createRouter({
         {
             path: '/report/:id/details',
             component: ViewReportDetails
+        },
+        {
+            path: '/task',
+            component: TaskPage
+        },
+        {
+            path: '/schedule',
+            component: ViewAllWorkingSchedules
+        },
+        {
+            path: '/write-report',
+            component: WriteReportPage
+        },
+        {
+            path: '/enter-manager-code',
+            component: EnterManagerCodePage
+        },
+        {
+            path: '/select-role',
+            component: SelectRolePage
         }
     ]
 })

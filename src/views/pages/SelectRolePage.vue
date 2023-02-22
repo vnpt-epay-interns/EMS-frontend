@@ -1,5 +1,5 @@
 <script setup>
-import Header from '../../components/Header.vue';
+import Header from '../components/Header.vue';
 
 </script>
 
@@ -44,7 +44,9 @@ import Header from '../../components/Header.vue';
         display: flex;
         flex-direction: column;
         align-items: center;
+        padding: 0 30px 0;
         gap: 20px;
+        text-align: center; 
     }
 
     .role-container {

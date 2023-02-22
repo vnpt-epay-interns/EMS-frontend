@@ -49,6 +49,7 @@
 
     .report__mark_as_read_btn {
         margin-top: 50px;
+        width: fit-content;
         padding: 10px 20px;
         background: var(--primary);
         color: white;

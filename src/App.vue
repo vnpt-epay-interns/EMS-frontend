@@ -1,6 +1,6 @@
 <script setup>
 import Register from './views/auth/Register/Register.vue';
-import SelectingRolePage from './views/auth/Register/SelectingRolePage.vue';
+import SelectingRolePage from './views/pages/SelectRolePage.vue';
 import { RouterView } from 'vue-router';
 </script>
 
