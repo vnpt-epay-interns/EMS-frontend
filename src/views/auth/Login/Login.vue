@@ -28,7 +28,7 @@
         justify-content: center;
         align-items: center;
         min-height: 100vh;
-        height: fit-content
+        height: fit-content;
     }
 
     .container {

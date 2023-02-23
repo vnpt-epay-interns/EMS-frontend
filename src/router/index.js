@@ -9,6 +9,8 @@ import TaskPage from '../views/pages/TaskPage.vue'
 import WriteReportPage from '../views/pages/WriteReportPage.vue'
 import EnterManagerCodePage from '../views/pages/EnterManagerCodePage.vue'
 import SelectRolePage from '../views/pages/SelectRolePage.vue'
+import Task from '../views/components/Task.vue'
+import DashboardPage from '../views/pages/DashboardPage.vue'
 
 
 export default createRouter({
@@ -16,7 +18,7 @@ export default createRouter({
     routes: [
         {
             path: '/',
-            component: HomePage
+            component: DashboardPage
         },
         {
             path: '/home',
