@@ -20,6 +20,7 @@
  
 <style>
 .user {
+    padding-top: 15rem;
     font-family: 'Inter', sans-serif;
     display: flex;
     flex-direction: column;
@@ -30,7 +31,6 @@
     margin-bottom: auto;
     background-color: #fff;
     border-radius: 0.5rem;
-    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
     margin-bottom: 1rem;
 }
 
@@ -50,14 +50,12 @@
 .user__info {
     display: flex;
     flex-direction: column;
+    font-size: 24px;
+    padding: 10px
 }
 .fullName {
     display: flex;
     justify-content: space-between;
 }
-
-.email {
-    display: flex;
-    align-items:flex-start
-}
+           
 </style>

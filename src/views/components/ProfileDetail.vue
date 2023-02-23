@@ -27,44 +27,59 @@
 </script>
 
 <style>
-
 form {
     width: 100%;
 }
 
+input {
+    font-size: 20px;
+    background-color: #FAFDFF;
+    padding: 2px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 0.5px solid rgba(0, 0, 0, 0.219);
+    font-family: 'Poppins', sans-serif;
+    margin-top: 10px
+}
 label {
     display: flex;
+    font-size: 16px;
 }
 
 .fullname {
     display: flex;
     justify-content: space-between;
-    margin-top: 5rem;;
+    margin-top: 5rem;
     margin-bottom: 1rem;
-
+    padding-bottom: 30px;
 }
 
 .profile_firstname {
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-    padding-left: 400px;
+    padding-left: 600px;
+    font-size: 20px;
+
 }
 
 .profile_lastname {
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-    padding-right: 400px;
+    padding-right: 600px;
+    font-size: 20px;
 }
 
 .profile_email {
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-    padding-left: 400px;
-    padding-right: 400px;
+    padding-left: 600px;
+    padding-right: 600px;
     margin-bottom: 50px;
+    font-size: 20px;
+
 }
 
 button {
@@ -79,4 +94,20 @@ button {
 }
 
 
+button {
+        font-family: 'Poppins', sans-serif;
+        width: fit-content;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 20px;
+        font-size: 20px;
+        background: #536FD8;
+        color: white;
+        cursor: pointer;
+        transition: all 0.5s ease-in-out;
+    }
+    button:hover {
+        background: #1437b5;
+
+    }
 </style>
