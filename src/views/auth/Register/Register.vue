@@ -1,6 +1,8 @@
 <script setup>
 import Header from '../../components/Header.vue';
 import RegisterForm from './RegisterForm.vue';
+
+
 </script>
 <template>
     

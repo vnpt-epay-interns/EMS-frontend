@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="report">
         <div class="report__status"></div>
         <div class="content">
             <p class="report__created_date">12/02/2023</p>
@@ -14,7 +14,7 @@
 </script>
 
 <style lang="scss" scoped>
-.container {
+.report {
     // padding: 0;
     display: flex;
     height: 100px;

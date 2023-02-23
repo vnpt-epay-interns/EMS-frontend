@@ -38,6 +38,8 @@
         flex-direction: column;
         gap: 20px;
         align-items: center;
+                min-height: 60vh;
+
         background: #fff;
         padding: 0 30px 0;
     }

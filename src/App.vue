@@ -1,7 +1,7 @@
 
 <script setup>
 import Register from './views/auth/Register/Register.vue';
-import SelectingRolePage from './views/auth/Register/SelectingRolePage.vue';
+import SelectingRolePage from './views/pages/SelectRolePage.vue';
 import { RouterView } from 'vue-router';
 </script>
 
@@ -9,7 +9,7 @@ import { RouterView } from 'vue-router';
   <RouterView />
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
 
 /* //<style >
@@ -52,6 +52,7 @@ import { RouterView } from 'vue-router';
 
 // }
 //======= */
+
 :root {
   --primary: #263159;
   --primary-hover: #40559f;
