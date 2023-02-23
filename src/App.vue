@@ -1,11 +1,12 @@
 
 <template>
     <div class="app">
-        <Sidebar />
+        <!-- <Sidebar /> -->
         <router-view>
 
         </router-view>
-        <User />
+        <!-- <User /> -->
+        <ListEmployee />
 </div>
 
 
@@ -15,25 +16,26 @@
 
 // import Header from './views/components/Header.vue'
 // import Sidebar from './views/components/Sidebar.vue'
-import User from './views/components/User.vue'
+// import User from './views/components/User.vue'
+import ListEmployee from './views/components/ListEmployee.vue'
 </script>
 
 
 
 <style lang="scss">
-// :root {
-//     ---primary: #4ade80;
-//     --grey: #64748b;
-//     --dark: #1e293b;
-//     --dark-alt: #334155;
-//     --sidebar-width: 300px;
-// }
+:root {
+    ---primary: #4ade80;
+    --grey: #64748b;
+    --dark: #1e293b;
+    --dark-alt: #334155;
+    --sidebar-width: 300px;
+}
 
-// * {
-//     margin: 0;
-//     padding: 0;
-//     box-sizing: border-box;
-// }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 // body {
 //     background: var(--light);
