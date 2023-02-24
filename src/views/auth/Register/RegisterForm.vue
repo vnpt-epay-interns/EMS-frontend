@@ -12,6 +12,7 @@ function toggleShowPassword() {
 </script>
 
 <template>
+    <div class="register__container__form">
     <form>
         <div class="register__container__form__input">
             <label for="name">First name</label>
@@ -51,17 +52,25 @@ function toggleShowPassword() {
             <label for="password2">Confirm Password</label>
             <input type="password" name="password2" id="password2" placeholder="********" />
         </div>
+
         <div class="register__container__form__input">
             <button>
                 <font-awesome-icon icon="fa-solid fa-arrow-right" />
             </button>
         </div>
     </form>
+            
+        </div>
 </template>
 
 <style scoped>
 
+
+.register__container__form {
+    max-width: 800px;
+}
 .register__container__form form {
+
     margin: 40px 0;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -134,6 +143,7 @@ button:hover {
 
 .showPassword__input:checked + .fa { color: red; }
 
+ HEAD
 .register__container__form form {
         margin: 40px 0;
         display: grid;

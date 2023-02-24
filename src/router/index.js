@@ -9,16 +9,24 @@ import TaskPage from '../views/pages/TaskPage.vue'
 import WriteReportPage from '../views/pages/WriteReportPage.vue'
 import EnterManagerCodePage from '../views/pages/EnterManagerCodePage.vue'
 import SelectRolePage from '../views/pages/SelectRolePage.vue'
-import Task from '../views/components/Task.vue'
+import TaskHEAD from '../views/components/Task.vue'
 import DashboardPage from '../views/pages/DashboardPage.vue'
 import Sidebar from '../views/components/Sidebar.vue'
 import ProfileDetail from '../views/components/ProfileDetail.vue'
+import ProjectManagementPage from '../views/pages/ProjectManagementPage.vue'
+import ListEmployeePage from '../views/pages/ListEmployeePage.vue'
+// import ProjectManagementPage from '../views/pages/ProjectManagementPage.vue'
+
 export default createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/dashboard',
             component: DashboardPage
+        },
+        {
+            path: '/',
+            redirect: '/dashboard',
         },
         {
             path: '/home',
@@ -34,11 +42,11 @@ export default createRouter({
         },
         {
             path: '/employee',
-            component: HomePage
+            component: ListEmployeePage
         },
         {
             path: '/project',
-            component: HomePage
+            component: ProjectManagementPage
         },
 
         {

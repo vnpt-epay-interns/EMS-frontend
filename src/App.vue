@@ -11,6 +11,7 @@ const showSidebar = ref(!['/register', '/login'].includes(window.location.pathna
 
 </script>
 
+
 <template>
   <div class="wrapper1" v-if="showSidebar">
     <Sidebar />
@@ -21,7 +22,7 @@ const showSidebar = ref(!['/register', '/login'].includes(window.location.pathna
   </div>
 </template>
 
-<style>
+<style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
 
 :root {
