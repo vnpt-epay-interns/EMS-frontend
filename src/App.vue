@@ -1,30 +1,8 @@
 
-<<<<<<< HEAD
 <script setup>
 import Register from './views/auth/Register/Register.vue';
 import SelectingRolePage from './views/pages/SelectRolePage.vue';
 import { RouterView } from 'vue-router';
-=======
-<template>
-    <div class="app">
-        <!-- <Sidebar /> -->
-        <router-view>
-
-        </router-view>
-        <!-- <User /> -->
-        <ListEmployee />
-</div>
-
-
-</template>
-
-<script setup>
-
-// import Header from './views/components/Header.vue'
-// import Sidebar from './views/components/Sidebar.vue'
-// import User from './views/components/User.vue'
-import ListEmployee from './views/components/ListEmployee.vue'
->>>>>>> 207604ebf02280d7b5df677bb0ccbf3fd6ce2f62
 </script>
 
 <template>
