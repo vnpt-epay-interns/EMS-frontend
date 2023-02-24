@@ -22,7 +22,7 @@ const showSidebar = ref(!['/register', '/login'].includes(window.location.pathna
   </div>
 </template>
 
-<style lang="scss">
+<style >
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
 
 :root {
