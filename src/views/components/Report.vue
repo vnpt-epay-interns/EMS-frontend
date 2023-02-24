@@ -22,6 +22,7 @@
     gap: 20px;
     align-items: center;
     background: #E6ECF0;
+    cursor: pointer;
 
     .report__status {
         background-color: #76CC8E;

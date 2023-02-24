@@ -70,6 +70,7 @@ import Day from '../components/Day.vue'
 
 <style lang="scss" scoped>
 .calendar {
+    padding: 20px;
     header {
         display: flex;
         gap: 40px;

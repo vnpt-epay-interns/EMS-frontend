@@ -8,6 +8,7 @@ const showPassword = ref(false)
 function toggleShowPassword() {
     showPassword.value = !showPassword.value
 }
+
 </script>
 
 <template>
@@ -43,7 +44,13 @@ function toggleShowPassword() {
             <input :type="showPassword ? 'text' : 'password'" name="confirmedPassword" id="confirmedPassword"
                 placeholder="********" v-model="confirmedPassword">
         </div>
-
+        <div class="register__container__form__input">
+            <input type="password" name="password" id="password" placeholder="********" />
+        </div>
+        <div class="register__container__form__input">
+            <label for="password2">Confirm Password</label>
+            <input type="password" name="password2" id="password2" placeholder="********" />
+        </div>
         <div class="register__container__form__input">
             <button>
                 <font-awesome-icon icon="fa-solid fa-arrow-right" />
@@ -127,4 +134,52 @@ button:hover {
 
 .showPassword__input:checked + .fa { color: red; }
 
+.register__container__form form {
+        margin: 40px 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 30px 20px
+    }
+
+    .input-email {
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
+    
+    .register__container__form__input {
+        display: flex;
+        flex-direction: column
+    }
+
+    input {
+        padding: 10px;
+        border-radius: 5px;
+        border: 0.5px solid rgba(0, 0, 0, 0.219);
+        font-family: 'Poppins', sans-serif;
+    }
+
+    input::placeholder {
+        color: rgba(0, 0, 0, 0.219);
+    }
+
+    input:focus {
+        outline: none;
+    }
+
+    button {
+        font-family: 'Poppins', sans-serif;
+        width: fit-content;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 20px;
+        font-size: 20px;
+        background: #536FD8;
+        color: white;
+        cursor: pointer;
+        transition: all 0.5s ease-in-out;
+    }
+    button:hover {
+        background: #1437b5;
+
+    }
 </style>

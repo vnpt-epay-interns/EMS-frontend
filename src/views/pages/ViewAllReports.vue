@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="all__report__page">
         <h1>All reports</h1>
         <div class="report-container">
             <Report />
@@ -14,8 +14,9 @@ import Report from '../components/Report.vue';
 </script>
 
 <style lang="scss" scoped>
-    .container {
-        
+    .all__report__page {
+        padding: 20px;
+
         h1 {
             margin-bottom: 20px;
         }

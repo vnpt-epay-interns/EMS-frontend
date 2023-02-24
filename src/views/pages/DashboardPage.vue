@@ -30,6 +30,7 @@
 
 <script setup lang="ts">
 import Task from '../components/Task.vue';
+import Sidebar from '../components/Sidebar.vue';
 </script>
 
 <style lang="scss" scoped>

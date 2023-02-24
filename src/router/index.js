@@ -11,13 +11,13 @@ import EnterManagerCodePage from '../views/pages/EnterManagerCodePage.vue'
 import SelectRolePage from '../views/pages/SelectRolePage.vue'
 import Task from '../views/components/Task.vue'
 import DashboardPage from '../views/pages/DashboardPage.vue'
-
-
+import Sidebar from '../views/components/Sidebar.vue'
+import ProfileDetail from '../views/components/ProfileDetail.vue'
 export default createRouter({
     history: createWebHistory(),
     routes: [
         {
-            path: '/',
+            path: '/dashboard',
             component: DashboardPage
         },
         {
@@ -28,6 +28,19 @@ export default createRouter({
             path: '/login',
             component: Login
         },
+        {
+            path: '/profile',
+            component: ProfileDetail
+        },
+        {
+            path: '/employee',
+            component: HomePage
+        },
+        {
+            path: '/project',
+            component: HomePage
+        },
+
         {
             path: '/register',
             component: Register

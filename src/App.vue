@@ -1,11 +1,24 @@
 <script setup>
 import Register from './views/auth/Register/Register.vue';
 import SelectingRolePage from './views/pages/SelectRolePage.vue';
-import { RouterView } from 'vue-router';
+import Sidebar from './views/components/Sidebar.vue';
+import { RouterView, useRoute } from 'vue-router';
+import { ref } from 'vue';
+
+
+
+const showSidebar = ref(!['/register', '/login'].includes(window.location.pathname))
+
 </script>
 
 <template>
-  <RouterView />
+  <div class="wrapper1" v-if="showSidebar">
+    <Sidebar />
+    <RouterView />
+  </div>
+  <div class="wrapper2" v-else>
+    <RouterView />
+  </div>
 </template>
 
 <style>
@@ -20,5 +33,12 @@ import { RouterView } from 'vue-router';
   margin: 0;
   padding: 0;
   font-family: 'Poppins', sans-serif;
+}
+
+.wrapper1 {
+
+  display: flex;
+  height: fit-content;
+  min-height: 100vh;
 }
 </style>

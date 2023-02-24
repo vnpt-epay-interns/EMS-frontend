@@ -135,12 +135,14 @@
     .row-1 {
         display: grid;
         justify-content: space-between;
-        grid-template-columns: 430px 430px;
+        gap: 20px;
+        grid-template-columns: 1fr 1fr;
     }
 
     .footer-field {
         display: grid;
-        grid-template-columns: 430px 430px;
+        gap: 20px;
+        grid-template-columns: 1fr 1fr;
         justify-content: space-between;
     }
 
@@ -160,7 +162,8 @@
     .additional-field {
         display: grid;
         justify-content: space-between;
-        grid-template-columns: 150px 150px;
+        gap: 15px;
+        grid-template-columns: 1fr 1fr;
         row-gap: 20px;
     }
 
