@@ -1,6 +1,6 @@
 <template>
     <div class="logo">
-        <img src="../assets/logo/logo1.png" alt="">
+        <img src="../../assets/logo/logo1.png" alt="">
         <div class="name">
             <h2>EMS</h2>
             <h4>Employee Management System</h4>

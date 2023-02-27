@@ -1,5 +1,5 @@
 <script setup>
-    import Header from '../components/Header.vue'
+    import Header from '@/views/components/Header.vue'
 </script>
 
 <template>
@@ -8,18 +8,12 @@
             <Header />  
             <div class="content">
                 <header>
-                    <div class="title">Enter Manager Code</div>
-                    <p class="description">Please fill your details to access your account.</p>
+                    <div class="title">Confirmation Email</div>
+                    <p class="description">
+                        Welcome,  we’re excited you’re joining us.
+                        <br />
+                        Ready to get started? First, verify your email address.</p>
                 </header>
-    
-                <div class="body">
-                    <label for="code" class="login__container__body__form__group__label">Refenced Code</label>
-                    <input type="text" id="code" class="login__container__body__form__group__input" placeholder="Enter Here" v-model="email" />
-                </div>
-    
-                <footer>
-                    <button>Submit</button>
-                </footer>
             </div>
         </div>
     </main>
@@ -33,7 +27,6 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
-        padding: 50px;
     }
 
     .container {
@@ -67,22 +60,10 @@
         flex-direction: column;
         justify-content: center;
     }
-
-    .body {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 30px;
-    }
     
     header {
         margin-bottom: 56px;
         font-style: normal;
-    }
-
-    footer {
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
 
     input {
@@ -93,16 +74,5 @@
 
     input:focus {
         outline: none;
-    }
-
-    button {
-        cursor: pointer;
-        border-radius: 5px;
-        padding: 10px;
-        min-width: 176px;
-        height: 44px;
-        background-color: var(--primary);
-        color: #fff;
-        border: none;
     }
 </style>

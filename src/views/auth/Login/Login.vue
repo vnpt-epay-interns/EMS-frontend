@@ -1,6 +1,7 @@
+
 <script setup>
-    import Header from '@/views/components/Header.vue'
-    import LoginForm from '@/views/auth/Login/LoginForm.vue'
+    import Header from '../../components/Header.vue'
+    import LoginForm from './LoginForm.vue'
 </script>
 
 <template>
@@ -26,7 +27,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        min-height: 100vh;
+        height: fit-content
     }
 
     .container {
