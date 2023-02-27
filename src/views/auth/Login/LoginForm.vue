@@ -58,6 +58,9 @@
         
     }
 
+    input {
+        font-size: 14px;
+    }
     input:focus {
         outline: none;
     }
@@ -74,7 +77,7 @@
 
     .input_container {
         display: flex;
-        padding: 10px;
+        padding: 2px 10px;
         justify-content: space-between;
         align-items: center;
         border: 1px solid #D0D5DD;

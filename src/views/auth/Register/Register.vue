@@ -29,10 +29,6 @@ import RegisterForm from './RegisterForm.vue';
 
 <style scoped>
 
-    * {
-        margin: 0;
-        padding: 0;
-    }
     .register {
         background: var(--primary);
         height: 100vh;
@@ -48,7 +44,8 @@ import RegisterForm from './RegisterForm.vue';
     }
     .register__container {
         width: 35%;
-        max-width: 800px;
+        max-width: 1000px;
+        min-width: fit-content;
         background: white;
         padding: 0px 30px 0px;
     }

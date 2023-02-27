@@ -7,7 +7,9 @@ import { ref } from 'vue';
 
 
 
-const showSidebar = ref(!['/register', '/login'].includes(window.location.pathname))
+const showSidebar = ref(!['/register', '/login', '/select-role'].includes(window.location.pathname))
+console.log(window.location.pathname);
+console.log(showSidebar.value);
 
 </script>
 
