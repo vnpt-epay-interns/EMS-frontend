@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router/index'
 import './assets/main.css'
-
+import cors from 'cors'
 
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -16,7 +16,14 @@ import { faArrowRight, faArrowLeft, faUserSecret, faXmark, faEye, faEyeSlash, fa
 /* add icons to the library */
 library.add(faUserSecret, faArrowRight, faArrowLeft, faXmark, faEye, faEyeSlash, faChevronLeft, faChevronRight, faNewspaper, faFlag, faClock, faCircleCheck, faMagnifyingGlass )
 
+
+// const corsOptions = {
+//     origin: '*',
+//     credentials: true
+// }
+
 createApp(App)
     .use(router)
+    // .use(cors(corsOptions))
     .component('font-awesome-icon', FontAwesomeIcon)
     .mount('#app')

@@ -11,4 +11,12 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   }
+  
 })
+
+
+module.exports = {
+  devServer: {
+    proxy: 'https://employeemanagementsystem-production.up.railway.app'
+  }
+}

@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import axios from 'axios'
-
+import { VUE_APP_BACKEND_URL } from '../../../../env.js'
 const firstName = ref('')
 const lastName = ref('')
 const email = ref('')
@@ -26,13 +26,16 @@ const handleClick = async () => {
         password: password.value,
     }
 
-    const response = await axios.post(`${process.env.VUE_APP_BACKEND_URL}/auth/register`, body);
-    
-    
+    // axios.defaults.withCredentials = true;
+    const response = await axios.post(`${VUE_APP_BACKEND_URL}/auth/register`, {
+        withCredentials: true,
+    }, body);
+
+
     const data = response.data;
     console.log('data: ');
     console.log(data);
-    
+
 
 }
 
@@ -63,14 +66,15 @@ function checkEmailExists() {
 
             <div class="register__container__form__input input-email">
                 <label for="email">Email</label>
-                <input type="email" name="email" id="email" placeholder="johndoe@gmail.com" v-model="email" @blur="checkEmailExists"/>
+                <input type="email" name="email" id="email" placeholder="johndoe@gmail.com" v-model="email"
+                    @blur="checkEmailExists" />
             </div>
             <div class="register__container__form__input">
                 <label for="password">Password</label>
 
                 <div class="password__container">
                     <input :type="showPassword ? 'text' : 'password'" name="password" id="password" placeholder="********"
-                        v-model="password" :class="showPasswordError ? 'red__border' : ''"/>
+                        v-model="password" :class="showPasswordError ? 'red__border' : ''" />
                     <span>
                         <font-awesome-icon class="fa" :icon="showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"
                             @click="toggleShowPassword" />
@@ -112,7 +116,7 @@ function checkEmailExists() {
             display: flex;
             flex-direction: column;
             justify-content: center;
-        
+
 
 
 
@@ -120,7 +124,7 @@ function checkEmailExists() {
                 position: relative;
                 display: flex;
                 align-items: center;
-                
+
                 #password {
                     // margin: 0;
                     width: 100%;
@@ -184,10 +188,4 @@ function checkEmailExists() {
 
     }
 }
-
-
-
-
-
-
 </style>
