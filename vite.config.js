@@ -6,6 +6,10 @@ import vue from '@vitejs/plugin-vue'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
+  devServer: {
+    headers: {"Access-Control-Allow-Origin": "*"},
+    proxy: 'https://employeemanagementsystem-production.up.railway.app'
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
@@ -14,9 +18,3 @@ export default defineConfig({
   
 })
 
-
-module.exports = {
-  devServer: {
-    proxy: 'https://employeemanagementsystem-production.up.railway.app'
-  }
-}
