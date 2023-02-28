@@ -1,18 +1,53 @@
 <script setup>
 import Sidebar from './views/components/Sidebar.vue';
-import { RouterView } from 'vue-router';
-import { ref } from 'vue';
+import { routerKey, RouterView, useRoute, useRouter } from 'vue-router';
+import { ref, onBeforeMount, inject } from 'vue';
+import { VUE_APP_BACKEND_URL } from '../env.js'
+import axios from 'axios'
+import Loading from './views/components/Loading.vue';
 
-const showSidebar = ref(!['/register', '/login', '/select-role'].includes(window.location.pathname))
+const store = inject('store');
+
+const router = useRouter();
+const isAuthenticated = ref(false);
+
+onBeforeMount(async () => {
+  const token = localStorage.getItem('token');
+
+  if (token) {
+    const options = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const response = axios.get(`${VUE_APP_BACKEND_URL}/api/auth/user-info`, options);
+    console.log(response.data)
+  }
+
+
+  if (isAuthenticated.value) {
+    isAuthenticated.value = true;
+    router.push('/dashboard');
+
+  } else {
+
+    if (!['/login', '/register'].includes(window.location.pathname)) {
+      router.push('/login')
+    }
+  }
+
+});
+
+
 </script>
 
 
 <template>
-  <div class="wrapper1" v-if="showSidebar">
-    <Sidebar />
-    <RouterView />
-  </div>
-  <div class="wrapper2" v-else>
+  <div :class="isAuthenticated ? 'flex__box' : ''">
+    <Loading v-if="store.state.isLoading"/>
+    <Sidebar v-if="isAuthenticated" />
     <RouterView />
   </div>
 </template>
@@ -31,10 +66,10 @@ const showSidebar = ref(!['/register', '/login', '/select-role'].includes(window
   font-family: 'Poppins', sans-serif;
 }
 
-.wrapper1 {
-
+.flex__box {
   display: flex;
   height: fit-content;
+
   min-height: 100vh;
 }
 </style>

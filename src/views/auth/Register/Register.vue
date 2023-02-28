@@ -44,7 +44,7 @@ import RegisterForm from './RegisterForm.vue';
     }
     .register__container {
         width: 35%;
-        max-width: 1000px;
+        max-width: 800px;
         min-width: fit-content;
         background: white;
         padding: 0px 30px 0px;

@@ -1,11 +1,16 @@
 <script setup lang="ts">
     import { ref } from 'vue'
+    import store from '../.././store/store'
     import Task from '../components/Task.vue';
     import axios from 'axios'
     import { VUE_APP_BACKEND_URL } from '../../../env'
 
     const tasks = axios
-        .get(`${VUE_APP_BACKEND_URL}/api/employee/get-tasks`)
+        .get(`${VUE_APP_BACKEND_URL}/api/employee/get-tasks`, {
+            headers: {
+                Authorization: 'Bearer ' + store.state.accessToken,
+            }
+    })
         .then(response => {
             console.log(response.data)
         })

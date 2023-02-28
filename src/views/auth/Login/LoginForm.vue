@@ -1,9 +1,10 @@
 <script setup>
+    import store from '../../../store/store.js'
     import { ref, reactive } from 'vue'
     import router from './../../../router/index'
     import axios from 'axios'
     import { VUE_APP_BACKEND_URL } from '../../../../env.js'
-
+    import { RouterLink } from 'vue-router';
     const email = ref('')
     const password = ref('')
     const showPassword = ref(false)
@@ -19,16 +20,19 @@
             password: password.value
         }
 
+        store.state.isLoading= true;
         await axios
             .post(`${VUE_APP_BACKEND_URL}/api/auth/login`, body)
                 .then(response => {
-                if (localStorage.getItem('accessToken')) {
-                    localStorage.removeItem('accessToken')
-                }
-                if (rememberMe.value) {
-                    localStorage.setItem('accessToken', response.data.data.token)
-                }
+                    store.state.accessToken = response.data.data.token
+                    if (localStorage.getItem('accessToken')) {
+                        localStorage.removeItem('accessToken')
+                    }
+                    if (rememberMe.value) {
+                        localStorage.setItem('accessToken', response.data.data.token)
+                    }
             })
+        store.state.isLoading= false;
         router.push({ name: 'Dashboard' })
     }
 
@@ -70,7 +74,7 @@
                 Sign in with Google
             </GoogleLogin >
             <div class="login__container__body__form__group">
-                <p class="sigup_optional">Don't have an account? <a href="" >Sign up</a></p>
+                <p class="sigup_optional">Don't have an account? <RouterLink to="/register" >Register</RouterLink></p>
             </div>
         </form>
     </div>
