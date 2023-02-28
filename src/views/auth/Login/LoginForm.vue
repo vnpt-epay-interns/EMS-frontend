@@ -3,11 +3,11 @@
     import router from './../../../router/index'
     import axios from 'axios'
     import { VUE_APP_BACKEND_URL } from '../../../../env.js'
-    import useGoogleAuth  from 'vue-google-oauth2'
 
     const email = ref('')
     const password = ref('')
     const showPassword = ref(false)
+    const rememberMe = ref(false)
 
     const togglePassword = () => {
         showPassword.value = !showPassword.value
@@ -21,15 +21,16 @@
 
         await axios
             .post(`${VUE_APP_BACKEND_URL}/api/auth/login`, body)
-            .then(response => {
-                const token = response.data.data.token
-                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-                localStorage.setItem('access-token', token)
+                .then(response => {
+                if (localStorage.getItem('accessToken')) {
+                    localStorage.removeItem('accessToken')
+                }
+                if (rememberMe.value) {
+                    localStorage.setItem('accessToken', response.data.data.token)
+                }
             })
-            router.push({ name: 'Dashboard' })
+        router.push({ name: 'Dashboard' })
     }
-
-    const { signIn } = useGoogleAuth()
 
 </script>
 
@@ -64,10 +65,10 @@
                 <button type="submit" class="login__container__body__form__group__button">Sign in</button>
             </div>
 
-            <div class="login__container__body__form__group login__container__body__form__group__button__google" @click="signIn">
+            <GoogleLogin :callback="loginWithGoogle">
                 <img src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png" alt="" >
                 Sign in with Google
-            </div>
+            </GoogleLogin >
             <div class="login__container__body__form__group">
                 <p class="sigup_optional">Don't have an account? <a href="" >Sign up</a></p>
             </div>
@@ -76,9 +77,6 @@
 </template>
 
 <style scoped>
-    /* .login__container__body {
-        background: red;
-    }    */
 
     input {
         font-size: 14px;
@@ -136,10 +134,15 @@
         color: #fff;
     }
 
-    .login__container__body__form__group__button__google {
+    .g-btn-wrapper[data-v-5e610566] {
+        display: flex;
+    }
+
+    .g-btn-wrapper {
         display: flex;
         flex-direction: row;
         justify-content: center;
+        align-items: center;
         gap: 10px;
         align-items: center;
         border: 1px solid #D0D5DD;
@@ -150,7 +153,7 @@
         min-width: 360px;
     }
 
-    .login__container__body__form__group__button__google img {
+    .g-btn-wrapper img {
         width: 24px;
         height: 24px;
     }
