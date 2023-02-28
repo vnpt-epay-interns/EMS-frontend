@@ -2,27 +2,54 @@
 import Register from './views/auth/Register/Register.vue';
 import SelectingRolePage from './views/pages/SelectRolePage.vue';
 import Sidebar from './views/components/Sidebar.vue';
-import { RouterView, useRoute } from 'vue-router';
-import { ref } from 'vue';
-import { Loading } from './views/components/Loading.vue';
+import { routerKey, RouterView, useRoute, useRouter } from 'vue-router';
+import { ref, onBeforeMount, inject } from 'vue';
+import { VUE_APP_BACKEND_URL } from '../env.js'
+import axios from 'axios'
+import Loading from './views/components/Loading.vue';
+
+const store = inject('store');
+
+const router = useRouter();
+const isAuthenticated = ref(false);
+
+onBeforeMount(async () => {
+  const token = localStorage.getItem('token');
+
+  if (token) {
+    const options = {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    }
+
+    const response = axios.get(`${VUE_APP_BACKEND_URL}/api/auth/user-info`, options);
+    console.log(response.data)
+  }
 
 
+  if (isAuthenticated.value) {
+    isAuthenticated.value = true;
+    router.push('/dashboard');
 
-const showSidebar = ref(!['/register', '/login', '/select-role'].includes(window.location.pathname))
-console.log(window.location.pathname);
-console.log(showSidebar.value);
+  } else {
 
-const getItem = localStorage.getItem('token');
-let authentication = false;
+    if (!['/login', '/register'].includes(window.location.pathname)) {
+      router.push('/login')
+    }
+  }
+
+});
 
 
 </script>
 
 
 <template>
-  
-  <div class="wrapper1">
-    <Sidebar v-if="showSidebar" />
+  <div :class="isAuthenticated ? 'flex__box' : ''">
+    <Loading v-if="store.state.isLoading"/>
+    <Sidebar v-if="isAuthenticated" />
     <RouterView />
   </div>
 </template>
@@ -41,10 +68,10 @@ let authentication = false;
   font-family: 'Poppins', sans-serif;
 }
 
-.wrapper1 {
-
+.flex__box {
   display: flex;
   height: fit-content;
+
   min-height: 100vh;
 }
 </style>

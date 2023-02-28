@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router/index'
 import './assets/main.css'
-
+import store from './store/store'
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
 
@@ -23,6 +23,7 @@ library.add(faUserSecret, faArrowRight, faArrowLeft, faXmark, faEye, faEyeSlash,
 
 createApp(App)
     .use(router)
+    .provide("store", store)
     // .use(cors(corsOptions))
     .component('font-awesome-icon', FontAwesomeIcon)
     .mount('#app')

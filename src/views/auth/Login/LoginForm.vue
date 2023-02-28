@@ -2,7 +2,7 @@
     import { ref } from 'vue'
     import axios from 'axios'
     import { VUE_APP_BACKEND_URL } from '../../../../env.js'
-
+    import { RouterLink } from 'vue-router';
     const email = ref('')
     const showPassword = ref(false)
     const active = ref(false)
@@ -58,7 +58,7 @@
                 Sign in with Google
             </div>
             <div class="login__container__body__form__group">
-                <p class="sigup_optional">Don't have an account? <a href="" >Sign up</a></p>
+                <p class="sigup_optional">Don't have an account? <RouterLink to="/register" >Register</RouterLink></p>
             </div>
         </form>
     </div>

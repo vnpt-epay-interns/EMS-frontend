@@ -2,6 +2,9 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import { VUE_APP_BACKEND_URL } from '../../../../env.js'
+import store from '../../../store/store.js'
+import { useRouter } from 'vue-router'
+
 const firstName = ref('')
 const lastName = ref('')
 const email = ref('')
@@ -9,6 +12,10 @@ const password = ref('')
 const confirmedPassword = ref('')
 const showPassword = ref(false)
 const showPasswordError = ref(false)
+const errorMessage = ref('')
+const validEmail = ref(false) // if email not exists in database
+
+const router = useRouter() 
 
 const handleClick = async () => {
 
@@ -25,21 +32,18 @@ const handleClick = async () => {
         email: email.value,
         password: password.value
     }
-    const config = {
-        headers: {
-            "Content-type": "application/json",
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': '*',
-            'Access-Control-Allow-Credentials': 'true'
-            
-        },
-    };
-    const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/auth/register-account`, body, config);
 
+    store.state.isLoading= true;
+    const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/auth/register-account`, body);
+    store.state.isLoading = false;
 
-    const data = response.data;
-    console.log('data: ');
-    console.log(data);
+    if (response.data.status !== 200) {
+        errorMessage.value = response.data.message
+        return
+    } else {
+        errorMessage.value = ''
+        router.push('/login')
+    }
 
 
 }
@@ -49,15 +53,28 @@ function toggleShowPassword() {
     showPassword.value = !showPassword.value
 }
 
-function checkEmailExists() {
+const checkEmailExists = async () => {
     //TODO: this method will send a request to check if the email exists in the database
-    console.log('checkEmailExist');
-    console.log('email: ', email.value)
+    const body = {
+        email: email.value
+    }
+    console.log(`${VUE_APP_BACKEND_URL}/api/auth/exists-email`);
+    
+    const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/auth/exists-email`, body);
+    
+    if (response.data.status == 200) {
+        validEmail.value = true
+    } else {
+        validEmail.value = false
+    }
 }
 </script>
 
 <template>
     <div class="register__container__form">
+        <div class="error__text">
+                <p v-if="errorMessage">{{ errorMessage }}</p>
+        </div>
         <form>
             <div class="register__container__form__input">
                 <label for="name">First name</label>
@@ -71,7 +88,7 @@ function checkEmailExists() {
 
             <div class="register__container__form__input input-email">
                 <label for="email">Email</label>
-                <input type="email" name="email" id="email" placeholder="johndoe@gmail.com" v-model="email"
+                <input type="email" name="email" id="email" :class="email ? (validEmail ? 'green__border' : 'red__border') : ''" placeholder="johndoe@gmail.com" v-model="email"
                     @blur="checkEmailExists" />
             </div>
             <div class="register__container__form__input">
@@ -100,15 +117,21 @@ function checkEmailExists() {
                     <font-awesome-icon icon="fa-solid fa-arrow-right" />
                 </button>
             </div>
-        </form>
 
+            
+        </form>
+        
     </div>
 </template>
 
 <style lang="scss" scoped>
 .register__container__form {
     max-width: 1000px;
-
+    .error__text {
+        font-size: 12px;
+        color: red;
+        text-align: center;
+    }
     form {
 
         margin: 40px 0;
@@ -181,7 +204,12 @@ function checkEmailExists() {
             }
 
             .red__border {
-                border: 2px solid red;
+                // border-bottom: 2px solid red;
+                border-left: 2px solid red;
+            }
+
+            .green__border {
+                border-left: 2px solid rgb(3, 224, 3);
             }
 
         }
