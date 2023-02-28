@@ -7,7 +7,7 @@ import { ref, onBeforeMount, inject } from 'vue';
 import { VUE_APP_BACKEND_URL } from '../env.js'
 import axios from 'axios'
 import Loading from './views/components/Loading.vue';
-
+import Modal from './views/components/Modal.vue';
 const store = inject('store');
 
 const router = useRouter();
@@ -48,6 +48,7 @@ onBeforeMount(async () => {
 
 <template>
   <div :class="isAuthenticated ? 'flex__box' : ''">
+    <Modal v-if="store.state.popup.isShowing"/>
     <Loading v-if="store.state.isLoading"/>
     <Sidebar v-if="isAuthenticated" />
     <RouterView />

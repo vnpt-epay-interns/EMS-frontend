@@ -42,6 +42,7 @@ const handleClick = async () => {
         return
     } else {
         errorMessage.value = ''
+        store.state.popup.displayForMilliSecond("Register successfully", 2000)
         router.push('/login')
     }
 

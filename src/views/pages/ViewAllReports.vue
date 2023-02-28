@@ -14,17 +14,18 @@ import Report from '../components/Report.vue';
 </script>
 
 <style lang="scss" scoped>
-    .all__report__page {
-        padding: 20px;
+.all__report__page {
+    padding: 20px;
 
-        h1 {
-            margin-bottom: 20px;
-        }
-        .report-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
+    h1 {
+        margin-bottom: 20px;
     }
+
+    .report-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+}
 </style>

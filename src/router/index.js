@@ -9,13 +9,15 @@ import TaskPage from '../views/pages/TaskPage.vue'
 import WriteReportPage from '../views/pages/WriteReportPage.vue'
 import EnterManagerCodePage from '../views/pages/EnterManagerCodePage.vue'
 import SelectRolePage from '../views/pages/SelectRolePage.vue'
-import TaskHEAD from '../views/components/Task.vue'
 import DashboardPage from '../views/pages/DashboardPage.vue'
-import Sidebar from '../views/components/Sidebar.vue'
 import ProfileDetail from '../views/components/ProfileDetail.vue'
 import ProjectManagementPage from '../views/pages/ProjectManagementPage.vue'
 import ListEmployeePage from '../views/pages/ListEmployeePage.vue'
 // import ProjectManagementPage from '../views/pages/ProjectManagementPage.vue'
+
+import ConfirmEmailPage from '../views/pages/ConfirmEmailPage.vue'
+import AccessDeniedPage from '../views/pages/AccessDeniedPage.vue'
+
 
 export default createRouter({
     history: createWebHistory(),
@@ -80,6 +82,14 @@ export default createRouter({
         {
             path: '/select-role',
             component: SelectRolePage
+        },
+        {
+            path: '/confirm-email',
+            component: ConfirmEmailPage
+        },
+        {
+            path: '/access-denied',
+            component: AccessDeniedPage
         }
     ]
 })
