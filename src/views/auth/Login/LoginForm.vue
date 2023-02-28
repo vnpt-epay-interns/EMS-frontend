@@ -1,7 +1,5 @@
 <script setup>
     import { ref } from 'vue'
-    import axios from 'axios'
-    import { VUE_APP_BACKEND_URL } from '../../../../env.js'
 
     const email = ref('')
     const showPassword = ref(false)
@@ -10,29 +8,20 @@
     const togglePassword = () => {
         showPassword.value = !showPassword.value
     }
-
-    async function handleSubmit() {
-        const body = {
-            email: email.value,
-            password: password.value
-        }
-
-        const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/auth/login`, body);
-        console.log(response.data)
-    }
 </script>
 
 <template>
     <div class="login__container__body">
         <form class="login__container__body__form" @submit.prevent="login">
             <div class="login__container__body__form__group">
+                <label for="email" class="login__container__body__form__group__label">Email</label>
                 <div class="input_container">
                     <input type="email" id="email" class="login__container__body__form__group__input" placeholder="Email" v-model="email" />
                     <font-awesome-icon class="icon" icon="fa-solid fa-xmark" @click="email='' "/>
                 </div>
             </div>
             <div class="login__container__body__form__group">
-
+                <label for="password" class="login__container__body__form__group__label">Password</label>
                 <div class="input_container">
                     <input :type="showPassword ? 'text' : 'password'" id="password" class="login__container__body__form__group__input" placeholder="Password" v-model="password" />
                     <font-awesome-icon class="icon" :icon="showPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'" @click="togglePassword" />
@@ -50,7 +39,7 @@
                 </div>
             </div>
             <div class="login__container__body__form__group">
-                <button type="submit" class="login__container__body__form__group__button" @click="handleSubmit">Sign in</button>
+                <button type="submit" class="login__container__body__form__group__button">Sign in</button>
             </div>
 
             <div class="login__container__body__form__group login__container__body__form__group__button__google">
@@ -58,21 +47,19 @@
                 Sign in with Google
             </div>
             <div class="login__container__body__form__group">
-                <p class="sigup_optional">Don't have an account? <a href="" >Sign up</a></p>
+                <p class="sigup_optional">Don't have an account? <a href="">Sign up</a></p>
             </div>
         </form>
     </div>
 </template>
 
 <style scoped>
-    /* .login__container__body {
-        background: red;
-    }    */
+    .login__container__body {
+        
+    }
 
     input {
         font-size: 14px;
-        margin: 0;
-        background: none;
     }
     input:focus {
         outline: none;
@@ -97,11 +84,6 @@
         border-radius: 5px;
     }
 
-    .remember {
-        display: flex;
-        align-items: center;
-        line-height: 30px;
-    }
     .remember_container {
         display: flex;
         justify-content: space-between;

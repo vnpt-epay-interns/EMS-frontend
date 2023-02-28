@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router/index'
 import './assets/main.css'
+import cors from 'cors'
 
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'

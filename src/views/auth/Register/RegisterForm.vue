@@ -23,18 +23,13 @@ const handleClick = async () => {
         firstName: firstName.value,
         lastName: lastName.value,
         email: email.value,
-        password: password.value
+        password: password.value,
     }
-    const config = {
-        headers: {
-            "Content-type": "application/json",
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': '*',
-            'Access-Control-Allow-Credentials': 'true'
-            
-        },
-    };
-    const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/auth/register-account`, body, config);
+
+    // axios.defaults.withCredentials = true;
+    const response = await axios.post(`${VUE_APP_BACKEND_URL}/auth/register`, {
+        withCredentials: true,
+    }, body);
 
 
     const data = response.data;
