@@ -25,21 +25,11 @@ const handleClick = async () => {
         email: email.value,
         password: password.value
     }
-    const config = {
-        headers: {
-            "Content-type": "application/json",
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': '*',
-            'Access-Control-Allow-Credentials': 'true'
-            
-        },
-    };
-    const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/auth/register-account`, body, config);
+
+    const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/auth/register-account`, body);
 
 
     const data = response.data;
-    console.log('data: ');
-    console.log(data);
 
 
 }

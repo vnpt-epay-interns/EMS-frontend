@@ -1,16 +1,9 @@
 <script setup>
-import Register from './views/auth/Register/Register.vue';
-import SelectingRolePage from './views/pages/SelectRolePage.vue';
 import Sidebar from './views/components/Sidebar.vue';
-import { RouterView, useRoute } from 'vue-router';
+import { RouterView } from 'vue-router';
 import { ref } from 'vue';
 
-
-
 const showSidebar = ref(!['/register', '/login', '/select-role'].includes(window.location.pathname))
-console.log(window.location.pathname);
-console.log(showSidebar.value);
-
 </script>
 
 

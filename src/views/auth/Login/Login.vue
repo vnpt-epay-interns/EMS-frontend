@@ -1,4 +1,3 @@
-
 <script setup>
     import Header from '../../components/Header.vue'
     import LoginForm from './LoginForm.vue'

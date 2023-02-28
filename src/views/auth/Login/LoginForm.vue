@@ -1,25 +1,36 @@
 <script setup>
-    import { ref } from 'vue'
+    import { ref, reactive } from 'vue'
+    import router from './../../../router/index'
     import axios from 'axios'
     import { VUE_APP_BACKEND_URL } from '../../../../env.js'
+    import useGoogleAuth  from 'vue-google-oauth2'
 
     const email = ref('')
+    const password = ref('')
     const showPassword = ref(false)
-    const active = ref(false)
 
     const togglePassword = () => {
         showPassword.value = !showPassword.value
     }
 
-    async function handleSubmit() {
+    const login = async () => {
         const body = {
             email: email.value,
             password: password.value
         }
 
-        const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/auth/login`, body);
-        console.log(response.data)
+        await axios
+            .post(`${VUE_APP_BACKEND_URL}/api/auth/login`, body)
+            .then(response => {
+                const token = response.data.data.token
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                localStorage.setItem('access-token', token)
+            })
+            router.push({ name: 'Dashboard' })
     }
+
+    const { signIn } = useGoogleAuth()
+
 </script>
 
 <template>
@@ -50,10 +61,10 @@
                 </div>
             </div>
             <div class="login__container__body__form__group">
-                <button type="submit" class="login__container__body__form__group__button" @click="handleSubmit">Sign in</button>
+                <button type="submit" class="login__container__body__form__group__button">Sign in</button>
             </div>
 
-            <div class="login__container__body__form__group login__container__body__form__group__button__google">
+            <div class="login__container__body__form__group login__container__body__form__group__button__google" @click="signIn">
                 <img src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png" alt="" >
                 Sign in with Google
             </div>

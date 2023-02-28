@@ -22,6 +22,7 @@ export default createRouter({
     routes: [
         {
             path: '/dashboard',
+            name: 'Dashboard',
             component: DashboardPage
         },
         {
