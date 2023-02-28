@@ -1,3 +1,26 @@
+<script setup lang="ts">
+    import { ref } from 'vue'
+    import store from '../.././store/store'
+    import Task from '../components/Task.vue';
+    import axios from 'axios'
+    import { VUE_APP_BACKEND_URL } from '../../../env'
+
+
+    const options = {
+            headers: {
+                "Authorization": `Bearer ${store.state.accessToken}`,
+                'Content-Type': 'application/json'
+            }
+    }
+
+    const tasks = axios
+        .get(`${VUE_APP_BACKEND_URL}/api/employee/get-tasks`, options)
+        .then(response => {
+            console.log(response.data)
+        })
+        
+</script>
+
 <template>
     <div class="dashboard">
         <div class="heading">
@@ -21,17 +44,13 @@
                     <Task />
                     <Task />
                     <Task />
+                    <Task />
                 </div>
             </div>
         </div>
 
     </div>
 </template>
-
-<script setup lang="ts">
-import Task from '../components/Task.vue';
-import Sidebar from '../components/Sidebar.vue';
-</script>
 
 <style lang="scss" scoped>
 .dashboard {
@@ -51,7 +70,6 @@ import Sidebar from '../components/Sidebar.vue';
             align-items: center;
 
             input {
-                margin-left: 5px;
                 border: none;
 
                 &:focus {

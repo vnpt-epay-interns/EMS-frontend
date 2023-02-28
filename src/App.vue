@@ -1,6 +1,4 @@
 <script setup>
-import Register from './views/auth/Register/Register.vue';
-import SelectingRolePage from './views/pages/SelectRolePage.vue';
 import Sidebar from './views/components/Sidebar.vue';
 import { routerKey, RouterView, useRoute, useRouter } from 'vue-router';
 import { ref, onBeforeMount, inject } from 'vue';
@@ -14,7 +12,7 @@ const router = useRouter();
 const isAuthenticated = ref(false);
 
 onBeforeMount(async () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('accessToken');
 
   if (token) {
     const options = {
@@ -24,13 +22,8 @@ onBeforeMount(async () => {
       }
     }
 
-    const response = axios.get(`${VUE_APP_BACKEND_URL}/api/auth/user-info`, options);
-    console.log(response.data)
-  }
-
-
-  if (isAuthenticated.value) {
-    isAuthenticated.value = true;
+    const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/auth/user-info`, options);
+    store.state.user = response.data.data;
     router.push('/dashboard');
 
   } else {
@@ -47,10 +40,10 @@ onBeforeMount(async () => {
 
 
 <template>
-  <div :class="isAuthenticated ? 'flex__box' : ''">
+  <div :class="store.state.user ? 'flex__box' : ''">
     <Modal v-if="store.state.popup.isShowing"/>
     <Loading v-if="store.state.isLoading"/>
-    <Sidebar v-if="isAuthenticated" />
+    <Sidebar v-if="store.state.user" />
     <RouterView />
   </div>
 </template>
@@ -72,7 +65,6 @@ onBeforeMount(async () => {
 .flex__box {
   display: flex;
   height: fit-content;
-
   min-height: 100vh;
 }
 </style>

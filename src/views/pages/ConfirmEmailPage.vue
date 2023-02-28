@@ -8,7 +8,7 @@
             <Header />  
             <div class="content">
                 <header>
-                    <div class="title">Confirmation Email</div>
+                    <div class="title">Verify your email</div>
                     <p class="description">
                         Welcome,  we’re excited you’re joining us.
                         <br />
@@ -50,6 +50,7 @@
     }
 
     .description {
+        margin-top: 20px;
         font-weight: 400;
         font-size: 16px;
         line-height: 24px;

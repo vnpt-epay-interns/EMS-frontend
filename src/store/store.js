@@ -17,7 +17,8 @@ const state = reactive({
                 state.popup.isShowing = false
             }, milliSeconds)
         },
-    }
+    },
+    accessToken: null
 }) 
 
 
