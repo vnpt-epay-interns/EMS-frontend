@@ -4,6 +4,7 @@ import SelectingRolePage from './views/pages/SelectRolePage.vue';
 import Sidebar from './views/components/Sidebar.vue';
 import { RouterView, useRoute } from 'vue-router';
 import { ref } from 'vue';
+import { Loading } from './views/components/Loading.vue';
 
 
 
@@ -11,15 +12,17 @@ const showSidebar = ref(!['/register', '/login', '/select-role'].includes(window
 console.log(window.location.pathname);
 console.log(showSidebar.value);
 
+const getItem = localStorage.getItem('token');
+let authentication = false;
+
+
 </script>
 
 
 <template>
-  <div class="wrapper1" v-if="showSidebar">
-    <Sidebar />
-    <RouterView />
-  </div>
-  <div class="wrapper2" v-else>
+  
+  <div class="wrapper1">
+    <Sidebar v-if="showSidebar" />
     <RouterView />
   </div>
 </template>

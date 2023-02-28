@@ -2,9 +2,11 @@
 <script setup>
     import Header from '../../components/Header.vue'
     import LoginForm from './LoginForm.vue'
+    import Loading from '../../components/Loading.vue'
 </script>
 
 <template>
+    <Loading />
     <main>
         <div class="container">
             <Header />
