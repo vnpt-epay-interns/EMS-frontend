@@ -1,11 +1,13 @@
 <script setup>
-import store from '../../../store/store.js'
-import { ref, reactive } from 'vue'
-import router from './../../../router/index'
+import ErrorText from '../../components/ErrorText.vue';
+import { ref, inject } from 'vue'
 import axios from 'axios'
 import { VUE_APP_BACKEND_URL } from '../../../../env.js'
 import { RouterLink } from 'vue-router';
 import { fetchUserInfoAndDoRouting } from '../../../router/index.js'
+
+const store = inject('store')
+const errorMessage = ref('')
 const email = ref('')
 const password = ref('')
 const showPassword = ref(false)
@@ -24,20 +26,24 @@ const login = async () => {
 
     store.state.isLoading = true;
     const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/auth/login`, body)
-    store.state.isLoading = false;
-
+    
+    if (response.data.status !== 200) {
+        store.state.isLoading = false;
+        errorMessage.value = response.data.message
+        setTimeout(() => errorMessage.value = '', 3000)
+        return
+    } 
 
     store.state.accessToken = response.data.data.token
-    store.state.authenticatedRole = response.data.data.role
     //TODO: check if this code is redundant!
 
     if (rememberMe.value) {
         localStorage.setItem('accessToken', response.data.data.token)
     }
 
-
     // fetch user info with the access token and do routing 
     fetchUserInfoAndDoRouting()
+    store.state.isLoading = false;
 }
 
 
@@ -54,13 +60,13 @@ const login = async () => {
                 </div>
             </div>
             <div class="login__container__body__form__group">
-
                 <div class="input_container">
                     <input :type="showPassword ? 'text' : 'password'" id="password"
                         class="login__container__body__form__group__input" placeholder="Password" v-model="password" />
                     <font-awesome-icon class="icon" :icon="showPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"
                         @click="togglePassword" />
                 </div>
+                <ErrorText :errorMessage="errorMessage"/>
             </div>
             <div class="login__container__body__form__group">
                 <div class="remember_container">
@@ -94,10 +100,9 @@ const login = async () => {
 input {
     font-size: 14px;
     margin: 0;
-    background: none;
 }
 
-input:focus {
+.login__container__body__form__group__input:focus {
     outline: none;
 }
 
@@ -109,6 +114,7 @@ input:focus {
 
 .login__container__body__form__group__input {
     border: none;
+    width: 85%;
 }
 
 .input_container {
@@ -193,4 +199,5 @@ a {
 
 a:link {
     color: var(--primary);
-}</style>
+}
+</style>

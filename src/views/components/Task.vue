@@ -1,9 +1,9 @@
 <script setup>
     import axios from 'axios';
-    import { ref, watchEffect } from 'vue';
+    import { ref, watchEffect, inject } from 'vue';
     import { VUE_APP_BACKEND_URL } from '../../../env'
-    import store from '../.././store/store'
 
+    const store = inject('store')
     const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
     const employeeName = ref('')
     const flag = ref('')
@@ -38,7 +38,7 @@
             <p class="task__assignee">{{ employeeName }}</p>
         </div>
         <div class="task-info">
-            <div class="reports" v-if="store.state.authenticatedRole==='MANAGER'">
+            <div class="reports" v-if="store.state.user.role==='MANAGER'">
                 <font-awesome-icon icon="fa-solid fa-newspaper" />
                 3
             </div>

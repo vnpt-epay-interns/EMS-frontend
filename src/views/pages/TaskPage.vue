@@ -1,9 +1,9 @@
 <script setup>
-    import { ref, watchEffect, onMounted } from 'vue'
+    import { ref, watchEffect, inject } from 'vue'
     import { VUE_APP_BACKEND_URL } from '../../../env'
     import axios from 'axios'
-    import store from '../.././store/store'
 
+    const store = inject('store')
     const title = ref('')
     const parentTask = ref()
     const description = ref('')
@@ -28,7 +28,7 @@
                 employeeId.value = element.id
             }
         })
-        console.log(employeeId.value);
+        
         const task = {
             title: title.value,
             description: description.value,
@@ -49,11 +49,15 @@
                 }
         })
 
-        console.log(response);
+        store.state.isLoading= true;
+        if (response.data.status !== 200) {
+            store.state.popup.displayForMilliSecond("Register successfully", 2000)
+        }
+        store.state.isLoading= false
     }
 
     const getUserInfoByEmployeeId = async (employeeId) => {
-        const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/${employeeId}`, {
+        const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-user-info/${employeeId}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     'Content-Type': 'application/json'

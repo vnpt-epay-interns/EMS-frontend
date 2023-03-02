@@ -152,9 +152,6 @@ export const fetchUserInfoAndDoRouting =  async () => {
     const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/auth/user-info`, options);
     store.state.user = response.data.data;
     store.state.isLoading = false
-
-    console.log('user info: ', store.state.user);
-    
     
     // do routing based on user info
     doRouting()

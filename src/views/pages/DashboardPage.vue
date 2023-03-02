@@ -1,11 +1,12 @@
 <script setup lang="ts">
-    import { ref, watchEffect } from 'vue'
+    import { ref, watchEffect, inject } from 'vue'
     import Task from '../components/Task.vue';
     import axios from 'axios'
-    import router from '../.././router/index'
+    import { useRouter } from 'vue-router';
     import { VUE_APP_BACKEND_URL } from '../../../env'
-    import store from '../../store/store';
 
+    const store = inject('store')
+    const router = useRouter()
     const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
 
     const tasks = ref([])
@@ -38,11 +39,6 @@
                 tasksByStatus.value["READY FOR REVIEW"].push(task)
             }
         })
-    // const tasks = axios
-    //     .get(`${VUE_APP_BACKEND_URL}/api/employee/get-tasks`, options)
-    //     .then(response => {
-    //         console.log(response.data)
-    //     })
         
     })
 
