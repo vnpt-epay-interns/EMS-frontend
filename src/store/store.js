@@ -6,13 +6,15 @@ const state = reactive({
     popup: {
         isShowing: false,
         message: '',
+        isSuccess: true,
         display: (message) => {
             state.popup.isShowing = true
             state.popup.message = message
         },
-        displayForMilliSecond: (message, milliSeconds) => {
+        displayForMilliSecond: (message, milliSeconds, success) => {
             state.popup.isShowing = true
             state.popup.message = message
+            state.popup.isSuccess = success
             setTimeout(() => {
                 state.popup.isShowing = false
             }, milliSeconds)

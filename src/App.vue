@@ -17,22 +17,26 @@ const pagesWithoutSidebar = ['/login', '/register', '/select-role', '/enter-mana
 // const showSidebar = ref(!pagesWithoutSidebar.includes(window.location.pathname))
 // console.log(!pagesWithoutSidebar.includes(window.location.pathname));
 
-onMounted(async () => {
-  const token = localStorage.getItem('accessToken');
+// onBeforeMount(async () => {
+const token = localStorage.getItem('accessToken');
 
-  if (token) {
-    store.state.accessToken = token;
+if (token) {
+  store.state.accessToken = token;
 
-    // using the access token to fetch user info and do routing
-    fetchUserInfoAndDoRouting()
+  // using the access token to fetch user info and do routing
+  fetchUserInfoAndDoRouting()
 
-  } else {
-    if (!['/login', '/register'].includes(window.location.pathname)) {
-      router.push('/login')
-    }
+} else {
+  
+  const currentPath = window.location.pathname
+  const unAuthenticatedEndpoints = ['/login', '/register','/verify-email']
+
+  if (!unAuthenticatedEndpoints.some(endpoint => currentPath.startsWith(endpoint))) {
+    router.push('/login')
   }
+}
 
-});
+// });
 
 
 </script>
