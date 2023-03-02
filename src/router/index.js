@@ -23,7 +23,6 @@ import axios from "axios";
 import { useRouter } from "vue-router";
 import { VUE_APP_BACKEND_URL } from "../../env";
 import store from "../store/store";
-
 const router =  createRouter({
     history: createWebHistory(),
     routes: [

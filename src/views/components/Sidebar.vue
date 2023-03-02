@@ -24,7 +24,9 @@
 
 <script setup>
 import { RouterLink } from 'vue-router';
-import store from '../../store/store';
+import { inject } from 'vue';
+
+const store = inject('store');
 
 const user = store.state.user;
 const fullName = store.state.user.firstName + ' ' + store.state.user.lastName

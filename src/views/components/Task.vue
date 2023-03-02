@@ -12,7 +12,7 @@
     })
 
     watchEffect(async () => {
-        const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/employee/${props.task.employeeId}`, {
+        const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/${props.task.employeeId}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -34,7 +34,7 @@
                 {{ task.title }}
             </h1>
 
-            <p class="task__description">{{ task.description }}</p>
+            <!-- <p class="task__description">{{ task.description }}</p> -->
             <p class="task__assignee">{{ employeeName }}</p>
         </div>
         <div class="task-info">
@@ -67,7 +67,7 @@
 .task {
     border-radius: 5px;
     width: 300px;
-    padding: 20px 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
     background: white;
 
     .task__content {
