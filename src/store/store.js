@@ -18,7 +18,8 @@ const state = reactive({
             }, milliSeconds)
         },
     },
-    accessToken: null
+    accessToken: null,
+    authenticatedRole: null
 }) 
 
 

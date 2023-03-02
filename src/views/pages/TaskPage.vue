@@ -1,12 +1,83 @@
 <script setup>
-    import { ref, watch } from 'vue'
+    import { ref, watchEffect, onMounted } from 'vue'
+    import { VUE_APP_BACKEND_URL } from '../../../env'
+    import axios from 'axios'
+    import store from '../.././store/store'
 
+    const title = ref('')
+    const parentTask = ref()
+    const description = ref('')
     const priority = ref('')
     const status = ref('')
-    const inCharge = ref('')
-    const done = ref('')
+    const employeeId = ref('')
+    const estimateHours = ref('')
+    const completion = ref()
     const startDate = ref(new Date().toISOString().substring(0, 10))
     const endDate = ref(new Date().toISOString().substring(0, 10))
+    const employees = ref([])
+    const employeeName = ref({
+        id: null,
+        fullName: null
+    })
+
+    const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
+
+    const createTask = async () => {
+        employees.value.forEach((element) => {
+            if (element.fullName === employeeId.value) {
+                employeeId.value = element.id
+            }
+        })
+        console.log(employeeId.value);
+        const task = {
+            title: title.value,
+            description: description.value,
+            status: status.value,
+            completion: completion.value,
+            priority: priority.value,
+            startDate: startDate.value,
+            endDate: endDate.value,
+            employeeId: employeeId.value,
+            estimateHours: estimateHours.value,
+            parentTask: parentTask.value
+        }
+        
+        const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/manager/tasks/create`, task, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+        })
+
+        console.log(response);
+    }
+
+    const getUserInfoByEmployeeId = async (employeeId) => {
+        const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/${employeeId}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+        })
+
+        employeeName.value["id"] = response.data.data.id
+        employeeName.value["fullName"] = response.data.data.firstName + " " + response.data.data.lastName
+        return employeeName.value
+    }
+
+    watchEffect(async () => {
+        const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/all-employees`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+        })
+        
+        response.data.data.forEach(async (element) => {
+            const employeeName = await getUserInfoByEmployeeId(element.id)
+            employees.value.push(employeeName)
+        });
+    })
 </script>
 
 <template>
@@ -17,20 +88,20 @@
         <main>
             <div class="row-1">
                 <div class="name-field">
-                    <label for="name">Name</label>
-                    <input type="text" id="name">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" v-model="title">
                 </div>
 
                 <div class="parent_task-Field">
                     <label for="parent-task">Parent Task</label>
-                    <input type="text" id="parent-task">
+                    <input type="text" id="parent-task" v-model="parentTask">
                 </div>
             </div>
 
             <div class="row-2">
                 <div class="description-field">
                     <label for="description">Description</label>
-                    <textarea name="description" id="description"></textarea>
+                    <textarea name="description" id="description" v-model="description"></textarea>
                 </div>
             </div>
 
@@ -57,17 +128,17 @@
                     </div>
                     <div class="in-charge">
                         <div>In-Charge</div>
-                        <select v-model="inCharge">
+                        <select v-model="employeeId">
                             <option disabled value="">Please select one</option>
-                            <option>Do Doan Vu</option>
+                            <option v-for="employee of employees">{{ employee.fullName }}</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="additional-field">
                     <div class="done">
-                        <div>Done(%)</div>
-                        <select v-model="done">
+                        <div>Completion(%)</div>
+                        <select v-model="completion">
                             <option disabled value="">Please select one</option>
                             <option>10</option>
                             <option>20</option>
@@ -83,7 +154,7 @@
                     </div>
                     <div class="estimate-field">
                         <label for="estimate">Estimate Time</label>
-                        <input type="text" id="estimate">
+                        <input type="text" id="estimate" v-model="estimateHours">
                     </div>
                     <div class="start_date-field">
                         <label for="start_date">Start date</label>
@@ -96,7 +167,7 @@
                 </div>
             </div>
             <footer>
-                <button>Save</button>
+                <button @click="createTask">Save</button>
             </footer>
         </main>
     </div>

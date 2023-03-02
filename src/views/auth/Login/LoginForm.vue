@@ -5,6 +5,7 @@ import router from './../../../router/index'
 import axios from 'axios'
 import { VUE_APP_BACKEND_URL } from '../../../../env.js'
 import { RouterLink } from 'vue-router';
+
 const email = ref('')
 const password = ref('')
 const showPassword = ref(false)
@@ -24,10 +25,8 @@ const login = async () => {
     const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/auth/login`, body)
 
     store.state.accessToken = response.data.data.token
+    store.state.authenticatedRole = response.data.data.role
     //TODO: check if this code is redundant!
-    if (localStorage.getItem('accessToken')) {
-        localStorage.removeItem('accessToken')
-    }
     if (rememberMe.value) {
         localStorage.setItem('accessToken', response.data.data.token)
     }

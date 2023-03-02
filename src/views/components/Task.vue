@@ -1,33 +1,59 @@
+<script setup>
+    import axios from 'axios';
+    import { ref, watchEffect } from 'vue';
+    import { VUE_APP_BACKEND_URL } from '../../../env'
+    import store from '../.././store/store'
+
+    const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
+    const employeeName = ref('')
+    const flag = ref('')
+    const props = defineProps({
+        task: Object
+    })
+
+    watchEffect(async () => {
+        const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/employee/${props.task.employeeId}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+        })
+
+        employeeName.value = response.data.data.firstName + ' ' + response.data.data.lastName
+
+        flag.value = props.task.priority === 'LOW' ? 'priority-low' : props.task.priority === 'HIGH' ? 'priority-high' : 'priority-medium'
+    })
+</script>
+
 <template>
     <div class='task'>
         <div class="task__content">
 
             <h1 class="task__title">
                 <span class="project-name">EMS</span> 
-                Do the homework
+                {{ task.title }}
             </h1>
 
-            <p class="task__description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus inventore ab,
-                dolore deserunt laboriosam, qui nihil molestias aspernatur error rem quasi.</p>
-            <p class="task__assignee">Vu</p>
+            <p class="task__description">{{ task.description }}</p>
+            <p class="task__assignee">{{ employeeName }}</p>
         </div>
         <div class="task-info">
-            <div class="reports">
+            <div class="reports" v-if="store.state.authenticatedRole==='MANAGER'">
                 <font-awesome-icon icon="fa-solid fa-newspaper" />
                 3
             </div>
-            <div class="priority priority-low">
+            <div class="priority" :id="flag">
                 <font-awesome-icon class="fa" icon="fa-solid fa-flag" />
             </div>
 
             <div class="due">
                 <font-awesome-icon class="fa" icon="fa-solid fa-clock" />
-                Apr 12
+                {{ task.endDate }}
             </div>
 
             <div class="completion">
                 <font-awesome-icon class="fa" icon="fa-solid fa-circle-check" />
-                50%
+                {{ task.completion }}%
             </div>
         </div>
     </div>
@@ -100,15 +126,15 @@
 
         }
 
-        .priority-high {
+        #priority-high {
             color: #FF0000;
         }
 
-        .priority-medium {
+        #priority-medium {
             color: #FFA500;
         }
 
-        .priority-low {
+        #priority-low {
             color: #76CC8E;
         }
     }

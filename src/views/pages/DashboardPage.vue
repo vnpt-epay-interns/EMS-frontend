@@ -1,24 +1,46 @@
 <script setup lang="ts">
-    import { ref } from 'vue'
-    import store from '../.././store/store'
+    import { ref, watchEffect } from 'vue'
     import Task from '../components/Task.vue';
     import axios from 'axios'
+    import router from '../.././router/index'
     import { VUE_APP_BACKEND_URL } from '../../../env'
+    import store from '../../store/store';
 
+    const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
+
+    const tasks = ref([])
+    const tasksByStatus = ref({
+        "NEW": [],
+        "IN-PROGRESS": [],
+        "DONE": [],
+        "READY FOR REVIEW": []
+    })
 
     const options = {
             headers: {
-                "Authorization": `Bearer ${store.state.accessToken}`,
+                "Authorization": `Bearer ${token}`,
                 'Content-Type': 'application/json'
             }
     }
 
-    const tasks = axios
-        .get(`${VUE_APP_BACKEND_URL}/api/employee/get-tasks`, options)
-        .then(response => {
-            console.log(response.data)
+    watchEffect(async () => {
+        const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/employee/get-tasks`, options)
+        tasks.value = response.data.data
+
+       tasks.value.filter(task => {
+            if (task.status === "NEW") {
+                tasksByStatus.value["NEW"].push(task)
+            } else if (task.status === "IN_PROGRESS") {
+                tasksByStatus.value["IN-PROGRESS"].push(task)
+            } else if (task.status === "DONE") {
+                tasksByStatus.value["DONE"].push(task)
+            } else if (task.status === "READY_FOR_REVIEW") {
+                tasksByStatus.value["READY FOR REVIEW"].push(task)
+            }
         })
         
+    })
+
 </script>
 
 <template>
@@ -29,22 +51,19 @@
                 <input type="text" placeholder="Search items">
             </div>
             <div class="right__side">
-                <button class="add__task__btn">New Task</button>
+                <button class="add__task__btn" @click="router.push('/task')">New Task</button>
             </div>
         </div>
 
         <div class="column-container">
-            <div class="column" v-for="index in 4">
+            <div class="column" v-for="[status, tasks] of Object.entries(tasksByStatus)">
                 <div class="status__info">
-                    <h2 class="status__name">New</h2>
-                    <p class="status__amount">3</p>
+                    <h2 class="status__name">{{ status }}</h2>
+                    <p class="status__amount">{{ tasks.length }}</p>
                 </div>
 
-                <div class="task-container new">
-                    <Task />
-                    <Task />
-                    <Task />
-                    <Task />
+                <div class="task-container" >
+                    <Task v-for="task in tasks" :task="task"/>
                 </div>
             </div>
         </div>
@@ -71,6 +90,7 @@
 
             input {
                 border: none;
+                margin-top: 0;
 
                 &:focus {
                     outline: none;
@@ -104,6 +124,7 @@
             width: fit-content;
             padding: 10px 20px;
             min-height: 750px;
+            // min-width: 360px;
             height: 95%;
             border-radius: 10px;
             // overflow-y: scroll;
@@ -136,12 +157,10 @@
                 display: flex;
                 flex-direction: column;
                 gap: 10px;
+                cursor: pointer;
             }
         }
 
     }
-
-
-
 }
 </style>

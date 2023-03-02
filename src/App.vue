@@ -27,7 +27,6 @@ onBeforeMount(async () => {
     router.push('/dashboard');
 
   } else {
-
     if (!['/login', '/register'].includes(window.location.pathname)) {
       router.push('/login')
     }
