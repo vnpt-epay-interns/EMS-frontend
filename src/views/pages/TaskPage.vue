@@ -173,9 +173,8 @@
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
     input, textarea, select {
-        padding-left: 5px;
         width: 100%;
         height: 40px;
         border: 1px solid #ccc;
@@ -208,6 +207,10 @@
         justify-content: space-between;
         gap: 20px;
         grid-template-columns: 1fr 1fr;
+
+        input {
+            padding: 0;
+        }
     }
 
     .footer-field {
@@ -231,12 +234,19 @@
     }
 
     .additional-field {
+        padding-left: 5px;
         display: grid;
         justify-content: space-between;
         gap: 15px;
         grid-template-columns: 1fr 1fr;
         row-gap: 20px;
+
+        input {
+            padding: 0;
+        }
     }
+
+
 
     footer {
         display: flex;

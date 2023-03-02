@@ -38,6 +38,11 @@
                 tasksByStatus.value["READY FOR REVIEW"].push(task)
             }
         })
+    // const tasks = axios
+    //     .get(`${VUE_APP_BACKEND_URL}/api/employee/get-tasks`, options)
+    //     .then(response => {
+    //         console.log(response.data)
+    //     })
         
     })
 

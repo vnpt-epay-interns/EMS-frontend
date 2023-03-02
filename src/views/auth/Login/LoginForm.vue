@@ -5,7 +5,7 @@ import router from './../../../router/index'
 import axios from 'axios'
 import { VUE_APP_BACKEND_URL } from '../../../../env.js'
 import { RouterLink } from 'vue-router';
-
+import { fetchUserInfoAndDoRouting } from '../../../router/index.js'
 const email = ref('')
 const password = ref('')
 const showPassword = ref(false)
@@ -16,6 +16,7 @@ const togglePassword = () => {
 }
 
 const login = async () => {
+    // login to get the accessToken
     const body = {
         email: email.value,
         password: password.value
@@ -23,31 +24,22 @@ const login = async () => {
 
     store.state.isLoading = true;
     const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/auth/login`, body)
+    store.state.isLoading = false;
+
 
     store.state.accessToken = response.data.data.token
     store.state.authenticatedRole = response.data.data.role
     //TODO: check if this code is redundant!
+
     if (rememberMe.value) {
         localStorage.setItem('accessToken', response.data.data.token)
     }
 
 
-    store.state.isLoading = false;
-
-    await fetchUserInfo()
-    router.push("/dashboard")
-
+    // fetch user info with the access token and do routing 
+    fetchUserInfoAndDoRouting()
 }
 
-const fetchUserInfo = async () => {
-    const options = {
-        headers: {
-            'Authorization': `Bearer ${store.state.accessToken}`
-        }
-    }
-    const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/auth/user-info`, options);
-    store.state.user = response.data.data;
-}
 
 </script>
 

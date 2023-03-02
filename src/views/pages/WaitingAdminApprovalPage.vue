@@ -1,5 +1,6 @@
 <script setup>
     import Header from '@/views/components/Header.vue'
+    
 </script>
 
 <template>
@@ -7,18 +8,13 @@
         <div class="container">
             <Header />  
             <div class="body">
-                <div class="logo">
-                    <p class="number">4</p>
-                    <p class="number">0</p>
-                    <p class="number">3</p>
-                </div>
                 <p class="header">
-                    Access Denied
+                    Waiting for administrator’s approval
                 </p>
                 <div class="description">
-                    You do not have permission to access this resource.
+                    You have successfully registered as a manager.
                     <br />
-                    You need to waiting for administrator’s approval.
+                    Now you need to wait for admin to approve your registration
                 </div>
             </div>
         </div>
@@ -55,29 +51,14 @@
         gap: 10px;
     }
 
-    .number {
-        display: inline-block;
-        font-size: 70px;
-        font-weight: bold;
-    }
-
-    .number:first-child {
-        color: #184680;
-    }
-
-    .number:nth-child(2) {
-        color: #3E97D9;
-        transform: translateX(-15px);
-    }
-
-    .number:last-child {
-        color: #184680;
-        transform: translateX(-30px);
-    }
-
     .header {
-        color: #184680;
-        font-weight: bold;
+        font-weight: 700;
+        font-size: 30px;
+        line-height: 48px;
+        letter-spacing: 0.01em;
+        text-transform: capitalize;
+        font-style: normal;
+        text-align: center;
     }
 
     .description {

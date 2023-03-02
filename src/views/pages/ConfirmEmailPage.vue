@@ -1,5 +1,8 @@
 <script setup>
     import Header from '@/views/components/Header.vue'
+    import { inject } from 'vue';
+
+    const store = inject('store');
 </script>
 
 <template>
@@ -7,13 +10,13 @@
         <div class="container">
             <Header />  
             <div class="content">
-                <header>
                     <div class="title">Verify your email</div>
+                    <p class="user__email">{{ store.state.user.email }}</p>
                     <p class="description">
                         Welcome,  we’re excited you’re joining us.
                         <br />
-                        Ready to get started? First, verify your email address.</p>
-                </header>
+                    Ready to get started? First, verify your email .
+                    </p>
             </div>
         </div>
     </main>
@@ -47,26 +50,31 @@
         line-height: 48px;
         letter-spacing: 0.01em;
         text-transform: capitalize;
+        font-style: normal;
     }
 
+    .user__email {
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 24px;
+        letter-spacing: 0.1em;
+        text-align: center;
+    }
     .description {
         margin-top: 20px;
         font-weight: 400;
         font-size: 16px;
         line-height: 24px;
         color: #667085;
+        text-align: left;
     }
     .content {
         display: flex;
         flex-direction: column;
         justify-content: center;
+        gap: 10px;
     }
     
-    header {
-        margin-bottom: 56px;
-        font-style: normal;
-    }
-
     input {
         border: 1px solid #D0D5DD;
         padding: 10px;

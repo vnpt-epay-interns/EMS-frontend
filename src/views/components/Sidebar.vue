@@ -16,6 +16,7 @@
       <RouterLink to="/task" class="nav__item" active-class="highlight">Task</RouterLink>
       <RouterLink to="/report" class="nav__item" active-class="highlight">Report</RouterLink>
       <RouterLink to="/project" class="nav__item" active-class="highlight">Project</RouterLink>
+      <RouterLink to="/logout" class="nav__item" active-class="highlight">Logout</RouterLink>
 
     </div>
   </aside>
