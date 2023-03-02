@@ -17,7 +17,7 @@ import ListEmployeePage from '../views/pages/ListEmployeePage.vue'
 import Logout from '../views/auth/Logout/Logout.vue'
 import ConfirmEmailPage from '../views/pages/ConfirmEmailPage.vue'
 import WaitingAdminApprovalPage from '../views/pages/WaitingAdminApprovalPage.vue'
-
+import VerifyEmailPage from '../views/pages/VerifyEmailPage.vue'
 
 import axios from "axios";
 import { useRouter } from "vue-router";
@@ -34,10 +34,6 @@ const router =  createRouter({
         {
             path: '/',
             redirect: '/dashboard',
-        },
-        {
-            path: '/home',
-            redirect: '/'
         },
         {
             path: '/login',
@@ -92,12 +88,20 @@ const router =  createRouter({
             component: SelectRolePage
         },
         {
+            path: '/verify-email/:verifyCode',
+            component: VerifyEmailPage
+        },
+        {
             path: '/confirm-email',
             component: ConfirmEmailPage
         },
         {
             path: '/waiting-for-admin-approval',
             component: WaitingAdminApprovalPage
+        },
+        {
+            path: "/:catchall(.*)*",
+            component: VerifyEmailPage 
         }
     ]
 })
@@ -105,6 +109,7 @@ const router =  createRouter({
 
 
 const doRouting = () => {
+
 
     if (store.state.user) {
 

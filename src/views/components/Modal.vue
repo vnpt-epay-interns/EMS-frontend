@@ -2,14 +2,21 @@
     <div class="modal__container">
         <div class="message__container" @click="closeModal">
             <div class="close__modal__btn" @click="closeModal">&times;</div>
-            {{ store.state.popup.message }}
+            <div class="message">
+                <img src="../../assets/logo/sucess.png" alt="icon" v-if="store.state.popup.isSuccess"/>
+                <img src="../../assets/logo/error.png" alt="icon" v-else/>
+                <p :class="store.state.popup.isSuccess  ? 'green__text' : 'red__text'">{{ store.state.popup.message }}</p>
+            </div>  
         </div>
     </div>
 </template>
 
 <script setup>
 import { ref, inject } from 'vue';
+
 const store = inject('store');
+const SuccessIcon = '../../assets/logo/success.png';
+const ErrorIcon = '../../assets/logo/error.png';
 
 const closeModal = () => {
     store.state.popup.isShowing = false;
@@ -59,6 +66,32 @@ const closeModal = () => {
 
             &:hover {
                 background: rgb(255, 0, 0);
+            }
+        }
+
+        .message {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+
+            img {
+                width: 50px;
+                height: 50px;
+            }
+
+            p {
+                font-size: 14px;
+                font-weight: 600;
+            }
+
+            .green__text {
+                color: green;
+            }
+
+            .red__text {
+                color: red;
             }
         }
     }
