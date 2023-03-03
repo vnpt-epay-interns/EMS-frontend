@@ -25,9 +25,7 @@ onMounted(async () => {
   store.state.isLoading = true;
   const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-employees`, config)
   store.state.isLoading = false;
-  console.log(response.data);
   employeeList.value = response.data.data;
-  console.log(employeeList.value);
 });
 
 </script>

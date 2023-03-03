@@ -115,7 +115,7 @@ const router =  createRouter({
 
 
 
-const doRouting = () => {
+export const doRouting = () => {
 
 
     if (store.state.user) {
@@ -164,25 +164,7 @@ export const fetchUserInfoAndDoRouting =  async () => {
     const userInfoResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/auth/user-info`, options);
     store.state.user = userInfoResponse.data.data;
     store.state.isLoading = false
-
-    // prepare tasks for app dashboard
-    store.state.isLoading = true
-    if (userInfoResponse.data.data.role === 'EMPLOYEE') {
-        // get all tasks for employee
-        const allTasksResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/employee/get-all-tasks`, options)
-        store.state.tasks = allTasksResponse.data.data
-    }
-
-    if (store.state.user.role === 'MANAGER') {
-        // get all employees for manager in TaskPage
-        const allEmployeesResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/all-employees`, options)
-        store.state.employees = allEmployeesResponse.data.data
-
-        // get all tasks for dashboard
-        const allTasksResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-tasks`, options)
-        store.state.tasks = allTasksResponse.data.data
-    }
-    store.state.isLoading = false
+    
     // do routing based on user info
     doRouting()
 }

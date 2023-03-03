@@ -2,10 +2,18 @@
     import { ref, watchEffect, inject } from 'vue'
     import Task from '../components/Task.vue';
     import { useRouter } from 'vue-router';
+    import axios from 'axios';
+    import { VUE_APP_BACKEND_URL } from '../../../env'
 
     const store = inject('store')
     const router = useRouter()
     const isNewTask = ref(true)
+    const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
+    const options = {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
 
     const tasks = ref([])
     const tasksByStatus = ref({
@@ -34,9 +42,20 @@
         })
     }
 
+    store.state.isLoading = true
     watchEffect(async () => {
-        tasks.value = store.state.tasks
-        
+        // prepare tasks for app dashboard
+        if (store.state.user.role === 'EMPLOYEE') {
+            const allTasksResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/employee/get-all-tasks`, options)
+            tasks.value = allTasksResponse.data.data
+        }
+
+        if (store.state.user.role === 'MANAGER') {
+            // get all employees for manager in TaskPage
+            const allEmployeesResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-tasks`, options)
+            tasks.value = allEmployeesResponse.data.data
+        }
+
         if (tasks.value) {
             tasks.value.filter(task => {
                 if (task.status === "NEW") {
@@ -52,6 +71,7 @@
         }
         
     })
+    store.state.isLoading = false
 
 </script>
 

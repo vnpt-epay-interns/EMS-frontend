@@ -1,7 +1,8 @@
 <script setup>
-    import { ref, inject } from 'vue'
+    import { ref, inject, watchEffect } from 'vue'
     import { useRoute } from 'vue-router'
     import { VUE_APP_BACKEND_URL } from '../../../env'
+    import { doRouting } from '../../router/index'
     import axios from 'axios'
 
     const store = inject('store')
@@ -10,9 +11,14 @@
     const employees = ref([])
     const isDisabled = ref(false)
     const errorMessage = ref('')
+    const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
+    const options = {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
 
     const task = store.state.task
-    const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
 
     const title = ref('')
     const parentId = ref(null)
@@ -43,10 +49,6 @@
     const isValidInput = () => {
         if (title.value === null) {
             errorMessage.value = 'Title is required'
-            return false
-        }
-        if (parentId.value === null) {
-            errorMessage.value = 'Parent task is required'
             return false
         }
         if (isNaN(parentId.value)) {
@@ -106,7 +108,18 @@
         resetTask()
     }
 
-    employees.value = store.state.employees
+    watchEffect( async () => {
+        if (store.state.user.role !== 'MANAGER') {
+            return
+        }
+        store.state.isLoading = true
+        // get all employees for manager in TaskPage
+        const allEmployeesResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-employees`, options)
+        employees.value = allEmployeesResponse.data.data
+        store.state.isLoading = false
+    })
+
+
     const handleClick = async () => {
         if (!isValidInput()) {
             store.state.popup.displayForMilliSecond(errorMessage.value, 2000)
@@ -115,6 +128,7 @@
 
         // get employee id from employee name
         employeeId.value = employees.value.find(e => (e.firstName + " " + e.lastName) === employeeName.value).id 
+        
         const task = {
             title: title.value,
             description: description.value,
@@ -139,7 +153,7 @@
                 })
                 
                 if (response.data.status === 200) {
-                    store.state.popup.displayForMilliSecond(response.data.data.messsage, 2000, true)
+                    store.state.popup.displayForMilliSecond(response.data.message, 2000, true)
                 } else {
                     store.state.popup.displayForMilliSecond("Update task failed", 2000)
                 }
@@ -151,7 +165,6 @@
                         'Content-Type': 'application/json'
                     }
                 })
-            
                 if (response.data.status === 200) {
                     store.state.popup.displayForMilliSecond("Create task successfully", 2000, true)
                     // after creating successfully, reset all fields
@@ -160,6 +173,7 @@
                     store.state.popup.displayForMilliSecond("Create task failed", 2000)
                 }
             }
+            doRouting()
         } catch (error) {
             store.state.popup.displayForMilliSecond("Action failed", 2000)
         }
@@ -205,11 +219,11 @@
                     </div>
                     <div class="status">
                         <div>Status</div>
-                        <select v-model="status" :disabled="isDisabled">
+                        <select v-model="status" >
                             <option disabled value="">Please select one</option>
                             <option>NEW</option>
-                            <option>IN-PROGRESS</option>
-                            <option>READY FOR REVIEW</option>
+                            <option value="IN_PROGRESS">IN-PROGRESS</option>
+                            <option value="READY_FOR_REVIEW">READY FOR REVIEW</option>
                             <option>DONE</option>
                         </select>
                     </div>
@@ -226,7 +240,7 @@
                 <div class="additional-field">
                     <div class="done">
                         <div>Completion(%)</div>
-                        <select v-model="completion" :disabled="isDisabled">
+                        <select v-model="completion">
                             <option disabled value="">Please select one</option>
                             <option>10</option>
                             <option>20</option>
@@ -255,7 +269,7 @@
                 </div>
             </div>
             <footer>
-                <button @click="handleClick" :disabled="isDisabled">Save</button>
+                <button @click="handleClick">Save</button>
             </footer>
         </main>
     </div>
