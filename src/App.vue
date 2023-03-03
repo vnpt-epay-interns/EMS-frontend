@@ -35,10 +35,6 @@ if (token) {
     router.push('/login')
   }
 }
-
-// });
-
-
 </script>
 
 
