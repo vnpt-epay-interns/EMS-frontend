@@ -95,6 +95,8 @@ input {
     font-size: 14px;
     margin: 0;
     background: none;
+    padding: 10px;
+
 }
 
 input:focus {

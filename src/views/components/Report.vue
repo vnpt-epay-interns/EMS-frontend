@@ -1,15 +1,39 @@
 <template>
     <div class="report">
         <div class="report__status"></div>
-        <div class="content">
-            <p class="report__created_date">12/02/2023</p>
-            <p class="report__name">Design database for EMS Project</p>
-            <p class="report__author__name">Nguyen Hoang Vy</p>
+        <div class="report__content">
+            <div class="report__content__title">
+                <h3>{{ report.reportTitle }}</h3>
+            </div>
+            <div class="report__content__name">
+                <h4>{{ report.employeeName }}</h4>
+            </div>
+            <div class="report__content__date">
+                <p>{{ report.createdAt }}</p>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
+
+const {report} = defineProps(['report'])
+// const store = inject('store');
+
+// const reportList = ref([])
+
+// onMounted(async () => {
+//     const config = {
+//         headers: {
+//             'Content-Type': "application/json",
+//             'Authorization': `Bearer ${store.state.accessToken}`,
+//         },
+//     };
+//     store.state.isLoading = true;
+//     const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/reports`, config)
+//     store.state.isLoading = false;
+// });
+
 
 </script>
 
@@ -34,5 +58,4 @@
     }
 
 }
-
 </style>
