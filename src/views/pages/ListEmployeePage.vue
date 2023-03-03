@@ -1,17 +1,35 @@
-<script>
+<script setup>
 import '../../assets/employeeTable.scss'
+// import { RouterLink } from 'vue-router';
 
-export default {
-  data() {
-    return {
-      tableData: [
-        { id: 1, column1: 'Row 1 Column 1', column2: 'Row 1 Column 2', column3: 'Row 1 Column 3' },
-        { id: 2, column1: 'Row 2 Column 1', column2: 'Row 2 Column 2', column3: 'Row 2 Column 3' },
-        { id: 3, column1: 'Row 3 Column 1', column2: 'Row 3 Column 2', column3: 'Row 3 Column 3' },
-      ],
-    };
-  },
-};
+// import { inject } from 'vue';
+
+import { VUE_APP_BACKEND_URL } from '../../../env'
+
+import axios from 'axios';
+
+import { ref, onMounted, inject } from 'vue';
+
+const store = inject('store');
+
+const employeeList = ref([]);
+
+onMounted(async () => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${store.state.accessToken}`,
+    },
+  };
+
+  store.state.isLoading = true;
+  const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-employees`, config)
+  store.state.isLoading = false;
+  console.log(response.data);
+  employeeList.value = response.data.data;
+  console.log(employeeList.value);
+});
+
 </script>
 
 
@@ -27,17 +45,17 @@ export default {
         <thead class="thead-light">
           <tr>
             <th class="top-left">ID</th>
-            <th>Column 1</th>
-            <th>Column 2</th>
-            <th class="top-right">Column 3</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th class="top-right">Email</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="row in tableData" :key="row.id">
-            <td>{{ row.id }}</td>
-            <td>{{ row.column1 }}</td>
-            <td>{{ row.column2 }}</td>
-            <td>{{ row.column3 }}</td>
+          <tr v-for="employee in employeeList" :key="employee.id">
+            <td>{{ employee.id }}</td>
+            <td>{{ employee.firstName }}</td>
+            <td>{{ employee.lastName }}</td>
+            <td>{{ employee.email }}</td>
           </tr>
         </tbody>
 

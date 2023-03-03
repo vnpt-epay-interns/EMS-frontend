@@ -117,6 +117,9 @@ const doLogin = (response) => {
 input {
     font-size: 14px;
     margin: 0;
+    background: none;
+    padding: 10px;
+
 }
 
 .login__container__body__form__group__input:focus {
