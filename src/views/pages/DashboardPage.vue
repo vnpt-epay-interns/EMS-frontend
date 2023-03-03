@@ -1,12 +1,11 @@
-<script setup lang="ts">
-    import { ref, watchEffect } from 'vue'
+<script setup>
+    import { ref, watchEffect, inject } from 'vue'
     import Task from '../components/Task.vue';
-    import axios from 'axios'
-    import router from '../.././router/index'
-    import { VUE_APP_BACKEND_URL } from '../../../env'
-    import store from '../../store/store';
+    import { useRouter } from 'vue-router';
 
-    const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
+    const store = inject('store')
+    const router = useRouter()
+    const isNewTask = ref(true)
 
     const tasks = ref([])
     const tasksByStatus = ref({
@@ -16,33 +15,41 @@
         "READY FOR REVIEW": []
     })
 
-    const options = {
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                'Content-Type': 'application/json'
+    const navigateNewTaskPage = () => {
+        isNewTask.value = true
+        router.push({
+            name: "TaskPage"
+        })
+    }
+
+    const viewTask = (t) => {
+        store.state.task = t
+        isNewTask.value = false
+        
+        router.push({
+            name: "TaskDetailsPage",
+            params: {
+                id: t.id
             }
+        })
     }
 
     watchEffect(async () => {
-        const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/employee/get-tasks`, options)
-        tasks.value = response.data.data
-
-       tasks.value.filter(task => {
-            if (task.status === "NEW") {
-                tasksByStatus.value["NEW"].push(task)
-            } else if (task.status === "IN_PROGRESS") {
-                tasksByStatus.value["IN-PROGRESS"].push(task)
-            } else if (task.status === "DONE") {
-                tasksByStatus.value["DONE"].push(task)
-            } else if (task.status === "READY_FOR_REVIEW") {
-                tasksByStatus.value["READY FOR REVIEW"].push(task)
-            }
-        })
-    // const tasks = axios
-    //     .get(`${VUE_APP_BACKEND_URL}/api/employee/get-tasks`, options)
-    //     .then(response => {
-    //         console.log(response.data)
-    //     })
+        tasks.value = store.state.tasks
+        
+        if (tasks.value) {
+            tasks.value.filter(task => {
+                if (task.status === "NEW") {
+                    tasksByStatus.value["NEW"].push(task)
+                } else if (task.status === "IN_PROGRESS") {
+                    tasksByStatus.value["IN-PROGRESS"].push(task)
+                } else if (task.status === "DONE") {
+                    tasksByStatus.value["DONE"].push(task)
+                } else if (task.status === "READY_FOR_REVIEW") {
+                    tasksByStatus.value["READY FOR REVIEW"].push(task)
+                }
+            })
+        }
         
     })
 
@@ -55,8 +62,8 @@
                 <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
                 <input type="text" placeholder="Search items">
             </div>
-            <div class="right__side">
-                <button class="add__task__btn" @click="router.push('/task')">New Task</button>
+            <div class="right__side" v-if="store.state.user.role==='MANAGER'">
+                <button class="add__task__btn" @click="navigateNewTaskPage()">New Task</button>
             </div>
         </div>
 
@@ -67,12 +74,11 @@
                     <p class="status__amount">{{ tasks.length }}</p>
                 </div>
 
-                <div class="task-container" >
-                    <Task v-for="task in tasks" :task="task"/>
+                <div class="task-container" v-for="task in tasks">
+                    <Task :task="task" @click="viewTask(task)"/>
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -94,8 +100,11 @@
             align-items: center;
 
             input {
+                font-size: 14px;
                 border: none;
                 margin-top: 0;
+                margin-left: 5px;
+                padding: 0;
 
                 &:focus {
                     outline: none;
@@ -125,19 +134,20 @@
         gap: 10px;
 
         .column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
             background: #E6ECF0;
             width: fit-content;
-            padding: 10px 20px;
+            padding: 10px;
             min-height: 750px;
-            // min-width: 360px;
+            min-width: 250px;
             height: 95%;
             border-radius: 10px;
-            // overflow-y: scroll;
 
             .status__info {
                 display: flex;
                 align-items: center;
-                margin-bottom: 10px;
                 align-items: center;
                 gap: 20px;
 

@@ -4,6 +4,7 @@ import axios from 'axios'
 import { VUE_APP_BACKEND_URL } from '../../../../env.js'
 import store from '../../../store/store.js'
 import { useRouter } from 'vue-router'
+import ErrorText from '../../components/ErrorText.vue'
 
 const firstName = ref('')
 const lastName = ref('')
@@ -18,7 +19,6 @@ const validEmail = ref(false) // if email not exists in database
 const router = useRouter() 
 
 const handleClick = async () => {
-
     if (password.value !== confirmedPassword.value) {
         showPasswordError.value = true
         return
@@ -39,6 +39,7 @@ const handleClick = async () => {
 
     if (response.data.status !== 200) {
         errorMessage.value = response.data.message
+        setTimeout(() => errorMessage.value = '', 3000)
         return
     } else {
         errorMessage.value = ''
@@ -71,9 +72,6 @@ const checkEmailExists = async () => {
 
 <template>
     <div class="register__container__form">
-        <div class="error__text">
-                <p v-if="errorMessage">{{ errorMessage }}</p>
-        </div>
         <form>
             <div class="register__container__form__input">
                 <label for="name">First name</label>
@@ -100,16 +98,15 @@ const checkEmailExists = async () => {
                         <font-awesome-icon class="fa" :icon="showPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"
                             @click="toggleShowPassword" />
                     </span>
-
                 </div>
+                
+                <ErrorText v-if="errorMessage" :errorMessage="errorMessage"/>
             </div>
             <div class="register__container__form__input">
                 <label for="confirmedPassword">Confirm Password</label>
                 <input :type="showPassword ? 'text' : 'password'" name="confirmedPassword" id="confirmedPassword"
                     placeholder="********" v-model="confirmedPassword" :class="showPasswordError ? 'red__border' : ''">
             </div>
-
-
 
             <div class="register__container__form__input">
                 <button @click.prevent="handleClick">
@@ -126,11 +123,6 @@ const checkEmailExists = async () => {
 <style lang="scss" scoped>
 .register__container__form {
     max-width: 1000px;
-    .error__text {
-        font-size: 12px;
-        color: red;
-        text-align: center;
-    }
     form {
 
         margin: 40px 0;
@@ -142,10 +134,7 @@ const checkEmailExists = async () => {
         .register__container__form__input {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-
-
-
+            justify-content: flex-start;
 
             .password__container {
                 position: relative;

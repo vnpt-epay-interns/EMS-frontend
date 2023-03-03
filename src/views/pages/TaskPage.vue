@@ -1,11 +1,21 @@
 <script setup>
-    import { ref, watchEffect, onMounted } from 'vue'
+    import { ref, inject } from 'vue'
+    import { useRoute } from 'vue-router'
     import { VUE_APP_BACKEND_URL } from '../../../env'
     import axios from 'axios'
-    import store from '../.././store/store'
+
+    const store = inject('store')
+    const route = useRoute()
+    // list selected employees for manager
+    const employees = ref([])
+    const isDisabled = ref(false)
+    const errorMessage = ref('')
+
+    const task = store.state.task
+    const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
 
     const title = ref('')
-    const parentTask = ref()
+    const parentId = ref(null)
     const description = ref('')
     const priority = ref('')
     const status = ref('')
@@ -14,21 +24,97 @@
     const completion = ref()
     const startDate = ref(new Date().toISOString().substring(0, 10))
     const endDate = ref(new Date().toISOString().substring(0, 10))
-    const employees = ref([])
-    const employeeName = ref({
-        id: null,
-        fullName: null
-    })
+    const employeeName = ref('')
 
-    const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
+    const resetTask = () => {
+        title.value = null
+        parentId.value = null
+        description.value = null
+        priority.value = null
+        status.value = null
+        employeeId.value = null
+        estimateHours.value = null
+        completion.value = null           
+        startDate.value = new Date().toISOString().substring(0, 10)
+        endDate.value = new Date().toISOString().substring(0, 10)
+        employeeName.value = null
+    }
 
-    const createTask = async () => {
-        employees.value.forEach((element) => {
-            if (element.fullName === employeeId.value) {
-                employeeId.value = element.id
-            }
-        })
-        console.log(employeeId.value);
+    const isValidInput = () => {
+        if (title.value === null) {
+            errorMessage.value = 'Title is required'
+            return false
+        }
+        if (parentId.value === null) {
+            errorMessage.value = 'Parent task is required'
+            return false
+        }
+        if (isNaN(parentId.value)) {
+            errorMessage.value = 'Parent task must be a number'
+            return false
+        }
+        if (description.value === null) {
+            errorMessage.value = 'Description is required'
+            return false
+        }
+        if (priority.value === null) {
+            errorMessage.value = 'Priority is required'
+            return false
+        }
+        if (status.value === null) {
+            errorMessage.value = 'Status is required'
+            return false
+        }
+        if (employeeName.value === null) {
+            errorMessage.value = 'Employee is required'
+            return false
+        }
+        if (estimateHours.value === null) {
+            errorMessage.value = 'Estimate hours is required'
+            return false
+        }
+        if (isNaN(estimateHours.value)) {
+            errorMessage.value = 'Estimate hours must be a number'
+            return false
+        }
+        if (completion.value === null) {
+            errorMessage.value = 'Completion is required'
+            return false
+        }
+        return true     
+    }
+
+    if (store.state.user.role === 'EMPLOYEE') {
+        isDisabled.value = true
+    }
+    
+    if (task !== null) {
+        title.value = task.title
+        parentId.value = task.parentId
+        description.value = task.description
+        priority.value = task.priority
+        status.value = task.status
+        employeeId.value = task.employeeId
+        estimateHours.value = task.estimateHours
+        completion.value = task.completion
+        startDate.value = task.startDate
+        endDate.value = task.endDate
+        employeeName.value = task.employeeName
+    }
+
+    if (window.location.pathname === '/task') {
+        resetTask()
+    }
+
+    employees.value = store.state.employees
+    const handleClick = async () => {
+        if (!isValidInput()) {
+            store.state.popup.displayForMilliSecond(errorMessage.value, 2000)
+            return
+        }
+
+        // get employee id from employee name
+        employeeId.value = employees.value.find(e => (e.firstName + " " + e.lastName) === employeeName.value).id 
         const task = {
             title: title.value,
             description: description.value,
@@ -39,45 +125,46 @@
             endDate: endDate.value,
             employeeId: employeeId.value,
             estimateHours: estimateHours.value,
-            parentTask: parentTask.value
+            parentId: parentId.value
         }
         
-        const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/manager/tasks/create`, task, {
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    'Content-Type': 'application/json'
+        store.state.isLoading= true;
+        try {
+            if (route.params.id !== undefined) {
+                const response = await axios.put(`${VUE_APP_BACKEND_URL}/api/manager/tasks/update/${route.params.id}`, task, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                
+                if (response.data.status === 200) {
+                    store.state.popup.displayForMilliSecond(response.data.data.messsage, 2000, true)
+                } else {
+                    store.state.popup.displayForMilliSecond("Update task failed", 2000)
                 }
-        })
-
-        console.log(response);
+            }
+            else {
+                const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/manager/tasks/create`, task, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                })
+            
+                if (response.data.status === 200) {
+                    store.state.popup.displayForMilliSecond("Create task successfully", 2000, true)
+                    // after creating successfully, reset all fields
+                    resetTask()
+                } else {
+                    store.state.popup.displayForMilliSecond("Create task failed", 2000)
+                }
+            }
+        } catch (error) {
+            store.state.popup.displayForMilliSecond("Action failed", 2000)
+        }
+        store.state.isLoading= false
     }
-
-    const getUserInfoByEmployeeId = async (employeeId) => {
-        const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/${employeeId}`, {
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-        })
-
-        employeeName.value["id"] = response.data.data.id
-        employeeName.value["fullName"] = response.data.data.firstName + " " + response.data.data.lastName
-        return employeeName.value
-    }
-
-    watchEffect(async () => {
-        const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/all-employees`, {
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-        })
-        
-        response.data.data.forEach(async (element) => {
-            const employeeName = await getUserInfoByEmployeeId(element.id)
-            employees.value.push(employeeName)
-        });
-    })
 </script>
 
 <template>
@@ -89,19 +176,19 @@
             <div class="row-1">
                 <div class="name-field">
                     <label for="title">Title</label>
-                    <input type="text" id="title" v-model="title">
+                    <input type="text" id="title" v-model="title" :disabled="isDisabled">
                 </div>
 
                 <div class="parent_task-Field">
                     <label for="parent-task">Parent Task</label>
-                    <input type="text" id="parent-task" v-model="parentTask">
+                    <input type="text" id="parent-task" v-model="parentId" :disabled="isDisabled">
                 </div>
             </div>
 
             <div class="row-2">
                 <div class="description-field">
                     <label for="description">Description</label>
-                    <textarea name="description" id="description" v-model="description"></textarea>
+                    <textarea name="description" id="description" v-model="description" :disabled="isDisabled"></textarea>
                 </div>
             </div>
 
@@ -109,7 +196,7 @@
                 <div class="selected-field">
                     <div class="priority">
                         <div>Priority</div>
-                        <select v-model="priority">
+                        <select v-model="priority" :disabled="isDisabled">
                             <option disabled value="">Please select one</option>
                             <option>LOW</option>
                             <option>MEDIUM</option>
@@ -118,7 +205,7 @@
                     </div>
                     <div class="status">
                         <div>Status</div>
-                        <select v-model="status">
+                        <select v-model="status" :disabled="isDisabled">
                             <option disabled value="">Please select one</option>
                             <option>NEW</option>
                             <option>IN-PROGRESS</option>
@@ -128,9 +215,10 @@
                     </div>
                     <div class="in-charge">
                         <div>In-Charge</div>
-                        <select v-model="employeeId">
+                        <select v-model="employeeName" :disabled="isDisabled">
                             <option disabled value="">Please select one</option>
-                            <option v-for="employee of employees">{{ employee.fullName }}</option>
+                            <option v-if="store.state.user.role==='EMPLOYEE'">{{ employeeName }}</option>
+                            <option v-for="employee of employees">{{ employee.firstName + " " + employee.lastName }}</option>
                         </select>
                     </div>
                 </div>
@@ -138,7 +226,7 @@
                 <div class="additional-field">
                     <div class="done">
                         <div>Completion(%)</div>
-                        <select v-model="completion">
+                        <select v-model="completion" :disabled="isDisabled">
                             <option disabled value="">Please select one</option>
                             <option>10</option>
                             <option>20</option>
@@ -154,20 +242,20 @@
                     </div>
                     <div class="estimate-field">
                         <label for="estimate">Estimate Time</label>
-                        <input type="text" id="estimate" v-model="estimateHours">
+                        <input type="text" id="estimate" v-model="estimateHours" :disabled="isDisabled">
                     </div>
                     <div class="start_date-field">
                         <label for="start_date">Start date</label>
-                        <input type="date" id="start_date" v-model="startDate">
+                        <input type="date" id="start_date" v-model="startDate" :disabled="isDisabled">
                     </div>
                     <div class="end_date-field">
                         <label for="end_date">Due date</label>
-                        <input type="date" id="end_date" v-model="endDate">
+                        <input type="date" id="end_date" v-model="endDate" :disabled="isDisabled">
                     </div>
                 </div>
             </div>
             <footer>
-                <button @click="createTask">Save</button>
+                <button @click="handleClick" :disabled="isDisabled">Save</button>
             </footer>
         </main>
     </div>
@@ -175,6 +263,7 @@
 
 <style scoped lang="scss">
     input, textarea, select {
+        font-size: small;
         width: 100%;
         height: 40px;
         border: 1px solid #ccc;
@@ -205,11 +294,11 @@
     .row-1 {
         display: grid;
         justify-content: space-between;
-        gap: 20px;
+        gap: 15px;
         grid-template-columns: 1fr 1fr;
 
         input {
-            padding: 0;
+            padding: 0 0 0 5px;
         }
     }
 
@@ -225,7 +314,7 @@
         justify-content: space-between;
         grid-template-columns: 150px 150px;
         grid-template-rows: 1fr 1fr;
-        row-gap: 20px;
+        gap: 15px;
     }
 
     .in-charge {
@@ -239,14 +328,11 @@
         justify-content: space-between;
         gap: 15px;
         grid-template-columns: 1fr 1fr;
-        row-gap: 20px;
 
         input {
-            padding: 0;
+            padding: 0 0 0 5px;
         }
     }
-
-
 
     footer {
         display: flex;
@@ -261,5 +347,10 @@
         padding: 10px;
         min-width: 200px;
         height: 44px;
+    }
+
+    button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
     }
 </style>

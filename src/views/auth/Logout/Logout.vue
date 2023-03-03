@@ -5,11 +5,9 @@
 </template>
 
 <script setup>
-    import { useRouter } from 'vue-router';
     import { inject } from 'vue';
-    import store from '../../../store/store.js';
 
-    const router = useRouter();
+    const store = inject('store')
     localStorage.removeItem('accessToken');
     store.state.accessToken = null;
     store.state.user = null;

@@ -1,93 +1,91 @@
 <script setup>
     import axios from 'axios';
-    import { ref, watchEffect } from 'vue';
+    import { ref, inject } from 'vue';
+    import { useRouter } from 'vue-router';
     import { VUE_APP_BACKEND_URL } from '../../../env'
-    import store from '../.././store/store'
-
-    const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
-    const employeeName = ref('')
+    
+    const router = useRouter();
     const flag = ref('')
+    const store = inject('store')
     const props = defineProps({
         task: Object
     })
 
-    watchEffect(async () => {
-        const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/${props.task.employeeId}`, {
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
+    flag.value = props.task.priority === 'LOW' ? 'priority-low' : props.task.priority === 'HIGH' ? 'priority-high' : 'priority-medium'
+    const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
+
+    const closeModal = async () => {
+        await axios.delete(`${VUE_APP_BACKEND_URL}/manager/tasks/delete/${props.task.id}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
         })
+        
+    }
 
-        employeeName.value = response.data.data.firstName + ' ' + response.data.data.lastName
-
-        flag.value = props.task.priority === 'LOW' ? 'priority-low' : props.task.priority === 'HIGH' ? 'priority-high' : 'priority-medium'
-    })
 </script>
 
 <template>
     <div class='task'>
-        <div class="task__content">
-
+        <!-- <div class="close__modal__btn" @click="closeModal">&times;</div> -->
+        <div class="task__content" :title="task.description">
             <h1 class="task__title">
-                <span class="project-name">EMS</span> 
-                {{ task.title }}
+                <span class="project-name" title="Project name">EMS</span> 
+                <span class="title" title="Title">{{ task.title }}</span>
             </h1>
 
-            <!-- <p class="task__description">{{ task.description }}</p> -->
-            <p class="task__assignee">{{ employeeName }}</p>
+            <p class="task__assignee" title="Asignee">{{ task.employeeName }}</p>
         </div>
+
         <div class="task-info">
-            <div class="reports" v-if="store.state.authenticatedRole==='MANAGER'">
-                <font-awesome-icon icon="fa-solid fa-newspaper" />
-                3
-            </div>
-            <div class="priority" :id="flag">
-                <font-awesome-icon class="fa" icon="fa-solid fa-flag" />
-            </div>
+                <div class="reports" v-if="store.state.user.role==='MANAGER'" title="Report" >
+                    <font-awesome-icon icon="fa-solid fa-newspaper" /> {{ task.numberReports }}
+                </div>
+                <div class="priority" :id="flag" :title="task.priority">
+                    <font-awesome-icon class="fa" icon="fa-solid fa-flag" />
+                </div>
 
-            <div class="due">
-                <font-awesome-icon class="fa" icon="fa-solid fa-clock" />
-                {{ task.endDate }}
-            </div>
+                <div class="due" title="Due date">
+                    <font-awesome-icon class="fa" icon="fa-solid fa-clock" />
+                    {{ task.endDate }}
+                </div>
 
-            <div class="completion">
-                <font-awesome-icon class="fa" icon="fa-solid fa-circle-check" />
-                {{ task.completion }}%
+                <div class="completion" title="Completion">
+                    <font-awesome-icon class="fa" icon="fa-solid fa-circle-check" />
+                    {{ task.completion }}%
+                </div>
             </div>
-        </div>
     </div>
 </template>
 
-<script setup>
-
-</script>
-
 <style lang="scss" scoped>
 .task {
+    position: relative;
     border-radius: 5px;
-    width: 300px;
     padding: 10px 10px 10px 10px;
     background: white;
 
     .task__content {
-        margin-bottom: 10px;
 
-        .project-name {
-            color: #E96479;
-            font-size: 12px;
-            border-right: 0.7px solid gray;
-            padding-right: 5px;
-        }
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
 
         .task__title {
             font-size: 15px;
             font-weight: 700;
-            margin-bottom: 10px;
-        }
 
-        p {
-            margin-bottom: 10px;
+            .project-name {
+                color: #E96479;
+                font-size: 12px;
+                border-right: 0.7px solid gray;
+                padding-right: 5px;
+            }
+
+            .title {
+                padding-left: 5px;
+            }
         }
 
         .task__assignee {
@@ -106,24 +104,24 @@
         .task__description {
             font-size: 12px;
             color: #1D2D35;
+            padding: 5px;
         }
 
     }
 
     .task-info {
         margin-top: 10px;
-        border-top: 1px solid #ccc;
         padding: 10px 5px 0px 5px;
         width: 100%;
         display: flex;
-        gap: 25px;
+        gap: 20px;
+        border-top: 1px solid #ccc; 
 
         div {
             font-size: 14px;
             display: flex;
             align-items: center;
             gap: 5px;
-
         }
 
         #priority-high {
@@ -137,6 +135,28 @@
         #priority-low {
             color: #76CC8E;
         }
+
+        .reports {
+            z-index: 1000;
+        }
+    }
+
+    .close__modal__btn {
+        position: absolute;
+        border-top-right-radius: 5px;
+        padding: 5px 10px;
+        font-size: 10px;
+        top: 0px;
+        right: 0px;
+        cursor: pointer;
+        background: rgb(236, 105, 105);
+        color: white;
+        z-index: 10000;
+
+        &:hover {
+            background: rgb(255, 0, 0);
+        }
     }
 }
+
 </style>

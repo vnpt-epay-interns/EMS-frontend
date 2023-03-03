@@ -21,8 +21,10 @@ const state = reactive({
         },
     },
     accessToken: null,
-    authenticatedRole: null,
-    showSidebar: false
+    showSidebar: false,
+    tasks: null,
+    employees: null,
+    task: null
 }) 
 
 
