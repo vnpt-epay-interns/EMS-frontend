@@ -15,7 +15,7 @@ import ProjectManagementPage from '../views/pages/ProjectManagementPage.vue'
 import ListEmployeePage from '../views/pages/ListEmployeePage.vue'
 // import ProjectManagementPage from '../views/pages/ProjectManagementPage.vue'
 import Logout from '../views/auth/Logout/Logout.vue'
-import ConfirmEmailPage from '../views/pages/ConfirmEmailPage.vue'
+import ConfirmEmailPage from '../views/pages/WaitingEmailVerification.vue'
 import WaitingAdminApprovalPage from '../views/pages/WaitingAdminApprovalPage.vue'
 import VerifyEmailPage from '../views/pages/VerifyEmailPage.vue'
 
@@ -92,7 +92,7 @@ const router =  createRouter({
             component: VerifyEmailPage
         },
         {
-            path: '/confirm-email',
+            path: '/wating-email-verification',
             component: ConfirmEmailPage
         },
         {
@@ -101,7 +101,7 @@ const router =  createRouter({
         },
         {
             path: "/:catchall(.*)*",
-            component: VerifyEmailPage 
+            component: Login 
         }
     ]
 })
@@ -139,7 +139,7 @@ const doRouting = () => {
             }
         } else {
             // user has not verified email
-            router.push('/confirm-email');
+            router.push('/wating-email-verification');
         }
     }
 }

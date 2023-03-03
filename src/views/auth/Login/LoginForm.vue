@@ -15,7 +15,7 @@ const togglePassword = () => {
     showPassword.value = !showPassword.value
 }
 
-const login = async () => {
+const formLogin = async () => {
     // login to get the accessToken
     const body = {
         email: email.value,
@@ -26,26 +26,45 @@ const login = async () => {
     const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/auth/login`, body)
     store.state.isLoading = false;
 
+    doLogin(response)
 
-    store.state.accessToken = response.data.data.token
-    store.state.authenticatedRole = response.data.data.role
-    //TODO: check if this code is redundant!
-
-    if (rememberMe.value) {
-        localStorage.setItem('accessToken', response.data.data.token)
-    }
-
-
-    // fetch user info with the access token and do routing 
-    fetchUserInfoAndDoRouting()
 }
 
+const googleLogin = async (googleResponse) => {
+    const body = {
+        authorizationCode: googleResponse.code
+    }
+
+    store.state.isLoading = true;
+    const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/auth/google-login`, body)
+    store.state.isLoading = false;
+
+    doLogin(response)
+
+}
+
+const doLogin = (response) => {
+    if (response.data.status == 200) {
+        store.state.accessToken = response.data.data.token
+        store.state.authenticatedRole = response.data.data.role
+
+        //TODO: remember me will by default be true
+        if (rememberMe.value) {
+            localStorage.setItem('accessToken', response.data.data.token)
+        }
+
+        // fetch user info with the access token and do routing 
+        fetchUserInfoAndDoRouting()
+    } else {
+        store.state.popup.displayForMilliSecond(response.data.message, 3000, false)
+    }
+}
 
 </script>
 
 <template>
     <div class="login__container__body">
-        <form class="login__container__body__form" @submit.prevent="login">
+        <form class="login__container__body__form" @submit.prevent="formLogin">
             <div class="login__container__body__form__group">
                 <div class="input_container">
                     <input type="email" id="email" class="login__container__body__form__group__input" placeholder="Email"
@@ -78,10 +97,11 @@ const login = async () => {
                 <button type="submit" class="login__container__body__form__group__button">Sign in</button>
             </div>
 
-            <GoogleLogin :callback="loginWithGoogle">
+            <GoogleLogin :callback="googleLogin">
                 <img src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png" alt="">
                 Sign in with Google
             </GoogleLogin>
+
             <div class="login__container__body__form__group">
                 <p class="sigup_optional">Don't have an account? <RouterLink to="/register">Register</RouterLink>
                 </p>
@@ -193,4 +213,5 @@ a {
 
 a:link {
     color: var(--primary);
-}</style>
+}
+</style>

@@ -17,6 +17,8 @@ import { useRoute } from 'vue-router'
 import axios from 'axios';
 import { inject, onMounted } from 'vue';
 import { VUE_APP_BACKEND_URL } from '../../../env';
+import Header from '@/views/components/Header.vue'
+
 const store = inject('store');
 
 
@@ -32,7 +34,10 @@ const verifyEmail = async () => {
     store.state.isLoading = false
 
     if (response.data.status == 200) {
-        window.location.reload(); // reload page to update the store, and do the auto routing
+        
+        store.state.popup.displayForMilliSecond("Successfully", 3000, true)
+
+        // window.location.reload(); // reload page to update the store, and do the auto routing
         
     } else {
         store.state.popup.displayForMilliSecond(response.data.message, 3000, false)
