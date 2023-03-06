@@ -1,8 +1,11 @@
 <template>
   <aside class="sidebar">
     <div class="user__info">
-      <img class='user__avatar'
-        :src="store.state.user.avatar"        alt="">
+      <RouterLink to="/profile">
+          <img class='user__avatar'
+          :src="store.state.user.avatar"        alt="">
+      </RouterLink>
+      
       <h1 class="user__name">{{ fullName}}</h1>
       <p class="user__emai">{{ store.state.user.email }}</p>
     </div>
