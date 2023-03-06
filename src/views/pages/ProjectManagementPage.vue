@@ -5,11 +5,8 @@
             <input type="text" placeholder="Enter new project name">
             <button>+</button>
         </div>
-        <div class="project__container">
-            <Project />
-            <Project />
-            <Project />
-            <Project />
+        <div class="project__container" v-for="project in projectList">
+            <project :project="project" />
         </div>
     </div>
 </template>

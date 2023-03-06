@@ -1,5 +1,6 @@
 <template>
     <div class="project">
+        <div class="head__color"    ></div>
         <div class="project__content">
             <div class="project__content__title">
                 <h3>{{ project.name }}</h3>
