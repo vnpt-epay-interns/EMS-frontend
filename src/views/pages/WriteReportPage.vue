@@ -1,15 +1,15 @@
 <script setup>
     import { QuillEditor } from '@vueup/vue-quill'
     import '@vueup/vue-quill/dist/vue-quill.snow.css'
+    import { ref } from 'vue'
     
 </script>
 
 <template>
     <div class="container">
         <header>
-            <h1>
-                Report name
-            </h1>
+            <label for="title">Report Title: </label>
+            <input type="text" id="title" v-model="title">
         </header>
         <QuillEditor theme="snow" toolbar="full" />
         <footer>
@@ -24,6 +24,11 @@
         flex-direction: column;
         gap: 20px;
         padding: 30px;
+    }
+
+    header {
+        display: flex;
+        gap: 10px;
     }
 
     .ql-editor {

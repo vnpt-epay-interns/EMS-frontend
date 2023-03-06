@@ -53,7 +53,7 @@
                 <span class="title" title="Title">{{ task.title }}</span>
             </h1>
 
-            <p class="task__assignee" title="Asignee">{{ task.employeeName }}</p>
+            <p class="task__assignee" title="Asignee" v-show="store.state.user.role === 'MANAGER'">{{ task.employeeName }}</p>
         </div>
 
         <div class="task-info">
