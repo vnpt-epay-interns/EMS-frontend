@@ -1,13 +1,13 @@
 <script setup>
-    import { ref, watchEffect, inject } from 'vue'
+    import { ref, onMounted, inject, reactive, watch } from 'vue'
     import Task from '../components/Task.vue';
     import { useRouter } from 'vue-router';
     import axios from 'axios';
     import { VUE_APP_BACKEND_URL } from '../../../env'
+    import Draggable from 'vueDraggable';
 
     const store = inject('store')
     const router = useRouter()
-    const isNewTask = ref(true)
     const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
     const options = {
         headers: {
@@ -19,31 +19,67 @@
     const tasksByStatus = ref({
         "NEW": [],
         "IN-PROGRESS": [],
+        "READY FOR REVIEW": [],
         "DONE": [],
-        "READY FOR REVIEW": []
     })
 
     const navigateNewTaskPage = () => {
-        isNewTask.value = true
         router.push({
             name: "TaskPage"
         })
     }
 
-    const viewTask = (t) => {
-        store.state.task = t
-        isNewTask.value = false
+    const onChange = (e) => {
+        let item = e.added || e.moved
+        if (!item) return
         
-        router.push({
-            name: "TaskDetailsPage",
-            params: {
-                id: t.id
-            }
-        })
+        for (const [status, tasks] of Object.entries(tasksByStatus.value)) {
+            tasks.forEach( async (task) => {
+                if (task.status !== status) {
+                    task.status = status
+                    let response = null
+                    if (task.status === 'IN-PROGRESS') {
+                        task.status = 'IN_PROGRESS'
+                    } else if (task.status === 'READY FOR REVIEW') {
+                        task.status = 'READY_FOR_REVIEW'
+                    }
+                    
+                    if (store.state.user.role === 'EMPLOYEE') {
+                        const body = {
+                            status: task.status,
+                            completion: task.completion
+                        }
+                        response = await axios.put(`${VUE_APP_BACKEND_URL}/api/employee/update-task/${task.id}`, body, options)
+                    } else {
+                        const body = {
+                            title: task.title,
+                            description: task.description,
+                            status: task.status,
+                            completion: task.completion,
+                            priority: task.priority,
+                            startDate: task.startDate,
+                            endDate: task.endDate,
+                            employeeId: task.employeeId,
+                            estimateHours: task.estimateHours,
+                            parentId: task.parentId
+                        }
+                        response = await axios.put(`${VUE_APP_BACKEND_URL}/api/manager/update-task/${task.id}`, body, options)
+                    }
+
+                    if (response.data.status !== 200) {
+                        store.state.popup.displayForMilliSecond(response.data.message, 2000, false)
+                    }
+                }
+            })
+        }  
     }
 
-    store.state.isLoading = true
-    watchEffect(async () => {
+    onMounted(async () => {
+        store.state.isLoading = true
+        if (!store.state.user) {
+            router.push('/login')
+            return
+        }
         // prepare tasks for app dashboard
         if (store.state.user.role === 'EMPLOYEE') {
             const allTasksResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/employee/get-all-tasks`, options)
@@ -55,6 +91,7 @@
             const allEmployeesResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-tasks`, options)
             tasks.value = allEmployeesResponse.data.data
         }
+        store.state.isLoading = false
 
         if (tasks.value) {
             tasks.value.filter(task => {
@@ -69,9 +106,7 @@
                 }
             })
         }
-        
     })
-    store.state.isLoading = false
 
 </script>
 
@@ -82,7 +117,7 @@
                 <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
                 <input type="text" placeholder="Search items">
             </div>
-            <div class="right__side" v-if="store.state.user.role==='MANAGER'">
+            <div class="right__side" v-if="store.state.user?.role==='MANAGER'">
                 <button class="add__task__btn" @click="navigateNewTaskPage()">New Task</button>
             </div>
         </div>
@@ -93,10 +128,11 @@
                     <h2 class="status__name">{{ status }}</h2>
                     <p class="status__amount">{{ tasks.length }}</p>
                 </div>
-
-                <div class="task-container" v-for="task in tasks">
-                    <Task :task="task" @click="viewTask(task)"/>
-                </div>
+                <Draggable class="task-field" :list="tasks" group="task" itemKey="status" @change="onChange" :id="status">
+                    <template class="task-container" #item="{element}">
+                        <Task :task="element"/>
+                    </template>
+                </Draggable>
             </div>
         </div>
     </div>
@@ -188,7 +224,7 @@
                 }
             }
 
-            .task-container {
+            .task-field {
                 display: flex;
                 flex-direction: column;
                 gap: 10px;

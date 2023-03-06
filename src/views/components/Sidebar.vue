@@ -3,7 +3,7 @@
     <div class="user__info">
       <RouterLink to="/profile">
           <img class='user__avatar'
-          :src="store.state.user.avatar"        alt="">
+          :src="store.state.user.avatar" alt="">
       </RouterLink>
       
       <h1 class="user__name">{{ fullName}}</h1>
@@ -16,7 +16,7 @@
       <RouterLink to="/employee" class="nav__item" active-class="highlight" v-if="store.state.user.role=='MANAGER'">Employee</RouterLink>
       <RouterLink to="/schedule" class="nav__item" active-class="highlight">Working Schedule</RouterLink>
       <RouterLink to="/task" class="nav__item" active-class="highlight" v-if="store.state.user.role=='MANAGER'">Task</RouterLink>
-      <RouterLink to="/report" class="nav__item" active-class="highlight">Report</RouterLink>
+      <RouterLink to="/write-report" class="nav__item" active-class="highlight" >Report</RouterLink>
       <RouterLink to="/project" class="nav__item" active-class="highlight" v-if="store.state.user.role=='MANAGER'">Project</RouterLink>
       <RouterLink to="/logout" class="nav__item" active-class="highlight">Logout</RouterLink>
 
@@ -25,14 +25,20 @@
 </template>
 
 <script setup>
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 import { inject } from 'vue';
 
+const router = useRouter();
 const store = inject('store');
-
-
 const fullName = store.state.user.firstName + ' ' + store.state.user.lastName
 
+const navigateReportPage = () => {
+  if (store.state.user.role === 'EMPLOYEE') {
+    router.push({
+      path: '/write-report'
+    })
+  }
+}
 </script>
 
 <style lang="scss" scoped>

@@ -12,22 +12,40 @@
     })
 
     flag.value = props.task.priority === 'LOW' ? 'priority-low' : props.task.priority === 'HIGH' ? 'priority-high' : 'priority-medium'
-    const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
 
-    const closeModal = async () => {
-        await axios.delete(`${VUE_APP_BACKEND_URL}/manager/tasks/delete/${props.task.id}`, {
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                'Content-Type': 'application/json'
+    // delete task feature
+    // const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
+    // const closeModal = async () => {
+    //     await axios.delete(`${VUE_APP_BACKEND_URL}/manager/tasks/delete/${props.task.id}`, {
+    //         headers: {
+    //             "Authorization": `Bearer ${token}`,
+    //             'Content-Type': 'application/json'
+    //         }
+    //     })
+        
+    // }
+
+    const viewTask = () => {   
+        store.state.task = props.task    
+        router.push({
+            name: "TaskDetailsPage",
+            params: {
+                id: props.task.id
             }
         })
-        
+    }
+
+    const viewReports = () => {
+        router.push({
+            name: "ReportTaskPage",
+            params: {id: props.task.id}
+        })
     }
 
 </script>
 
 <template>
-    <div class='task'>
+    <div class='task' @click="viewTask">
         <!-- <div class="close__modal__btn" @click="closeModal">&times;</div> -->
         <div class="task__content" :title="task.description">
             <h1 class="task__title">
@@ -35,11 +53,11 @@
                 <span class="title" title="Title">{{ task.title }}</span>
             </h1>
 
-            <p class="task__assignee" title="Asignee">{{ task.employeeName }}</p>
+            <p class="task__assignee" title="Asignee" v-show="store.state.user.role === 'MANAGER'">{{ task.employeeName }}</p>
         </div>
 
         <div class="task-info">
-                <div class="reports" v-if="store.state.user.role==='MANAGER'" title="Report" >
+                <div class="reports" v-if="store.state.user.role==='MANAGER'" title="Report" @click.stop="viewReports">
                     <font-awesome-icon icon="fa-solid fa-newspaper" /> {{ task.numberReports }}
                 </div>
                 <div class="priority" :id="flag" :title="task.priority">

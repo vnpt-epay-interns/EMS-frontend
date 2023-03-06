@@ -66,6 +66,11 @@ const router =  createRouter({
             component: ViewAllReports
         },
         {
+            path: '/report/task/:id',
+            name: "ReportTaskPage",
+            component: ViewAllReports
+        },
+        {
             path: '/report/:id/details',
             component: ViewReportDetails
         },
