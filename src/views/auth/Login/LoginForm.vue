@@ -48,7 +48,6 @@ const googleLogin = async (googleResponse) => {
 const doLogin = (response) => {
     if (response.data.status == 200) {
         store.state.accessToken = response.data.data.token
-        store.state.authenticatedRole = response.data.data.role
 
         //TODO: remember me will by default be true
         if (rememberMe.value) {

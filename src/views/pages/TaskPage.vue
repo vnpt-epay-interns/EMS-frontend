@@ -2,7 +2,6 @@
     import { ref, inject, watchEffect } from 'vue'
     import { useRoute } from 'vue-router'
     import { VUE_APP_BACKEND_URL } from '../../../env'
-    import { doRouting } from '../../router/index'
     import axios from 'axios'
 
     const store = inject('store')
@@ -83,6 +82,10 @@
             errorMessage.value = 'Completion is required'
             return false
         }
+        if (Date.parse(endDate.value) - Date.parse(startDate.value) < 0) {
+            errorMessage.value = 'End date must be greater than start date'
+            return false
+        }
         return true     
     }
 
@@ -106,7 +109,7 @@
 
     if (window.location.pathname === '/task') {
         resetTask()
-    }
+    }   
 
     watchEffect( async () => {
         if (store.state.user.role !== 'MANAGER') {
@@ -119,61 +122,66 @@
         store.state.isLoading = false
     })
 
-
     const handleClick = async () => {
         if (!isValidInput()) {
             store.state.popup.displayForMilliSecond(errorMessage.value, 2000)
             return
         }
-
-        // get employee id from employee name
-        employeeId.value = employees.value.find(e => (e.firstName + " " + e.lastName) === employeeName.value).id 
-        
-        const task = {
-            title: title.value,
-            description: description.value,
-            status: status.value,
-            completion: completion.value,
-            priority: priority.value,
-            startDate: startDate.value,
-            endDate: endDate.value,
-            employeeId: employeeId.value,
-            estimateHours: estimateHours.value,
-            parentId: parentId.value
-        }
         
         store.state.isLoading= true;
         try {
-            if (route.params.id !== undefined) {
-                const response = await axios.put(`${VUE_APP_BACKEND_URL}/api/manager/tasks/update/${route.params.id}`, task, {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                })
-                
+            if (store.state.user.role === 'EMPLOYEE') {
+                const task = {
+                    status: status.value,
+                    completion: completion.value
+                }
+                const response = await axios.put(`${VUE_APP_BACKEND_URL}/api/employee/update-task/${route.params.id}`, task , options)
+
                 if (response.data.status === 200) {
                     store.state.popup.displayForMilliSecond(response.data.message, 2000, true)
                 } else {
-                    store.state.popup.displayForMilliSecond("Update task failed", 2000)
+                    store.state.popup.displayForMilliSecond(response.data.message, 2000)
                 }
-            }
-            else {
-                const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/manager/tasks/create`, task, {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        'Content-Type': 'application/json'
+            } else {
+                // get employee id from employee name
+                employeeId.value = employees.value.find(e => (e.firstName + " " + e.lastName) === employeeName.value).id 
+                const task = {
+                    title: title.value,
+                    description: description.value,
+                    status: status.value,
+                    completion: completion.value,
+                    priority: priority.value,
+                    startDate: startDate.value,
+                    endDate: endDate.value,
+                    employeeId: employeeId.value,
+                    estimateHours: estimateHours.value,
+                    parentId: parentId.value
+                }
+
+                if (route.params.id !== undefined) {
+                    const response = await axios.put(`${VUE_APP_BACKEND_URL}/api/manager/update-task/${route.params.id}`, task, {
+                        headers: {
+                            "Authorization": `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    
+                    if (response.data.status === 200) {
+                        store.state.popup.displayForMilliSecond(response.data.message, 2000, true)
+                    } else {
+                        store.state.popup.displayForMilliSecond(response.data.message, 2000)
                     }
-                })
-                if (response.data.status === 200) {
-                    store.state.popup.displayForMilliSecond("Create task successfully", 2000, true)
-                    // after creating successfully, reset all fields
-                    resetTask()
                 } else {
-                    store.state.popup.displayForMilliSecond("Create task failed", 2000)
+                    const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/manager/create-task`, task, options)
+                    if (response.data.status === 200) {
+                        store.state.popup.displayForMilliSecond(response.data.message, 2000, true)
+                        // after creating successfully, reset all fields
+                        resetTask()
+                    } else {
+                        store.state.popup.displayForMilliSecond(response.data.message, 2000)
+                    }
                 }
             }
-            doRouting()
         } catch (error) {
             store.state.popup.displayForMilliSecond("Action failed", 2000)
         }
