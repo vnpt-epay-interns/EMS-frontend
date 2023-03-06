@@ -2,11 +2,11 @@
     <div class="calendar">
         <header>
             <p class="year">{{ new Date().getFullYear() }}</p>
-            <button>
+            <button @click="prevMonth" class="btn btn-">
                 <font-awesome-icon icon="fa-solid fa-chevron-left" />
             </button>
             <p class="month">{{ monthInfo.name }}</p>
-            <button>
+            <button @click="nextMonth">
                 <font-awesome-icon icon="fa-solid fa-chevron-right" />
             </button>
         </header>
@@ -36,7 +36,7 @@
 <script setup>
 import Day from '../../components/Day.vue'
 import axios from 'axios';
-import { ref, onMounted, inject } from 'vue';
+import { ref, onMounted, inject, watch } from 'vue';
 import { VUE_APP_BACKEND_URL } from '../../../../env';
 
 const store = inject('store');
@@ -50,6 +50,23 @@ const monthInfo = ref({
 
 const schedules = ref([])
 
+const nextMonth = () => {
+    if (monthNumber.value == 11) {
+        monthNumber.value = 0;
+        year.value++;
+    } else {
+        monthNumber.value++;
+    }
+}
+
+const prevMonth = () => {
+    if (monthNumber.value == 0) {
+        monthNumber.value = 11;
+        year.value--;
+    } else {
+        monthNumber.value--;
+    }
+}
 const checkIfWeekend = (day) => {
     return monthInfo.value.weekends.includes(day)
 }
@@ -69,8 +86,7 @@ const getWorkingDayStatus = (schedule, day) => {
     return status.toLowerCase(); // return full, morning, or afternoon
 }
 
-
-onMounted(async () => {
+const fetchWorkingSchedules = async () => {
     const config = {
         headers: {
             'Authorization': `Bearer ${store.state.accessToken}`
@@ -85,7 +101,14 @@ onMounted(async () => {
 
     monthInfo.value = res.data.data.monthInfo;
     schedules.value = res.data.data.schedules;
+}
 
+watch(monthNumber, (newVal, oldVal) => {
+    fetchWorkingSchedules();
+})
+
+onMounted(async () => {
+    fetchWorkingSchedules()
 })
 
 </script>

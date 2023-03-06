@@ -2,11 +2,11 @@
     <div class="calendar">
         <header>
             <p class="year">{{ new Date().getFullYear() }}</p>
-            <button>
+            <button @click="prevMonth">
                 <font-awesome-icon icon="fa-solid fa-chevron-left" />
             </button>
             <p class="month">{{ monthInfo.name }}</p>
-            <button>
+            <button @click="nextMonth">
                 <font-awesome-icon icon="fa-solid fa-chevron-right" />
             </button>
         </header>
@@ -115,8 +115,27 @@ const handleSave = async () => {
     }
 
 }
-//TODO: change month and year
-onMounted(async () => {
+
+
+const nextMonth = () => {
+    if (monthNumber.value == 11) {
+        monthNumber.value = 0;
+        year.value++;
+    } else {
+        monthNumber.value++;
+    }
+}
+
+const prevMonth = () => {
+    if (monthNumber.value == 0) {
+        monthNumber.value = 11;
+        year.value--;
+    } else {
+        monthNumber.value--;
+    }
+}
+
+const fetchWorkingSchedule = async () => {
     const config = {
         headers: {
             'Authorization': `Bearer ${store.state.accessToken}`
@@ -128,6 +147,14 @@ onMounted(async () => {
 
     monthInfo.value = res.data.data.monthInfo;
     schedule.value = res.data.data.schedules[0]; // there will be only one element in the array
+}
+
+watch(monthNumber, (newVal, oldVal) => {
+    fetchWorkingSchedule();
+})
+//TODO: change month and year
+onMounted(() => {
+    fetchWorkingSchedule();
 
 })
 
