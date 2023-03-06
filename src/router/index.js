@@ -4,7 +4,8 @@ import Login from '../views/auth/Login/Login.vue'
 import Register from '../views/auth/Register/Register.vue'
 import ViewReportDetails from '../views/pages/ViewReportDetails.vue'
 import ViewAllReports from '../views/pages/ViewAllReports.vue'
-import ViewAllWorkingSchedules from '../views/pages/ViewAllWorkingSchedules.vue'
+import WorkingSchedulePage from '../views/pages/workingSchedules/WorkingSchedulePage.vue'
+import EmployeeWorkingSchedulePage from '../views/pages/workingSchedules/EmployeeWorkingSchedulePage.vue'
 import TaskPage from '../views/pages/TaskPage.vue'
 import WriteReportPage from '../views/pages/WriteReportPage.vue'
 import EnterManagerCodePage from '../views/pages/EnterManagerCodePage.vue'
@@ -80,7 +81,7 @@ const router =  createRouter({
         },
         {
             path: '/schedule',
-            component: ViewAllWorkingSchedules
+            component: WorkingSchedulePage
         },
         {
             path: '/write-report',
