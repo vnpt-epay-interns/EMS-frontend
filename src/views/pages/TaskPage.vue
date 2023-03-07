@@ -1,11 +1,12 @@
 <script setup>
     import { ref, inject, watchEffect } from 'vue'
-    import { useRoute } from 'vue-router'
+    import { useRoute, useRouter } from 'vue-router'
     import { VUE_APP_BACKEND_URL } from '../../../env'
     import axios from 'axios'
 
     const store = inject('store')
     const route = useRoute()
+    const router = useRouter()
     // list selected employees for manager
     const employees = ref([])
     const isDisabled = ref(false)
@@ -187,6 +188,10 @@
         }
         store.state.isLoading= false
     }
+
+    const addReportForTask = () => {
+        router.push({ name: "WriteReportForTaskPage", params: { id: route.params.id } })
+    }
 </script>
 
 <template>
@@ -277,6 +282,7 @@
                 </div>
             </div>
             <footer>
+                <button @click="addReportForTask" v-show="store.state.user.role==='EMPLOYEE'">Add Report</button>
                 <button @click="handleClick">Save</button>
             </footer>
         </main>
@@ -358,6 +364,7 @@
 
     footer {
         display: flex;
+        gap: 20px;
         justify-content: flex-end;
     }
 

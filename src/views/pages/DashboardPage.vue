@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, onMounted, inject, reactive, watch } from 'vue'
+    import { ref, onMounted, inject } from 'vue'
     import Task from '../components/Task.vue';
     import { useRouter } from 'vue-router';
     import axios from 'axios';
@@ -108,6 +108,10 @@
         }
     })
 
+    const addReport = () => {
+        router.push({ name: "WriteReportPage" })
+    }
+
 </script>
 
 <template>
@@ -119,6 +123,9 @@
             </div>
             <div class="right__side" v-if="store.state.user?.role==='MANAGER'">
                 <button class="add__task__btn" @click="navigateNewTaskPage()">New Task</button>
+            </div>
+            <div class="right__side" v-show="store.state.user.role==='EMPLOYEE'">
+                <button class="add__task__btn" @click="addReport()">New Report</button>
             </div>
         </div>
 

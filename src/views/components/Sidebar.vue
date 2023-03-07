@@ -16,7 +16,7 @@
       <RouterLink to="/employee" class="nav__item" active-class="highlight" v-if="store.state.user.role=='MANAGER'">Employee</RouterLink>
       <RouterLink to="/schedule" class="nav__item" active-class="highlight">Working Schedule</RouterLink>
       <RouterLink to="/task" class="nav__item" active-class="highlight" v-if="store.state.user.role=='MANAGER'">Task</RouterLink>
-      <RouterLink to="/write-report" class="nav__item" active-class="highlight" >Report</RouterLink>
+      <RouterLink to="/reports" class="nav__item" active-class="highlight" >Report</RouterLink>
       <RouterLink to="/project" class="nav__item" active-class="highlight" v-if="store.state.user.role=='MANAGER'">Project</RouterLink>
       <RouterLink to="/logout" class="nav__item" active-class="highlight">Logout</RouterLink>
 
@@ -35,7 +35,7 @@ const fullName = store.state.user.firstName + ' ' + store.state.user.lastName
 const navigateReportPage = () => {
   if (store.state.user.role === 'EMPLOYEE') {
     router.push({
-      path: '/write-report'
+      name: "ReportsPage"
     })
   }
 }

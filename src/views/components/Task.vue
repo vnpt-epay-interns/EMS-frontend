@@ -37,7 +37,7 @@
 
     const viewReports = () => {
         router.push({
-            name: "ReportTaskPage",
+            name: "ViewAllReportsForTaskPage",
             params: {id: props.task.id}
         })
     }
@@ -57,7 +57,7 @@
         </div>
 
         <div class="task-info">
-                <div class="reports" v-if="store.state.user.role==='MANAGER'" title="Report" @click.stop="viewReports">
+                <div class="reports" title="Report" @click.stop="viewReports">
                     <font-awesome-icon icon="fa-solid fa-newspaper" /> {{ task.numberReports }}
                 </div>
                 <div class="priority" :id="flag" :title="task.priority">
