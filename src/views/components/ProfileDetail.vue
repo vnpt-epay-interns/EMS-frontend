@@ -17,9 +17,16 @@
                         <input type="text" name="lastname" id="lastname" placeholder="Doe" v-model="lastName"/>
                     </div>
                 </div>
-                <div class="profile_email">
-                    <label for="email">Email</label>
-                    <input type="email" name="email" id="email" placeholder="alo@gmail.com" v-model="email" readonly>
+                <div class="user__contact">
+                    <div class="profile_email">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" placeholder="alo@gmail.com" v-model="email" readonly>
+                    </div>
+                    <div class="referenced__code">
+                        <label for="referencecode">Reference Code</label>
+                        <input type="text" name="referencecode" id="referencedcode" placeholder="********"
+                            v-model="referencecode" readonly>
+                    </div>
                 </div>
             </div>
 
@@ -44,6 +51,7 @@ const store = inject('store')
 const firstName = ref(store.state.user.firstName)
 const lastName = ref(store.state.user.lastName)
 const email = ref(store.state.user.email)
+const referencecode = ref(store.state.user.referencecode)
 
 console.log(firstName);
 console.log(email);
@@ -60,11 +68,16 @@ const handleSave = async () => {
         firstName: firstName.value,
         lastName: lastName.value,
     }  
-    // console.log(body);
+
+    const refcode = {
+        referencecode: referencecode.value,
+    }
+    
     store.state.isLoading = true;
     const response = await axios.put(`${VUE_APP_BACKEND_URL}/api/auth/update-user-info`, body, config)
+    const referenceCode = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-referenced-code`, refcode, config)
     store.state.isLoading = false;
-    // console.log(response)
+
 }                                                                                                   
 
 
@@ -95,6 +108,15 @@ form {
     border-radius: 50%;
 }
 
+.user__contact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    padding-bottom: 30px;
+
+}
 
 input {
     font-size: 20px;
