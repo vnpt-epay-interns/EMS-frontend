@@ -1,5 +1,5 @@
 <template>
-    <form           >
+    <form>
         <div class="profile__detail">
             <div class="user__profile">
                 <img class='user__avatar' :src="store.state.user.avatar" alt="">
@@ -10,11 +10,11 @@
                 <div class="full__name">
                     <div class="profile_firstname">
                         <label for="firstname">First name</label>
-                        <input type="text" name="firstname" id="firstname" placeholder="John" v-model="firstName"/>
+                        <input type="text" name="firstname" id="firstname" placeholder="John" v-model="firstName" />
                     </div>
                     <div class="profile_lastname">
                         <label for="lastname">Last name</label>
-                        <input type="text" name="lastname" id="lastname" placeholder="Doe" v-model="lastName"/>
+                        <input type="text" name="lastname" id="lastname" placeholder="Doe" v-model="lastName" />
                     </div>
                 </div>
                 <div class="user__contact">
@@ -25,7 +25,7 @@
                     <div class="referenced__code">
                         <label for="referencecode">Reference Code</label>
                         <input type="text" name="referencecode" id="referencedcode" placeholder="********"
-                            v-model="referencecode" readonly>
+                            v-model="referenceCode" readonly>
                     </div>
                 </div>
             </div>
@@ -40,7 +40,7 @@
 
 <script setup>
 import { inject } from 'vue'
-import { ref, reactive } from 'vue'
+import { ref, reactive, onBeforeMount } from 'vue'
 import axios from 'axios'
 // import { RouterLink } from 'vue-router';
 import { VUE_APP_BACKEND_URL } from '../../../env'
@@ -51,10 +51,11 @@ const store = inject('store')
 const firstName = ref(store.state.user.firstName)
 const lastName = ref(store.state.user.lastName)
 const email = ref(store.state.user.email)
-const referencecode = ref(store.state.user.referencecode)
+const referenceCode = ref(store.state.user.referenceCode)
 
-console.log(firstName);
-console.log(email);
+
+// console.log(firstName);
+// console.log(email);
 
 const handleSave = async () => {
     const config = {
@@ -69,16 +70,30 @@ const handleSave = async () => {
         lastName: lastName.value,
     }  
 
-    const refcode = {
-        referencecode: referencecode.value,
-    }
-    
     store.state.isLoading = true;
     const response = await axios.put(`${VUE_APP_BACKEND_URL}/api/auth/update-user-info`, body, config)
-    const referenceCode = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-referenced-code`, refcode, config)
     store.state.isLoading = false;
+}           
 
-}                                                                                                   
+onBeforeMount(async () => {
+    const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${store.state.accessToken}`,
+        },
+      };
+
+      const refcode = {
+        referenceCode : referenceCode.value,
+      }
+      console.log(referenceCode);
+
+    // store.state.isLoading = true;
+    const refCode = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-referenced-code`, refcode, config)
+    // store.state.isLoading = false;
+    }
+
+)
 
 
 </script>
