@@ -9,6 +9,25 @@
             <button @click="nextMonth">
                 <font-awesome-icon icon="fa-solid fa-chevron-right" />
             </button>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <p class="full">F</p>
+                    <p>Full</p>
+                </div>
+                <div class="legend-item">
+                    <p class="morning">M</p>
+                    <p>Morning</p>
+                </div>
+                <div class="legend-item">
+                    <p class="afternoon">A</p>
+                    <p>Afternoon</p>
+                </div>
+                <div class="legend-item">
+                    <p class="weekend"></p>
+                    <p>Weekend</p>
+                </div>
+            </div>
         </header>
         <table>
             <thead>
@@ -20,13 +39,13 @@
             </thead>
             <tbody>
                 <tr v-for="schedule in schedules">
-                    <td class="name">{{ schedule.employeeName  }}</td>
+                    <td class="name">{{ schedule.employeeName }}</td>
                     <td v-for="i in monthInfo.numberOfDays">
                         <p v-if="checkIfWeekend(i)" class="weekend"></p>
-                        <p v-else-if="checkIfEmployeeWorkAtDay(schedule, i)" 
-                            :class="getWorkingDayStatus(schedule, i)"> {{ getWorkingDayStatus(schedule, i).charAt(0).toUpperCase() }}</p>
+                        <p v-else-if="checkIfEmployeeWorkAtDay(schedule, i)" :class="getWorkingDayStatus(schedule, i)"> {{
+                            getWorkingDayStatus(schedule, i).charAt(0).toUpperCase() }}</p>
                         <p v-else></p>
-                    </td>   
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -78,7 +97,7 @@ const checkIfEmployeeWorkAtDay = (schedule, day) => {
 const getWorkingDayStatus = (schedule, day) => {
     // for example schedule.days = [1, 2, 6, 14, 25, 26, 30] //meaning that the employee works on  the days 1, 2, 6, 14, 25, 26, 30 of the month
     // for example schedule.statuses = ['FULL', 'MORNING', 'FULL', 'FULL', 'FULL', 'MORNING', 'FULL'] //meaning that the employee works full on the days 1, 6, 14, 25, 26,  30 of the month, works morning on the day 2
-    
+
 
     const status = schedule.statuses[day - 1]
     console.log('s');
@@ -96,7 +115,7 @@ const fetchWorkingSchedules = async () => {
     console.log("Before getting");
     const res = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/working-schedules/${year.value}/${monthNumber.value}`, config)
     console.log('After getting');
-    
+
     store.state.isLoading = false;
 
     monthInfo.value = res.data.data.monthInfo;
@@ -118,6 +137,7 @@ onMounted(async () => {
     padding: 20px;
 
     header {
+        margin-bottom: 20px;
         display: flex;
         gap: 40px;
         align-items: center;
@@ -145,6 +165,23 @@ onMounted(async () => {
             }
         }
 
+        .legend {
+            display: flex;
+            gap: 20px;
+            .legend-item {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+
+                p {
+                    min-width: 25px;
+                    min-height: 25px;
+                    text-align: center;
+                    line-height: 25px;
+                }
+            }
+        }
+
     }
 
     th {
@@ -152,7 +189,8 @@ onMounted(async () => {
         border-left: 1px solid black;
     }
 
-    th,td {
+    th,
+    td {
 
         p {
             width: 25px;
@@ -162,21 +200,7 @@ onMounted(async () => {
             text-align: center;
         }
 
-        .morning {
-            background: #ffcd28;
-        }
 
-        .afternoon {
-            background: #ff6b6b;
-        }
-
-        .full {
-            background: #2bcbf7;
-        }
-
-        .weekend {
-            background: #CCC;
-        }
 
 
     }
@@ -191,8 +215,53 @@ onMounted(async () => {
 
     }
 
+    .morning {
+        background: #ffcd28;
+    }
+
+    .afternoon {
+        background: #ff6b6b;
+    }
+
+    .full {
+        background: #2bcbf7;
+    }
+
+    .weekend {
+        background: #CCC;
+    }
 
 
+}
+
+@media (max-width: 2400px) {
+
+    .calendar {
+        button {
+            border: none;
+            background: none;
+            cursor: pointer;
+
+            &:hover {
+                transform: scale(1.5);
+            }
+        }
+
+    }
+
+    th {
+        border-left: 1px solid black;
+    }
+
+    th,
+    td {
+        p {
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+        }
+
+    }
 
 }
 </style>

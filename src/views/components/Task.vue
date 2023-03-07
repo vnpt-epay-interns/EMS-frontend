@@ -1,46 +1,34 @@
 <script setup>
-    import axios from 'axios';
-    import { ref, inject } from 'vue';
-    import { useRouter } from 'vue-router';
-    import { VUE_APP_BACKEND_URL } from '../../../env'
-    
-    const router = useRouter();
-    const flag = ref('')
-    const store = inject('store')
-    const props = defineProps({
-        task: Object
+import axios from 'axios';
+import { ref, inject } from 'vue';
+import { useRouter } from 'vue-router';
+import { VUE_APP_BACKEND_URL } from '../../../env'
+
+const router = useRouter();
+const flag = ref('')
+const store = inject('store')
+const props = defineProps({
+    task: Object
+})
+
+flag.value = props.task.priority === 'LOW' ? 'priority-low' : props.task.priority === 'HIGH' ? 'priority-high' : 'priority-medium'
+
+const viewTask = () => {
+    store.state.task = props.task
+    router.push({
+        name: "TaskDetailsPage",
+        params: {
+            id: props.task.id
+        }
     })
+}
 
-    flag.value = props.task.priority === 'LOW' ? 'priority-low' : props.task.priority === 'HIGH' ? 'priority-high' : 'priority-medium'
-
-    // delete task feature
-    // const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
-    // const closeModal = async () => {
-    //     await axios.delete(`${VUE_APP_BACKEND_URL}/manager/tasks/delete/${props.task.id}`, {
-    //         headers: {
-    //             "Authorization": `Bearer ${token}`,
-    //             'Content-Type': 'application/json'
-    //         }
-    //     })
-        
-    // }
-
-    const viewTask = () => {   
-        store.state.task = props.task    
-        router.push({
-            name: "TaskDetailsPage",
-            params: {
-                id: props.task.id
-            }
-        })
-    }
-
-    const viewReports = () => {
-        router.push({
-            name: "ReportTaskPage",
-            params: {id: props.task.id}
-        })
-    }
+const viewReports = () => {
+    router.push({
+        name: "ReportTaskPage",
+        params: { id: props.task.id }
+    })
+}
 
 </script>
 
@@ -49,31 +37,32 @@
         <!-- <div class="close__modal__btn" @click="closeModal">&times;</div> -->
         <div class="task__content" :title="task.description">
             <h1 class="task__title">
-                <span class="project-name" title="Project name">EMS</span> 
+                <span class="project-name" title="Project name">EMS</span>
                 <span class="title" title="Title">{{ task.title }}</span>
             </h1>
 
-            <p class="task__assignee" title="Asignee" v-show="store.state.user.role === 'MANAGER'">{{ task.employeeName }}</p>
+            <p class="task__assignee" title="Asignee" v-show="store.state.user.role === 'MANAGER'">{{ task.employeeName }}
+            </p>
         </div>
 
         <div class="task-info">
-                <div class="reports" v-if="store.state.user.role==='MANAGER'" title="Report" @click.stop="viewReports">
-                    <font-awesome-icon icon="fa-solid fa-newspaper" /> {{ task.numberReports }}
-                </div>
-                <div class="priority" :id="flag" :title="task.priority">
-                    <font-awesome-icon class="fa" icon="fa-solid fa-flag" />
-                </div>
-
-                <div class="due" title="Due date">
-                    <font-awesome-icon class="fa" icon="fa-solid fa-clock" />
-                    {{ task.endDate }}
-                </div>
-
-                <div class="completion" title="Completion">
-                    <font-awesome-icon class="fa" icon="fa-solid fa-circle-check" />
-                    {{ task.completion }}%
-                </div>
+            <div class="reports" v-if="store.state.user.role === 'MANAGER'" title="Report" @click.stop="viewReports">
+                <font-awesome-icon icon="fa-solid fa-newspaper" /> {{ task.numberReports }}
             </div>
+            <div class="priority" :id="flag" :title="task.priority">
+                <font-awesome-icon class="fa" icon="fa-solid fa-flag" />
+            </div>
+
+            <div class="due" title="Due date">
+                <font-awesome-icon class="fa" icon="fa-solid fa-clock" />
+                {{ task.endDate }}
+            </div>
+
+            <div class="completion" title="Completion">
+                <font-awesome-icon class="fa" icon="fa-solid fa-circle-check" />
+                {{ task.completion }}%
+            </div>
+        </div>
     </div>
 </template>
 
@@ -83,7 +72,7 @@
     border-radius: 5px;
     padding: 10px 10px 10px 10px;
     background: white;
-
+    // margin: 10px 0;
     .task__content {
 
         display: flex;
@@ -107,7 +96,7 @@
         }
 
         .task__assignee {
-            font-size: 15px;
+            font-size: 12px;
             font-weight: 500;
             cursor: pointer;
             background: #0013FE;
@@ -116,7 +105,7 @@
             text-align: center;
             width: fit-content;
             padding: 0 5px;
-            color: white;
+            color: white;;
         }
 
         .task__description {
@@ -133,7 +122,7 @@
         width: 100%;
         display: flex;
         gap: 20px;
-        border-top: 1px solid #ccc; 
+        border-top: 1px solid #ccc;
 
         div {
             font-size: 14px;
@@ -177,4 +166,43 @@
     }
 }
 
+@media (max-width: 1400px) {
+    .task {
+
+        .task__content {
+
+            .task__title {
+                font-size: 12px;
+
+                .project-name {
+                    font-size: 11px;
+                }
+            }
+
+            .task__assignee {
+                font-size: 10px;
+                border-radius: 3px;
+                min-width: 50px;
+            }
+
+            .task__description {
+                font-size: 5px;
+                color: #1D2D35;
+                padding: 5px;
+            }
+
+        }
+
+        .task-info {
+            width: 100%;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #ccc;
+
+            div {
+                font-size: 11px;
+            }
+        }
+    }
+}
 </style>

@@ -50,13 +50,16 @@ if (token) {
   </div>
 </template>
 
-<style >
+<style scss>
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
 
 :root {
   --primary: #263159;
   --primary-hover: #40559f;
+  --small-desktop : 1400px;
 }
+
 
 * {
   margin: 0;

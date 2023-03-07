@@ -1,7 +1,7 @@
 <template>
     <div class="calendar">
         <header>
-            <p class="year">{{ new Date().getFullYear() }}</p>
+            <p class="year">{{ year }}</p>
             <button @click="prevMonth">
                 <font-awesome-icon icon="fa-solid fa-chevron-left" />
             </button>
@@ -12,7 +12,7 @@
         </header>
         <table>
             <thead>
-                <th class="name">Name</th>
+                <th class="name">Section</th>
                 <th v-for="index in monthInfo.numberOfDays">
                     <p> {{ index }}</p>
 
@@ -23,8 +23,8 @@
                     <td class="name">Full</td>
                     <td v-for="i in monthInfo.numberOfDays">
                         <p v-if="checkIfWeekend(i)" class="weekend"></p>
-                        <p v-else :class="checkIfClicked(i, 'FULL')? 'full' : ''"
-                            @click="e => handleClick(e, i, 'FULL')"></p>
+                        <p v-else :class="checkIfClicked(i, 'FULL') ? 'full' : ''" @click="e => handleClick(e, i, 'FULL')">
+                        </p>
                     </td>
                 </tr>
                 <tr>
@@ -72,16 +72,16 @@ const schedule = ref({
 })
 
 const handleClick = (e, day, status) => {
-    if (schedule.value.statuses[day-1] == status) {
-        schedule.value.statuses[day-1] = 'OFF'
+    if (schedule.value.statuses[day - 1] == status) {
+        schedule.value.statuses[day - 1] = 'OFF'
     } else {
-        schedule.value.statuses[day-1] = status
+        schedule.value.statuses[day - 1] = status
     }
 }
 
 const checkIfClicked = (day, status) => {
 
-    return schedule.value.statuses[day-1] == status;
+    return schedule.value.statuses[day - 1] == status;
 }
 // const schedules = ref([])
 
@@ -162,9 +162,12 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .calendar {
+    
     padding: 20px;
 
+
     header {
+        margin-bottom: 20px;
         display: flex;
         gap: 40px;
         align-items: center;
@@ -210,7 +213,7 @@ onMounted(() => {
             text-align: center;
         }
 
-        
+
         .morning {
             background: #ffcd28;
         }
@@ -223,7 +226,7 @@ onMounted(() => {
             background: #2bcbf7;
         }
 
-        
+
 
         .weekend {
             background: #CCC;
@@ -245,7 +248,7 @@ onMounted(() => {
 
     .save-btn {
         margin-top: 20px;
-    
+
 
         &:hover {
             background: var(--primary-hover);
@@ -254,4 +257,34 @@ onMounted(() => {
     }
 
 
-}</style>
+}
+
+@media (max-width: 1300px) {
+
+    .calendar {
+
+
+
+        th {
+            border-left: 1px solid black;
+        }
+
+        th,
+        td {
+
+            p {
+                width: 20px;
+                height: 20px;
+                line-height: 20px;
+                font-size: 13px;
+            }
+
+        }
+
+        .save-btn {
+            font-size: 12px;
+        }
+
+    }
+}
+</style>

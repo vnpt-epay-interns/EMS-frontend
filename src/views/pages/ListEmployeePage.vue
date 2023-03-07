@@ -32,89 +32,73 @@ onMounted(async () => {
 
 
 <template>
-  <div class="overview">
+  <div class="view-all-employee-page">
     <div class="header">
       <h2>Overview</h2>
       <h4>Employee List</h4>
-
     </div>
-    <div class="list">
-      <table class="table">
-        <thead class="thead-light">
-          <tr>
-            <th class="top-left">ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th class="top-right">Email</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="employee in employeeList" :key="employee.id">
-            <td>{{ employee.id }}</td>
-            <td>{{ employee.firstName }}</td>
-            <td>{{ employee.lastName }}</td>
-            <td>{{ employee.email }}</td>
-          </tr>
-        </tbody>
 
-      </table>
-    </div>
+    <table class="table"> 
+      <thead class="thead-light">
+        <tr>
+          <th class="top-left">ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th class="top-right">Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="employee in employeeList" :key="employee.id">
+          <td>{{ employee.id }}</td>
+          <td>{{ employee.firstName }}</td>
+          <td>{{ employee.lastName }}</td>
+          <td>{{ employee.email }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
+
 </template>
 
 <style lang="scss">
 // Import the library
 
+.view-all-employee-page {
+  padding: 10px;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 
-.table {
-  margin-top: 2%;
-  width: 100%;
-  font-size: 18px;
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 14px;
 
-  th,
-  td {
-    padding: 25px;
-    text-align: center;
-    border: 0.5px solid black;
-  }
+    .thead-light {
+      background-color: #e9ecef;
+      color: var(--primary)
+    }
 
-}
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border: 1px solid black;
+      padding: 5px 10px;
+      
+    }
 
-.top-left {
-  border-top-left-radius: 10px;
-}
+  
 
-.top-right {
-  border-top-right-radius: 10px;
-}
+    .top-left {
+      border-top-left-radius: 10px;
+    }
 
-.thead-light {
-  border-top-left-radius: 10px;
-  background-color: #969696;
-}
-
-.overview {
-  margin-left: 30px;
-  align-items: center;
-  justify-content: space-around;
-  margin-right: 10%;
-}
-
-.header {
-  display: flexbox;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 5%;
-
-  h2 {
-    display: flex;
-    font-size: 24px;
-    margin-bottom: 5px;
-
-  }
-
-  h4 {
-    font-size: 38px;
+    .top-right {
+      border-top-right-radius: 10px;
+    }
   }
 }
+
 </style> 

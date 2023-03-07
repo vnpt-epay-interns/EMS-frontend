@@ -51,7 +51,7 @@ onMounted(async () => {
 
     h1 {
         font-weight: 700;
-        font-size: 48px;
+        font-size: 28px;
     }
 
     .add__project__form {
@@ -61,18 +61,23 @@ onMounted(async () => {
 
         input {
             width: 500px;
-            height: 50px;
+            height: 40px;
             border: 0;
-            border-radius: 10px;
+            border-radius: 5px;
             padding: 0 20px;
-            font-size: 16px;
+            font-size: 14px;
             background-color: #f3f3f3;
+
+            &:focus {
+                outline: none;
+                border-bottom: 1px solid black;
+            }
         }
 
         button {
 
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             border: none;
             border-radius: 10px;
             font-size: 24px;
@@ -80,6 +85,10 @@ onMounted(async () => {
             cursor: pointer;
             background-color: var(--primary);
             color: #fff;
+
+            &:hover {
+                background: var(--primary-hover)
+            }
         }
 
     }

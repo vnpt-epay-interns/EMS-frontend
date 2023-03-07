@@ -2,22 +2,25 @@
   <aside class="sidebar">
     <div class="user__info">
       <RouterLink to="/profile">
-          <img class='user__avatar'
-          :src="store.state.user.avatar" alt="">
+        <img class='user__avatar' :src="store.state.user.avatar" alt="">
       </RouterLink>
-      
-      <h1 class="user__name">{{ fullName}}</h1>
+
+      <h1 class="user__name">{{ fullName }}</h1>
       <p class="user__emai">{{ store.state.user.email }}</p>
     </div>
 
     <div class="nav__item__container">
-      <RouterLink to="/dashboard" class="nav__item" active-class="highlight" >Dashboard</RouterLink>
+      <RouterLink to="/dashboard" class="nav__item" active-class="highlight">Dashboard</RouterLink>
       <RouterLink to="/profile" class="nav__item" active-class="highlight">User Profile</RouterLink>
-      <RouterLink to="/employee" class="nav__item" active-class="highlight" v-if="store.state.user.role=='MANAGER'">Employee</RouterLink>
+      <RouterLink to="/employee" class="nav__item" active-class="highlight" v-if="store.state.user.role == 'MANAGER'">
+        Employee</RouterLink>
       <RouterLink to="/schedule" class="nav__item" active-class="highlight">Working Schedule</RouterLink>
-      <RouterLink to="/task" class="nav__item" active-class="highlight" v-if="store.state.user.role=='MANAGER'">Task</RouterLink>
-      <RouterLink to="/write-report" class="nav__item" active-class="highlight" >Report</RouterLink>
-      <RouterLink to="/project" class="nav__item" active-class="highlight" v-if="store.state.user.role=='MANAGER'">Project</RouterLink>
+      <RouterLink to="/task" class="nav__item" active-class="highlight" v-if="store.state.user.role == 'MANAGER'">Task
+      </RouterLink>
+      <RouterLink to="/write-report" class="nav__item" active-class="highlight">Report</RouterLink>
+      <RouterLink to="/project" class="nav__item" active-class="highlight" v-if="store.state.user.role == 'MANAGER'">
+        Project
+      </RouterLink>
       <RouterLink to="/logout" class="nav__item" active-class="highlight">Logout</RouterLink>
 
     </div>
@@ -89,5 +92,39 @@ const navigateReportPage = () => {
       color: var(--primary)
     }
   }
+
+
+}
+
+@media (max-width: 1300px) {
+  .sidebar {
+    min-width: 150px;
+    // width: 150px;
+    // background-color: rgb(240, 239, 239);
+    .user__info {
+      font-size: 12px;
+      padding-bottom: 10px;
+
+
+      .user__avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
+    }
+
+    .nav__item__container {
+      padding: 20px 10px;
+      gap: 10px;
+
+      .nav__item {
+        font-size: 12px;
+      }
+
+      
+    }
+
+  }
+
 }
 </style>
