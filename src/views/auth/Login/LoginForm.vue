@@ -1,4 +1,6 @@
 <script setup>
+  import { VueRecaptcha } from 'vue-recaptcha';
+
 import ErrorText from '../../components/ErrorText.vue';
 import { ref, inject } from 'vue'
 import axios from 'axios'
@@ -12,12 +14,19 @@ const email = ref('')
 const password = ref('')
 const showPassword = ref(false)
 const rememberMe = ref(true)
+const recaptcha = ref(null)
 
 const togglePassword = () => {
     showPassword.value = !showPassword.value
 }
 
 const formLogin = async () => {
+
+    if (recaptcha.value === null) {
+        errorMessage.value = 'Please verify the captcha'
+        return
+    }
+
     // login to get the accessToken
     const body = {
         email: email.value,
@@ -60,6 +69,9 @@ const doLogin = (response) => {
         store.state.popup.displayForMilliSecond(response.data.message, 3000, false)
     }
 }
+const handleVerifyCaptca = (response) => {
+    recaptcha.value = response
+}
 
 </script>
 
@@ -94,6 +106,10 @@ const doLogin = (response) => {
                     </div>
                 </div>
             </div>
+            <div class="recaptcha-container">
+                <VueRecaptcha class="recaptcha" sitekey="6LfQf90kAAAAAPzEvbUPR9wb4QC7qcCY-YIIEDOt" @verify="handleVerifyCaptca"/>
+            </div>
+
             <div class="login__container__body__form__group">
                 <button type="submit" class="login__container__body__form__group__button">Sign in</button>
             </div>
@@ -108,11 +124,13 @@ const doLogin = (response) => {
                 <p class="sigup_optional">Don't have an account? <RouterLink to="/register">Register</RouterLink>
                 </p>
             </div>
+
         </form>
     </div>
 </template>
 
 <style scoped>
+
 input {
     font-size: 14px;
     margin: 0;
@@ -161,6 +179,9 @@ input {
     margin-bottom: 10px;
 }
 
+.recaptcha-container {
+    margin-bottom: 20px;
+}
 button {
     cursor: pointer;
     border-radius: 5px;

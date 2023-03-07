@@ -108,6 +108,7 @@ main {
     cursor: pointer;
     filter: grayscale();
     transition: all 0.3s ease-in-out;
+    border: 4px solid gray;
 }
 
 .human-icon:hover {
@@ -116,6 +117,7 @@ main {
 
 .selected {
     filter: none;
+    border: 4px solid rgb(47, 255, 141);
 }
 
 button {

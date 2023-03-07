@@ -193,11 +193,11 @@ const checkEmailExists = async () => {
 
             .red__border {
                 // border-bottom: 2px solid red;
-                border-left: 2px solid red;
+                border-bottom: 3px solid red;
             }
 
             .green__border {
-                border-left: 2px solid rgb(3, 224, 3);
+                border-bottom: 3px solid rgb(3, 224, 3);
             }
 
         }
