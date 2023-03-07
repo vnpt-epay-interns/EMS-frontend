@@ -17,7 +17,8 @@
       <RouterLink to="/schedule" class="nav__item" active-class="highlight">Working Schedule</RouterLink>
       <RouterLink to="/task" class="nav__item" active-class="highlight" v-if="store.state.user.role == 'MANAGER'">Task
       </RouterLink>
-      <RouterLink to="/write-report" class="nav__item" active-class="highlight">Report</RouterLink>
+      <RouterLink to="/write-report" class="nav__item" active-class="highlight" v-if="store.state.user.role === 'EMPLOYEE'">Report</RouterLink>
+      <RouterLink to="/reports" class="nav__item" active-class="highlight" v-if="store.state.user.role === 'MANAGER'">Report</RouterLink>
       <RouterLink to="/project" class="nav__item" active-class="highlight" v-if="store.state.user.role == 'MANAGER'">
         Project
       </RouterLink>

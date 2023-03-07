@@ -239,7 +239,7 @@ onMounted(async () => {
                 overflow-y: auto;
                 display: flex;
                 flex-direction: column;
-                padding-bottom: 10px;
+                padding: 0 10px 10px 0;
                 gap: 10px;
                 cursor: pointer;
 
