@@ -23,7 +23,8 @@ const state = reactive({
     accessToken: null,
     showSidebar: false,
     tasks: null,
-    task: null
+    task: null,
+    report: null
 }) 
 
 

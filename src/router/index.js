@@ -61,18 +61,29 @@ const router =  createRouter({
             component: Register
         },
         {
-            path: '/report',
-            name: "ReportPage",
+            path: '/reports',
+            name: "ReportsPage",
             component: ViewAllReports
         },
         {
-            path: '/report/task/:id',
-            name: "ReportTaskPage",
-            component: ViewAllReports
-        },
-        {
-            path: '/report/:id/details',
+            path: '/report/details/:id',
+            name: "ViewReportDetails",
             component: ViewReportDetails
+        },
+        {
+            path: '/write-report/task/:id',
+            name: "WriteReportForTaskPage",
+            component: WriteReportPage
+        },
+        {
+            path: '/write-report',
+            name: "WriteReportPage",
+            component: WriteReportPage
+        },
+        {
+            path: '/reports/task/:id',
+            name: "ViewAllReportsForTaskPage",
+            component: ViewAllReports
         },
         {
             path: '/task',
@@ -87,10 +98,6 @@ const router =  createRouter({
         {
             path: '/schedule',
             component: WorkingSchedulePage
-        },
-        {
-            path: '/write-report',
-            component: WriteReportPage
         },
         {
             path: '/enter-manager-code',

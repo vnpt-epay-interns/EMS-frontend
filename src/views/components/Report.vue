@@ -1,9 +1,9 @@
 <template>
-    <div class="report">
+    <div class="report" @click="viewReportDetails">
         <div class="report__status"></div>
         <div class="report__content">
             <div class="report__content__title">
-                <h3>{{ report.reportTitle }}</h3>
+                <h3>{{ report.title }}</h3>
             </div>
             <div class="report__content__name">
                 <h4>{{ report.employeeName }}</h4>
@@ -16,8 +16,14 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
+import { inject } from 'vue';
 
+const store = inject('store');
+const router = useRouter();
 const {report} = defineProps(['report'])
+store.state.report = report
+
 // const store = inject('store');
 
 // const reportList = ref([])
@@ -33,7 +39,14 @@ const {report} = defineProps(['report'])
 //     const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/reports`, config)
 //     store.state.isLoading = false;
 // });
-
+const viewReportDetails = () => {
+  router.push({
+    name: "ViewReportDetails",
+    params: {
+      id: report.id,
+    }
+  })
+}
 
 </script>
 

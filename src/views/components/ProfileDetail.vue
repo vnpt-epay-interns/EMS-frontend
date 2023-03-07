@@ -37,16 +37,11 @@ import { ref, reactive } from 'vue'
 import axios from 'axios'
 // import { RouterLink } from 'vue-router';
 import { VUE_APP_BACKEND_URL } from '../../../env'
-import { fetchUserInfoAndDoRouting } from '../../router/index.js'
-
 
 const store = inject('store')
 const firstName = ref(store.state.user.firstName)
 const lastName = ref(store.state.user.lastName)
 const email = ref(store.state.user.email)
-
-console.log(firstName);
-console.log(email);
 
 const handleSave = async () => {
     const config = {
@@ -62,7 +57,7 @@ const handleSave = async () => {
     }  
     // console.log(body);
     store.state.isLoading = true;
-    const response = await axios.put(`${VUE_APP_BACKEND_URL}/api/auth/update-user-info`, body, config)
+    await axios.put(`${VUE_APP_BACKEND_URL}/api/auth/update-user-info`, body, config)
     store.state.isLoading = false;
     // console.log(response)
 }                                                                                                   

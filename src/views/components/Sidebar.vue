@@ -38,7 +38,7 @@ const fullName = store.state.user.firstName + ' ' + store.state.user.lastName
 const navigateReportPage = () => {
   if (store.state.user.role === 'EMPLOYEE') {
     router.push({
-      path: '/write-report'
+      name: "ReportsPage"
     })
   }
 }

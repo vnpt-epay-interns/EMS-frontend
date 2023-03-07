@@ -2,35 +2,29 @@
     <div class="container">
         <header>
             <h1 class="report__header">
-                Design the database for EMS project
+                {{ report.title }}
             </h1>
 
             <div class="report__info">
                 <p class="report__created_date">
-                    12/02/2022
+                    {{ report.createdDate }}
                 </p>
-                <p class="report__author__name">Hai</p>
+                <p class="report__author__name">{{ report.employeeName }}</p>
             </div>
         </header>
 
-        <div class="report__content">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-            magna aliqua. Sed viverra tellus in hac habitasse platea. Dictumst vestibulum rhoncus est pellentesque elit
-            ullamcorper. Tortor at risus viverra adipiscing at. Id venenatis a condimentum vitae sapien pellentesque. Ornare
-            aenean euismod elementum nisi quis eleifend quam adipiscing vitae. Euismod quis viverra nibh cras pulvinar
-            mattis. Placerat vestibulum lectus mauris ultrices eros in cursus. Fermentum posuere urna nec tincidunt
-            praesent. Faucibus ornare suspendisse sed nisi lacus sed. Volutpat odio facilisis mauris sit amet massa.
-            Suspendisse interdum consectetur libero id faucibus nisl tincidunt. At ultrices mi tempus imperdiet nulla
-            malesuada pellentesque. Nullam non nisi est sit amet facilisis magna etiam tempor. Interdum velit euismod in
-            pellentesque massa placerat. Vitae et leo duis ut diam. Malesuada fames ac turpis egestas integer eget aliquet
-            nibh.
-        </div>
+        <div class="report__content" v-html="report.content"></div>
 
         <button class="report__mark_as_read_btn">Mark as read</button>
-</div></template>
+    </div>
+</template>
 
 <script setup>
+    import { inject, ref } from 'vue';
 
+    const store = inject('store');
+    const report = store.state.report;
+    console.log(report);
 </script>
 
 <style lang="scss" scoped>

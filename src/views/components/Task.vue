@@ -1,8 +1,6 @@
 <script setup>
-import axios from 'axios';
 import { ref, inject } from 'vue';
 import { useRouter } from 'vue-router';
-import { VUE_APP_BACKEND_URL } from '../../../env'
 
 const router = useRouter();
 const flag = ref('')
@@ -11,10 +9,24 @@ const props = defineProps({
     task: Object
 })
 
+
+
 flag.value = props.task.priority === 'LOW' ? 'priority-low' : props.task.priority === 'HIGH' ? 'priority-high' : 'priority-medium'
 
-const viewTask = () => {
-    store.state.task = props.task
+// delete task feature
+// const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
+// const closeModal = async () => {
+//     await axios.delete(`${VUE_APP_BACKEND_URL}/manager/tasks/delete/${props.task.id}`, {
+//         headers: {
+//             "Authorization": `Bearer ${token}`,
+//             'Content-Type': 'application/json'
+//         }
+//     })
+    
+// }
+
+const viewTask = () => {   
+    store.state.task = props.task    
     router.push({
         name: "TaskDetailsPage",
         params: {
@@ -25,8 +37,8 @@ const viewTask = () => {
 
 const viewReports = () => {
     router.push({
-        name: "ReportTaskPage",
-        params: { id: props.task.id }
+        name: "ViewAllReportsForTaskPage",
+        params: {id: props.task.id}
     })
 }
 
@@ -46,24 +58,25 @@ const viewReports = () => {
         </div>
 
         <div class="task-info">
-            <div class="reports" v-if="store.state.user.role === 'MANAGER'" title="Report" @click.stop="viewReports">
-                <font-awesome-icon icon="fa-solid fa-newspaper" /> {{ task.numberReports }}
-            </div>
-            <div class="priority" :id="flag" :title="task.priority">
-                <font-awesome-icon class="fa" icon="fa-solid fa-flag" />
-            </div>
+                <div class="reports" title="Report" @click.stop="viewReports">
+                    <font-awesome-icon icon="fa-solid fa-newspaper" /> {{ task.numberReports }}
+                </div>
+                <div class="priority" :id="flag" :title="task.priority">
+                    <font-awesome-icon class="fa" icon="fa-solid fa-flag" />
+                </div>
 
-            <div class="due" title="Due date">
-                <font-awesome-icon class="fa" icon="fa-solid fa-clock" />
-                {{ task.endDate }}
-            </div>
+                <div class="due" title="Due date">
+                    <font-awesome-icon class="fa" icon="fa-solid fa-clock" />
+                    {{ task.endDate }}
+                </div>
 
-            <div class="completion" title="Completion">
-                <font-awesome-icon class="fa" icon="fa-solid fa-circle-check" />
-                {{ task.completion }}%
+                <div class="completion" title="Completion">
+                    <font-awesome-icon class="fa" icon="fa-solid fa-circle-check" />
+                    {{ task.completion }}%
+                </div>
             </div>
         </div>
-    </div>
+    
 </template>
 
 <style lang="scss" scoped>

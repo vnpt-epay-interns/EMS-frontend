@@ -1,19 +1,19 @@
 <script setup>
-import { ref, onMounted, inject, reactive, watch } from 'vue'
-import Task from '../components/Task.vue';
-import { useRouter } from 'vue-router';
-import axios from 'axios';
-import { VUE_APP_BACKEND_URL } from '../../../env'
-import Draggable from 'vueDraggable';
+    import { ref, onMounted, inject } from 'vue'
+    import Task from '../components/Task.vue';
+    import { useRouter } from 'vue-router';
+    import axios from 'axios';
+    import { VUE_APP_BACKEND_URL } from '../../../env'
+    import Draggable from 'vueDraggable';
 
-const store = inject('store')
-const router = useRouter()
-const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
-const options = {
-    headers: {
-        'Authorization': `Bearer ${token}`
+    const store = inject('store')
+    const router = useRouter()
+    const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
+    const options = {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
     }
-}
 
 const tasks = ref([])
 const tasksByStatus = ref({
@@ -108,6 +108,10 @@ onMounted(async () => {
     }
 })
 
+    const addReport = () => {
+        router.push({ name: "WriteReportPage" })
+    }
+
 </script>
 
 <template>
@@ -119,6 +123,9 @@ onMounted(async () => {
             </div>
             <div class="right__side" v-if="store.state.user?.role === 'MANAGER'">
                 <button class="add__task__btn" @click="navigateNewTaskPage()">New Task</button>
+            </div>
+            <div class="right__side" v-show="store.state.user.role==='EMPLOYEE'">
+                <button class="add__task__btn" @click="addReport()">New Report</button>
             </div>
         </div>
 
