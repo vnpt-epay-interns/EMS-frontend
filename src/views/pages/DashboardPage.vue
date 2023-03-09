@@ -136,7 +136,7 @@ onMounted(async () => {
                     <p class="status__amount">{{ tasks.length }}</p>
                 </div>
                 <Draggable class="draggable-area" :list="tasks" group="task" itemKey="status" @change="onChange" :id="status">
-                    <template class="task-container" #item="{ element }">
+                    <template #item="{ element }">
                         <Task :task="element" />
                     </template>
                 </Draggable>
@@ -241,7 +241,7 @@ onMounted(async () => {
                 flex-direction: column;
                 padding: 0 10px 10px 0;
                 gap: 10px;
-                cursor: pointer;
+                // cursor: pointer;
 
                 &::-webkit-scrollbar-track {
                     -webkit-box-shadow: inset 0 0 6px rgb(169, 169, 169);

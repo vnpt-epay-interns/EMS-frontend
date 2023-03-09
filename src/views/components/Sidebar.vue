@@ -2,7 +2,7 @@
   <aside class="sidebar">
     <div class="user__info">
       <RouterLink to="/profile">
-        <img class='user__avatar' :src="store.state.user.avatar" alt="">
+        <img class="user__avatar" :src="store.state.user.avatar" alt="" />
       </RouterLink>
 
       <h1 class="user__name">{{ fullName }}</h1>
@@ -10,39 +10,75 @@
     </div>
 
     <div class="nav__item__container">
-      <RouterLink to="/dashboard" class="nav__item" active-class="highlight">Dashboard</RouterLink>
-      <RouterLink to="/profile" class="nav__item" active-class="highlight">User Profile</RouterLink>
-      <RouterLink to="/employee" class="nav__item" active-class="highlight" v-if="store.state.user.role == 'MANAGER'">
-        Employee</RouterLink>
-      <RouterLink to="/schedule" class="nav__item" active-class="highlight">Working Schedule</RouterLink>
-      <RouterLink to="/task" class="nav__item" active-class="highlight" v-if="store.state.user.role == 'MANAGER'">Task
+      <RouterLink to="/dashboard" class="nav__item" active-class="highlight" :class="path.startsWith('/dashboard') ? 'highlight' : ''"
+        >Dashboard</RouterLink
+      >
+      <RouterLink to="/profile" class="nav__item" active-class="highlight" :class="path.startsWith('/profile') ? 'highlight' : ''"
+        >User Profile</RouterLink
+      >
+      <RouterLink
+        to="/employee"
+        class="nav__item"
+        active-class="highlight"
+        v-if="store.state.user.role == 'MANAGER'"
+        :class="path.startsWith('/employee') ? 'highlight' : ''"
+      >
+        Employee</RouterLink
+      >
+      <RouterLink to="/schedule" class="nav__item" active-class="highlight"
+      :class="path.startsWith('/schedule') ? 'highlight' : ''"
+        >Working Schedule</RouterLink
+      >
+      <RouterLink
+        to="/task"
+        class="nav__item"
+        active-class="highlight"
+        v-if="store.state.user.role == 'MANAGER'"
+        :class="path.startsWith('/task') ? 'highlight' : ''"
+        >Task
       </RouterLink>
-      <RouterLink to="/write-report" class="nav__item" active-class="highlight" v-if="store.state.user.role === 'EMPLOYEE'">Report</RouterLink>
-      <RouterLink to="/reports" class="nav__item" active-class="highlight" v-if="store.state.user.role === 'MANAGER'">Report</RouterLink>
-      <RouterLink to="/project" class="nav__item" active-class="highlight" v-if="store.state.user.role == 'MANAGER'">
+      <RouterLink
+        to="/write-report"
+        class="nav__item"
+        active-class="highlight"
+        v-if="store.state.user.role === 'EMPLOYEE'"
+        :class="path.startsWith('/report') ? 'highlight' : ''"
+        >Report</RouterLink
+      >
+      <RouterLink
+        to="/reports"
+        class="nav__item"
+        active-class="highlight"
+        v-if="store.state.user.role === 'MANAGER'"
+        :class="path.startsWith('/report') ? 'highlight' : ''"
+        >Report</RouterLink
+      >
+      <RouterLink
+        to="/project"
+        class="nav__item"
+        active-class="highlight"
+        v-if="store.state.user.role == 'MANAGER'"
+        :class="path.startsWith('/project') ? 'highlight' : ''"
+      >
         Project
       </RouterLink>
-      <RouterLink to="/logout" class="nav__item" active-class="highlight">Logout</RouterLink>
-
+      <RouterLink to="/logout" class="nav__item" active-class="highlight"
+        >Logout</RouterLink
+      >
     </div>
   </aside>
 </template>
 
 <script setup>
-import { RouterLink, useRouter } from 'vue-router';
-import { inject } from 'vue';
+import { RouterLink, useRoute } from "vue-router";
+import { inject, ref, computed, watch } from "vue";
 
-const router = useRouter();
-const store = inject('store');
-const fullName = store.state.user.firstName + ' ' + store.state.user.lastName
+const store = inject("store");
+const fullName = store.state.user.firstName + " " + store.state.user.lastName;
 
-const navigateReportPage = () => {
-  if (store.state.user.role === 'EMPLOYEE') {
-    router.push({
-      name: "ReportsPage"
-    })
-  }
-}
+const route = useRoute();
+
+const path = computed(() => route.path);
 </script>
 
 <style lang="scss" scoped>
@@ -64,7 +100,6 @@ const navigateReportPage = () => {
     gap: 5px;
     border-bottom: 0.5px solid white;
     padding-bottom: 20px;
-
 
     .user__avatar {
       width: 70px;
@@ -90,11 +125,9 @@ const navigateReportPage = () => {
 
     .highlight {
       background: white;
-      color: var(--primary)
+      color: var(--primary);
     }
   }
-
-
 }
 
 @media (max-width: 1300px) {
@@ -105,7 +138,6 @@ const navigateReportPage = () => {
     .user__info {
       font-size: 12px;
       padding-bottom: 10px;
-
 
       .user__avatar {
         width: 50px;
@@ -121,11 +153,7 @@ const navigateReportPage = () => {
       .nav__item {
         font-size: 12px;
       }
-
-      
     }
-
   }
-
 }
 </style>

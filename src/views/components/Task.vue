@@ -85,6 +85,7 @@ const viewReports = () => {
     border-radius: 5px;
     padding: 10px 10px 10px 10px;
     background: white;
+    cursor: pointer;
     // margin: 10px 0;
     .task__content {
 
@@ -134,7 +135,7 @@ const viewReports = () => {
         padding: 10px 5px 0px 5px;
         width: 100%;
         display: flex;
-        gap: 20px;
+        gap: 10px;
         border-top: 1px solid #ccc;
 
         div {
