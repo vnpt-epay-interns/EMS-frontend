@@ -24,8 +24,11 @@
                     </div>
                     <div class="referenced__code">
                         <label for="referencecode">Reference Code</label>
-                        <input type="text" name="referencecode" id="referencedcode" placeholder="********"
-                            v-model="referenceCode" readonly>
+                        <input type="text" name="referencecode" id="referencedcode" v-if="store.state.user.role === 'MANAGER'"
+                            placeholder="********" v-model="referenceCode" readonly>
+                        <input type="text" name="referencecode" id="referencedcode"
+                            v-if="store.state.user.role === 'EMPLOYEE'" placeholder="********" v-model="referenceCodeE"
+                            readonly>
                     </div>
                 </div>
             </div>
@@ -51,47 +54,48 @@ const store = inject('store')
 const firstName = ref(store.state.user.firstName)
 const lastName = ref(store.state.user.lastName)
 const email = ref(store.state.user.email)
-const referenceCode = ref(store.state.user.referenceCode)
-
+const referenceCode = ref('')
+const referenceCodeE = ref('')
 
 // console.log(firstName);
 // console.log(email);
 
 const handleSave = async () => {
     const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${store.state.accessToken}`,
-    },
-  };
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${store.state.accessToken}`,
+        },
+    };
 
     const body = {
         firstName: firstName.value,
         lastName: lastName.value,
-    }  
+    }
 
     store.state.isLoading = true;
     const response = await axios.put(`${VUE_APP_BACKEND_URL}/api/auth/update-user-info`, body, config)
     store.state.isLoading = false;
-}           
+}
 
 onBeforeMount(async () => {
     const config = {
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${store.state.accessToken}`,
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${store.state.accessToken}`,
         },
-      };
-
-      const refcode = {
-        referenceCode : referenceCode.value,
-      }
-      console.log(referenceCode);
+    };
 
     // store.state.isLoading = true;
-    const refCode = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-referenced-code`, refcode, config)
-    // store.state.isLoading = false;
+    if (store.state.user.role === 'MANAGER') {
+        const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-referenced-code`, config)
+        referenceCode.value = response.data.data.referenceCode
     }
+    const response2 = await axios.get(`${VUE_APP_BACKEND_URL}/api/employee/get-referenced-code`, config)
+    referenceCodeE.value = response2.data.data.referenceCode
+
+    // store.state.isLoading = false;
+}
 
 )
 
