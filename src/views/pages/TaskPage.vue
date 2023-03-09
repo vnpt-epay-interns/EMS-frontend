@@ -2,6 +2,7 @@
     import { ref, inject, watchEffect } from 'vue'
     import { useRoute, useRouter } from 'vue-router'
     import { VUE_APP_BACKEND_URL } from '../../../env'
+    import ErrorText from '../components/ErrorText.vue'
     import axios from 'axios'
 
     const store = inject('store')
@@ -46,48 +47,67 @@
         employeeName.value = null
     }
 
+    const isValidTitle = ref(true)
+    const isValidParentId = ref(true)
+    const isValidPriority = ref(true)
+    const isValidStatus = ref(true)
+    const isValidEmployeeName = ref(true)
+    const isValidEstimateHours = ref(true)
+    const isValidCompletion = ref(true)
+    const isValidEndDate = ref(true)
+
+    const resetValid = () => {
+        isValidTitle.value = true
+        isValidParentId.value = true
+        isValidPriority.value = true
+        isValidStatus.value = true
+        isValidEmployeeName.value = true
+        isValidEstimateHours.value = true
+        isValidCompletion.value = true
+        isValidEndDate.value = true
+    }
+
     const isValidInput = () => {
-        if (title.value === null) {
+        if (title.value === null || title.value === '') {
             errorMessage.value = 'Title is required'
-            return false
+            isValidTitle.value = false
         }
-        if (isNaN(parentId.value)) {
+        else if (isNaN(parentId.value)) {
             errorMessage.value = 'Parent task must be a number'
-            return false
+            isValidParentId.value = false
         }
-        if (description.value === null) {
-            errorMessage.value = 'Description is required'
-            return false
-        }
-        if (priority.value === null) {
+        else if (priority.value === null || priority.value === '') {
             errorMessage.value = 'Priority is required'
-            return false
+            isValidPriority.value = false
         }
-        if (status.value === null) {
+        else if (status.value === null || status.value === '') {
             errorMessage.value = 'Status is required'
-            return false
+            isValidStatus.value = false
         }
-        if (employeeName.value === null) {
+        else if (employeeName.value === null || employeeName.value === '') {
             errorMessage.value = 'Employee is required'
-            return false
+            isValidEmployeeName.value = false
         }
-        if (estimateHours.value === null) {
+        else if (estimateHours.value === null || estimateHours.value === '') {
             errorMessage.value = 'Estimate hours is required'
-            return false
+            isValidEstimateHours.value = false
         }
-        if (isNaN(estimateHours.value)) {
-            errorMessage.value = 'Estimate hours must be a number'
-            return false
-        }
-        if (completion.value === null) {
+        else if (completion.value === null || completion.value === '') {
             errorMessage.value = 'Completion is required'
-            return false
+            isValidCompletion.value = false
         }
-        if (Date.parse(endDate.value) - Date.parse(startDate.value) < 0) {
+        else if (isNaN(estimateHours.value)) {
+            errorMessage.value = 'Estimate hours must be a number'
+            isValidEstimateHours.value = false
+        }
+        else if (Date.parse(endDate.value) - Date.parse(startDate.value) < 0) {
             errorMessage.value = 'End date must be greater than start date'
-            return false
-        }
-        return true     
+            isValidEndDate.value = false
+        }   
+        setTimeout(() => {
+            errorMessage.value = ''
+            resetValid()
+        }, 1500)
     }
 
     if (store.state.user.role === 'EMPLOYEE') {
@@ -124,11 +144,11 @@
     })
 
     const handleClick = async () => {
-        if (!isValidInput()) {
-            store.state.popup.displayForMilliSecond(errorMessage.value, 2000)
+        isValidInput()
+        if (errorMessage.value !== '') {
             return
         }
-        
+
         store.state.isLoading= true;
         try {
             if (store.state.user.role === 'EMPLOYEE') {
@@ -157,6 +177,11 @@
                     employeeId: employeeId.value,
                     estimateHours: estimateHours.value,
                     parentId: parentId.value
+                }
+
+                isValidInput()
+                if (errorMessage.value !== '') {
+                    return
                 }
 
                 if (route.params.id !== undefined) {
@@ -192,6 +217,7 @@
     const addReportForTask = () => {
         router.push({ name: "WriteReportForTaskPage", params: { id: route.params.id } })
     }
+    
 </script>
 
 <template>
@@ -204,11 +230,13 @@
                 <div class="name-field">
                     <label for="title">Title</label>
                     <input type="text" id="title" v-model="title" :disabled="isDisabled">
+                    <ErrorText v-if="!isValidTitle" :errorMessage="errorMessage"/>
                 </div>
 
                 <div class="parent_task-Field">
                     <label for="parent-task">Parent Task</label>
                     <input type="text" id="parent-task" v-model="parentId" :disabled="isDisabled">
+                    <ErrorText v-if="!isValidParentId" :errorMessage="errorMessage"/>
                 </div>
             </div>
 
@@ -229,6 +257,7 @@
                             <option>MEDIUM</option>
                             <option>HIGH</option>
                         </select>
+                        <ErrorText v-if="!isValidPriority" :errorMessage="errorMessage"/>
                     </div>
                     <div class="status">
                         <div>Status</div>
@@ -239,6 +268,7 @@
                             <option value="READY_FOR_REVIEW">READY FOR REVIEW</option>
                             <option>DONE</option>
                         </select>
+                        <ErrorText v-if="!isValidStatus" :errorMessage="errorMessage"/>
                     </div>
                     <div class="in-charge">
                         <div>In-Charge</div>
@@ -247,6 +277,7 @@
                             <option v-if="store.state.user.role==='EMPLOYEE'">{{ employeeName }}</option>
                             <option v-for="employee of employees">{{ employee.firstName + " " + employee.lastName }}</option>
                         </select>
+                        <ErrorText v-if="!isValidEmployeeName" :errorMessage="errorMessage"/>
                     </div>
                 </div>
 
@@ -266,10 +297,12 @@
                             <option>90</option>
                             <option>100</option>
                         </select>
+                        <ErrorText v-if="!isValidCompletion" :errorMessage="errorMessage"/>
                     </div>
                     <div class="estimate-field">
                         <label for="estimate">Estimate Time</label>
                         <input type="text" id="estimate" v-model="estimateHours" :disabled="isDisabled">
+                        <ErrorText v-if="!isValidEstimateHours" :errorMessage="errorMessage"/>
                     </div>
                     <div class="start_date-field">
                         <label for="start_date">Start date</label>
@@ -278,6 +311,7 @@
                     <div class="end_date-field">
                         <label for="end_date">Due date</label>
                         <input type="date" id="end_date" v-model="endDate" :disabled="isDisabled">
+                        <ErrorText v-if="!isValidEndDate" :errorMessage="errorMessage"/>
                     </div>
                 </div>
             </div>
