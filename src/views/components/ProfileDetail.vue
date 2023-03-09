@@ -86,14 +86,14 @@ onBeforeMount(async () => {
         },
     };
 
-    // store.state.isLoading = true;
     if (store.state.user.role === 'MANAGER') {
         const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-referenced-code`, config)
         referenceCode.value = response.data.data.referenceCode
     }
-    const response2 = await axios.get(`${VUE_APP_BACKEND_URL}/api/employee/get-referenced-code`, config)
-    referenceCodeE.value = response2.data.data.referenceCode
-
+    else {
+        const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/employee/get-referenced-code`, config)
+        referenceCodeE.value = response.data.data.referenceCode
+    }
     // store.state.isLoading = false;
 }
 
