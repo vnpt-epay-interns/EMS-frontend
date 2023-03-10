@@ -24,6 +24,7 @@
         const body = {
             content: content.value,
             title: title.value, 
+
         }
 
         let response = null;

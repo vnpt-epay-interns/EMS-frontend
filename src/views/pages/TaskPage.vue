@@ -301,7 +301,7 @@
                     </div>
                     <div class="estimate-field">
                         <label for="estimate">Estimate Time</label>
-                        <input type="text" id="estimate" v-model="estimateHours" :disabled="isDisabled">
+                        <input type="number" id="estimate" v-model="estimateHours" :disabled="isDisabled">
                         <ErrorText v-if="!isValidEstimateHours" :errorMessage="errorMessage"/>
                     </div>
                     <div class="start_date-field">
