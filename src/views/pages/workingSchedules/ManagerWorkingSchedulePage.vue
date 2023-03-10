@@ -55,7 +55,7 @@
 <script setup>
 import Day from '../../components/Day.vue'
 import axios from 'axios';
-import { ref, onMounted, inject, watch } from 'vue';
+import { ref, watchEffect, inject, watch } from 'vue';
 import { VUE_APP_BACKEND_URL } from '../../../../env';
 
 const store = inject('store');
@@ -100,8 +100,7 @@ const getWorkingDayStatus = (schedule, day) => {
 
 
     const status = schedule.statuses[day - 1]
-    console.log('s');
-    console.log(status);
+
     return status.toLowerCase(); // return full, morning, or afternoon
 }
 
@@ -112,10 +111,7 @@ const fetchWorkingSchedules = async () => {
         }
     }
     store.state.isLoading = true;
-    console.log("Before getting");
     const res = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/working-schedules/${year.value}/${monthNumber.value}`, config)
-    console.log('After getting');
-
     store.state.isLoading = false;
 
     monthInfo.value = res.data.data.monthInfo;
@@ -126,7 +122,7 @@ watch(monthNumber, (newVal, oldVal) => {
     fetchWorkingSchedules();
 })
 
-onMounted(async () => {
+watchEffect(async () => {
     fetchWorkingSchedules()
 })
 

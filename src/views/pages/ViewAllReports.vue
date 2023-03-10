@@ -11,7 +11,7 @@
 import Report from '../components/Report.vue';
 import { VUE_APP_BACKEND_URL } from '../../../env'
 import axios from 'axios';
-import { ref, onMounted, inject } from 'vue';
+import { ref, watchEffect, inject } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -19,7 +19,7 @@ const store = inject('store');
 const reportList = ref([])
 const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
 
-onMounted(async () => {
+watchEffect(async () => {
   const config = {
     headers: {
       'Content-Type': 'application/json',

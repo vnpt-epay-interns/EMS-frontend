@@ -24,7 +24,6 @@
 
     const store = inject('store');
     const report = store.state.report;
-    console.log(report);
 </script>
 
 <style lang="scss" scoped>

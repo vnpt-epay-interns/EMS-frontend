@@ -14,31 +14,10 @@ import { VUE_APP_BACKEND_URL } from '../../../env'
 import Manager from '../components/Manager.vue'
 import axios from 'axios';
 
-import { ref, onMounted, inject } from 'vue';
+import { ref, watchEffect, inject } from 'vue';
 
 const store = inject('store');
 const unApprovedManagerList = ref([
-    // {
-    //     id: 1,
-    //     firstName: 'Nguyen',
-    //     lastName: 'Van A',
-    //     email: 'Lorem@gmail.com',
-    //     avatar: 'https://i.pravatar.cc/150?img=4',
-    // },
-    // {
-    //     id: 1,
-    //     firstName: 'Nguyen',
-    //     lastName: 'Van B',
-    //     email: 'Lorem@gmail.com',
-    //     avatar: 'https://i.pravatar.cc/150?img=2',
-    // },
-    // {
-    //     id: 1,
-    //     firstName: 'Nguyen',
-    //     lastName: 'Van C',
-    //     email: 'Lorem@gmail.com',
-    //     avatar: 'https://i.pravatar.cc/150?img=3',
-    // }
 ]);
 
 const verifyManager = async (managerId) => {
@@ -54,7 +33,7 @@ const verifyManager = async (managerId) => {
     store.state.isLoading = false;
     fetchUnApprovedManagers()
 }
-onMounted(() => {
+watchEffect(() => {
     fetchUnApprovedManagers();
 
 });

@@ -16,13 +16,13 @@ import Project from '../components/Project.vue'
 
 import { VUE_APP_BACKEND_URL } from '../../../env'
 import axios from 'axios';
-import { ref, onMounted, inject } from 'vue';
+import { ref, watchEffect, inject } from 'vue';
 
 const store = inject('store');
 
 const projectList = ref([])
 
-onMounted(async () => {
+watchEffect(async () => {
     const config = {
         headers: {
             'Content-Type': 'application/json',

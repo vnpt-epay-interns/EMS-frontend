@@ -1,5 +1,5 @@
 <template>
-    <form           >
+    <form>
         <div class="profile__detail">
             <div class="user__profile">
                 <img class='user__avatar' :src="store.state.user.avatar" alt="">
@@ -10,16 +10,26 @@
                 <div class="full__name">
                     <div class="profile_firstname">
                         <label for="firstname">First name</label>
-                        <input type="text" name="firstname" id="firstname" placeholder="John" v-model="firstName"/>
+                        <input type="text" name="firstname" id="firstname" placeholder="John" v-model="firstName" />
                     </div>
                     <div class="profile_lastname">
                         <label for="lastname">Last name</label>
-                        <input type="text" name="lastname" id="lastname" placeholder="Doe" v-model="lastName"/>
+                        <input type="text" name="lastname" id="lastname" placeholder="Doe" v-model="lastName" />
                     </div>
                 </div>
-                <div class="profile_email">
-                    <label for="email">Email</label>
-                    <input type="email" name="email" id="email" placeholder="alo@gmail.com" v-model="email" readonly>
+                <div class="user__contact">
+                    <div class="profile_email">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" placeholder="alo@gmail.com" v-model="email" readonly>
+                    </div>
+                    <div class="referenced__code">
+                        <label for="referencecode">Reference Code</label>
+                        <input type="text" name="referencecode" id="referencedcode" v-if="store.state.user.role === 'MANAGER'"
+                            placeholder="********" v-model="referenceCode" readonly>
+                        <input type="text" name="referencecode" id="referencedcode"
+                            v-if="store.state.user.role === 'EMPLOYEE'" placeholder="********" v-model="referenceCodeE"
+                            readonly>
+                    </div>
                 </div>
             </div>
 
@@ -33,7 +43,7 @@
 
 <script setup>
 import { inject } from 'vue'
-import { ref, reactive } from 'vue'
+import { ref, reactive, onBeforeMount } from 'vue'
 import axios from 'axios'
 // import { RouterLink } from 'vue-router';
 import { VUE_APP_BACKEND_URL } from '../../../env'
@@ -42,25 +52,47 @@ const store = inject('store')
 const firstName = ref(store.state.user.firstName)
 const lastName = ref(store.state.user.lastName)
 const email = ref(store.state.user.email)
+const referenceCode = ref('')
+const referenceCodeE = ref('')
 
 const handleSave = async () => {
     const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${store.state.accessToken}`,
-    },
-  };
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${store.state.accessToken}`,
+        },
+    };
 
     const body = {
         firstName: firstName.value,
         lastName: lastName.value,
-    }  
-    // console.log(body);
+    }
+
     store.state.isLoading = true;
     await axios.put(`${VUE_APP_BACKEND_URL}/api/auth/update-user-info`, body, config)
     store.state.isLoading = false;
-    // console.log(response)
-}                                                                                                   
+}
+
+onBeforeMount(async () => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${store.state.accessToken}`,
+        },
+    };
+
+    if (store.state.user.role === 'MANAGER') {
+        const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-referenced-code`, config)
+        referenceCode.value = response.data.data.referenceCode
+    }
+    else {
+        const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/employee/get-referenced-code`, config)
+        referenceCodeE.value = response.data.data.referenceCode
+    }
+    // store.state.isLoading = false;
+}
+
+)
 
 
 </script>
@@ -90,6 +122,15 @@ form {
     border-radius: 50%;
 }
 
+.user__contact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+    padding-bottom: 30px;
+
+}
 
 input {
     font-size: 20px;

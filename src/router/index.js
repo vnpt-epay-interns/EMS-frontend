@@ -166,21 +166,21 @@ export const doRouting = () => {
 
 export const fetchUserInfoAndDoRouting = async () => {
 
-    const token = localStorage.getItem('accessToken')
+    const token = localStorage.getItem('accessToken') || store.state.accessToken;
 
-    if (token) {
-        // fetch user info
-        const options = {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+    // fetch user info
+    const options = {
+        headers: {
+            'Authorization': `Bearer ${token}`
         }
-        store.state.isLoading = true
-        const userInfoResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/auth/user-info`, options);
-        store.state.user = userInfoResponse.data.data;
-        store.state.isLoading = false
     }
+    store.state.isLoading = true
+    const userInfoResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/auth/user-info`, options);
+    store.state.user = userInfoResponse.data.data;
+    console.log('after fetching');
 
+    console.log(store.state.user);
+    store.state.isLoading = false
 
     // do routing based on user info
     doRouting()

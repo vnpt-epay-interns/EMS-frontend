@@ -53,7 +53,7 @@
 <script setup>
 import Day from '../../components/Day.vue'
 import axios from 'axios';
-import { ref, onMounted, inject, watch, computed } from 'vue';
+import { ref, watchEffect, inject, watch, computed } from 'vue';
 import { VUE_APP_BACKEND_URL } from '../../../../env';
 
 const store = inject('store');
@@ -153,7 +153,7 @@ watch(monthNumber, (newVal, oldVal) => {
     fetchWorkingSchedule();
 })
 //TODO: change month and year
-onMounted(() => {
+watchEffect(() => {
     fetchWorkingSchedule();
 
 })
