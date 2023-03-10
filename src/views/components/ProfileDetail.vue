@@ -1,10 +1,10 @@
 <template>
-    <ChangeAvatarModalVue/>
+    <ChangeAvatarModalVue :showModal="showModal" v-if="showModal" @closeModal="closeModal" />
     <div class="profile__detail">
         <div class="user__profile">
             <div class="img-container">
                 <img class='user__avatar' :src="store.state.user.avatar" alt="">
-                <button>Change avatar</button>
+                <font-awesome-icon icon="fa-solid fa-camera" @click="showModal = true" class="camera_icon"/>
             </div>
             <h1 class="user__fullName">{{ firstName + " " + lastName }}</h1>
             <p class="user__email">{{ email }}</p>
@@ -26,9 +26,6 @@
                 <label for="referencecode">Reference Code</label>
                 <input type="text" name="referencecode" id="referencedcode" placeholder="********" v-model="referenceCode"
                     readonly>
-                <!-- <input type="text" name="referencecode" id="referencedcode"
-                            v-if="store.state.user.role === 'EMPLOYEE'" placeholder="********" v-model="referenceCodeE"
-                            readonly> -->
             </div>
         </div>
 
@@ -41,7 +38,7 @@
 
 <script setup>
 import { inject } from 'vue'
-import { ref, reactive, onBeforeMount } from 'vue'
+import { ref, reactive, watchEffect } from 'vue'
 import axios from 'axios'
 // import { RouterLink } from 'vue-router';
 import { VUE_APP_BACKEND_URL } from '../../../env'
@@ -51,7 +48,7 @@ const firstName = ref(store.state.user.firstName)
 const lastName = ref(store.state.user.lastName)
 const email = ref(store.state.user.email)
 const referenceCode = ref('')
-const referenceCodeE = ref('')
+const showModal = ref(false)
 
 const handleSave = async () => {
     const config = {
@@ -71,7 +68,11 @@ const handleSave = async () => {
     store.state.isLoading = false;
 }
 
-onBeforeMount(async () => {
+const closeModal = () => {
+    showModal.value = false
+}
+
+watchEffect(async () => {
     const config = {
         headers: {
             'Content-Type': 'application/json',
@@ -79,15 +80,10 @@ onBeforeMount(async () => {
         },
     };
 
-    if (store.state.user.role === 'MANAGER') {
-        const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-referenced-code`, config)
-        referenceCode.value = response.data.data.referenceCode
-    }
-    else {
-        const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/employee/get-referenced-code`, config)
-        referenceCodeE.value = response.data.data.referenceCode
-    }
-    // store.state.isLoading = false;
+    store.state.isLoading = true;
+    const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-referenced-code`, config)
+    referenceCode.value = response.data.data.referenceCode
+    store.state.isLoading = false;
 }
 
 )
@@ -109,12 +105,54 @@ onBeforeMount(async () => {
         padding-bottom: 0px;
         padding: 10px;
         overflow: hidden;
+        
 
-        .user__avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
+        .img-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+            .user__avatar {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+            }
+
+            .camera_icon {
+                display: flex; 
+                align-items: center;
+                background: #ccc;
+                margin-top: -25%;
+                margin-left: -25%;
+                padding: 5px;
+                border-radius: 50%;
+                align-self: flex-end;
+                font-size: 20px;
+                color: var(--primary);
+                cursor: pointer;
+                transition: all 0.5s ease-in-out;
+
+            }
+
+            button {
+                padding: 5px 10px;
+                border: none;
+                border-radius: 10px;
+                font-size: 12px;
+                background: var(--primary);
+                color: white;
+                cursor: pointer;
+                transition: all 0.5s ease-in-out;
+                display: flex;
+                align-items: center;
+
+                &:hover {
+                    background: var(--primary-hover);
+                }
+            }
+
         }
+
 
     }
 
