@@ -58,9 +58,7 @@ onMounted(async () => {
       </tbody>
     </table> -->
     <div class="employee-container">
-      <div>
         <EmployeeVue v-for="employee in employeeList" :key="employee.id" :employee="employee" />
-      </div>
     </div>
   </div>
 

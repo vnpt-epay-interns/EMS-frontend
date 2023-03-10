@@ -1,7 +1,13 @@
 import { reactive } from 'vue'
 
 const state = reactive({
-    user: null,
+    user: {
+        id: null,
+        email: null,
+        firstName: null,
+        lastName: null,
+        role: null,
+    },
     isLoading: false,
     popup: {
         isShowing: false,

@@ -24,7 +24,7 @@ import axios from "axios";
 import { useRouter } from "vue-router";
 import { VUE_APP_BACKEND_URL } from "../../env";
 import store from "../store/store";
-const router =  createRouter({
+const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
@@ -121,7 +121,7 @@ const router =  createRouter({
         },
         {
             path: "/:catchall(.*)*",
-            component: Login 
+            component: Login
         }
     ]
 })
@@ -164,20 +164,24 @@ export const doRouting = () => {
     }
 }
 
-export const fetchUserInfoAndDoRouting =  async () => {
+export const fetchUserInfoAndDoRouting = async () => {
 
-    const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
-    // fetch user info
-    const options = {
-        headers: {
-            'Authorization': `Bearer ${token}`
+    const token = localStorage.getItem('accessToken')
+
+    if (token) {
+        // fetch user info
+        const options = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         }
+        store.state.isLoading = true
+        const userInfoResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/auth/user-info`, options);
+        store.state.user = userInfoResponse.data.data;
+        store.state.isLoading = false
     }
-    store.state.isLoading = true
-    const userInfoResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/auth/user-info`, options);
-    store.state.user = userInfoResponse.data.data;
-    store.state.isLoading = false
-    
+
+
     // do routing based on user info
     doRouting()
 }

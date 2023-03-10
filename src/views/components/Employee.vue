@@ -15,7 +15,7 @@
     .employee {
         width: 100%;
         display: grid;
-        grid-template-columns: 15% 10% 30% 50%;
+        grid-template-columns: 10% 40px 30% 50%;
         align-items: center;
         // line-height: 100px;
         padding: 10px;
