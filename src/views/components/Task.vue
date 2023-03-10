@@ -8,8 +8,17 @@ const store = inject('store')
 const props = defineProps({
     task: Object
 })
+const shortProjectName = ref('')
+const shorthand = (projectName) => {
+    let shortName = ''
+    let words = projectName.split(' ')
+    words.forEach(word => {
+        shortName += word[0]
+    })
+    return shortName
+}
 
-
+shortProjectName.value = shorthand(props.task.projectName)
 
 flag.value = props.task.priority === 'LOW' ? 'priority-low' : props.task.priority === 'HIGH' ? 'priority-high' : 'priority-medium'
 
@@ -49,7 +58,7 @@ const viewReports = () => {
         <!-- <div class="close__modal__btn" @click="closeModal">&times;</div> -->
         <div class="task__content" :title="task.description">
             <h1 class="task__title">
-                <span class="project-name" title="Project name">EMS</span>
+                <span class="project-name" title="Project name">{{ shortProjectName }}</span>
                 <span class="title" title="Title">{{ task.title }}</span>
             </h1>
 

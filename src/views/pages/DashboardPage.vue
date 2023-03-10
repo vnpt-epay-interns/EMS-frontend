@@ -61,7 +61,8 @@ const onChange = (e) => {
                         endDate: task.endDate,
                         employeeId: task.employeeId,
                         estimateHours: task.estimateHours,
-                        parentId: task.parentId
+                        parentId: task.parentId,
+                        projectId: task.projectId
                     }
                     response = await axios.put(`${VUE_APP_BACKEND_URL}/api/manager/update-task/${task.id}`, body, options)
                 }
@@ -110,7 +111,6 @@ const fetchTasks = async () => {
 watchEffect(async () => {
     fetchTasks()
 })
-
 
 const addReport = () => {
     router.push({ name: "WriteReportPage" })

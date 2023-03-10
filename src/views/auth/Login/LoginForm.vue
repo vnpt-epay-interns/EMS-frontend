@@ -113,7 +113,7 @@ const handleVerifyCaptca = (response) => {
                 <button type="submit" class="login__container__body__form__group__button">Sign in</button>
             </div>
 
-            <GoogleLogin :callback="googleLogin">
+            <GoogleLogin :callback="googleLogin" class="login__container__body__form__group">
 
                 <img src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png" alt="">
                 Sign in with Google
