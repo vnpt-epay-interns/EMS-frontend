@@ -4,7 +4,7 @@ import Task from '../components/Task.vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { VUE_APP_BACKEND_URL } from '../../../env'
-import Draggable from 'vueDraggable';
+import Draggable from 'vuedraggable';
 
 const store = inject('store')
 const router = useRouter()
