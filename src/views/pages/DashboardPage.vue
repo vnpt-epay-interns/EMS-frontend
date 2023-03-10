@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { VUE_APP_BACKEND_URL } from '../../../env'
 import Draggable from 'vueDraggable';
-
+import AdminPage from './AdminPage.vue';
 const store = inject('store')
 const router = useRouter()
 const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
@@ -111,7 +111,8 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="dashboard">
+    <AdminPage v-if="store.state.user.role == 'ADMIN'" />
+    <div v-else class="dashboard">
         <div class="heading">
             <div class="left__side">
                 <font-awesome-icon icon="fa-solid fa-magnifying-glass" />

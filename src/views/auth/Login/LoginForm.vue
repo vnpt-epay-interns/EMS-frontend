@@ -1,6 +1,5 @@
 <script setup>
-  import { VueRecaptcha } from 'vue-recaptcha';
-
+import { VueRecaptcha } from 'vue-recaptcha';
 import ErrorText from '../../components/ErrorText.vue';
 import { ref, inject } from 'vue'
 import axios from 'axios'
