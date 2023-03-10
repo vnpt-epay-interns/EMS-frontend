@@ -5,6 +5,7 @@
     import { ref, inject } from 'vue'
     import axios from 'axios';
     import { useRoute } from 'vue-router'
+    import ErrorText from '../components/ErrorText.vue';
     
     const store = inject('store')
     const route = useRoute()
@@ -16,11 +17,33 @@
     }
     const content = ref('')
     const title = ref('')
+    const errorMessage = ref('')
+    const isValidTitle = ref(true)
+    const isValidContent = ref(true)
+
+    const validateField = () => {
+        if (title.value === '') {
+            errorMessage.value = 'Title is required'
+            isValidTitle.value = false
+        }
+        else if (content.value === '') {
+            errorMessage.value = 'Content is required'
+            isValidContent.value = false
+        }
+        setTimeout(() => {
+            errorMessage.value = ''
+            isValidTitle.value = true
+            isValidContent.value = true
+        }, 1500)
+    }
     const reset = () => {
         content.value = ''
         title.value = ''
     }
     const submit = async () => {
+        validateField()
+        if (errorMessage !== '') return
+
         const body = {
             content: content.value,
             title: title.value, 
@@ -49,9 +72,13 @@
     <div class="container">
         <header>
             <label for="title">Report Title: </label>
-            <input type="text" id="title" v-model="title">
+            <div class="title_field">
+                <input type="text" id="title" v-model="title">
+                <ErrorText v-if="!isValidTitle" :errorMessage="errorMessage"/>
+            </div>
         </header>
         <QuillEditor theme="snow" toolbar="full" ref="editor" content-type="html" placeholder="Type here.... " v-model:content="content"/>
+        <ErrorText v-if="!isValidContent" :errorMessage="errorMessage"/>
         <footer>
             <button class="save-btn" @click="submit">Save</button>
         </footer>
@@ -69,6 +96,13 @@
     header {
         display: flex;
         gap: 10px;
+    }
+
+    .text_field #title {
+        height: 100%;
+        width: 300px;
+        border: 1px solid #ccc;
+        padding-left: 5px;
     }
 
     .ql-editor {

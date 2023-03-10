@@ -10,6 +10,7 @@
     const router = useRouter()
     // list selected employees for manager
     const employees = ref([])
+    const projects = ref([])
     const isDisabled = ref(false)
     const errorMessage = ref('')
     const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
@@ -32,6 +33,8 @@
     const startDate = ref(new Date().toISOString().substring(0, 10))
     const endDate = ref(new Date().toISOString().substring(0, 10))
     const employeeName = ref('')
+    const projectId = ref('')
+    const projectName = ref('')
 
     const resetTask = () => {
         title.value = null
@@ -44,7 +47,7 @@
         completion.value = null           
         startDate.value = new Date().toISOString().substring(0, 10)
         endDate.value = new Date().toISOString().substring(0, 10)
-        employeeName.value = null
+        projectId.value = null
     }
 
     const isValidTitle = ref(true)
@@ -55,6 +58,7 @@
     const isValidEstimateHours = ref(true)
     const isValidCompletion = ref(true)
     const isValidEndDate = ref(true)
+    const isValidProjectId = ref(true)
 
     const resetValid = () => {
         isValidTitle.value = true
@@ -65,10 +69,15 @@
         isValidEstimateHours.value = true
         isValidCompletion.value = true
         isValidEndDate.value = true
+        isValidProjectId.value = true
     }
 
     const isValidInput = () => {
-        if (title.value === null || title.value === '') {
+        if (projectId.value === null || projectId.value === '') {
+            errorMessage.value = 'Project is required'
+            isValidProjectId.value = false
+        }
+        else if (title.value === null || title.value === '') {
             errorMessage.value = 'Title is required'
             isValidTitle.value = false
         }
@@ -84,7 +93,7 @@
             errorMessage.value = 'Status is required'
             isValidStatus.value = false
         }
-        else if (employeeName.value === null || employeeName.value === '') {
+        else if (employeeId.value === null || employeeId.value === '') {
             errorMessage.value = 'Employee is required'
             isValidEmployeeName.value = false
         }
@@ -103,7 +112,7 @@
         else if (Date.parse(endDate.value) - Date.parse(startDate.value) < 0) {
             errorMessage.value = 'End date must be greater than start date'
             isValidEndDate.value = false
-        }   
+        } 
         setTimeout(() => {
             errorMessage.value = ''
             resetValid()
@@ -126,6 +135,8 @@
         startDate.value = task.startDate
         endDate.value = task.endDate
         employeeName.value = task.employeeName
+        projectId.value = task.projectId
+        projectName.value = task.projectName
     }
 
     if (window.location.pathname === '/task') {
@@ -140,6 +151,11 @@
         // get all employees for manager in TaskPage
         const allEmployeesResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-employees`, options)
         employees.value = allEmployeesResponse.data.data
+
+        // get all projects for manager in TaskPage
+        const allProjectsResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-projects`, options)
+        projects.value = allProjectsResponse.data.data
+
         store.state.isLoading = false
     })
 
@@ -164,8 +180,6 @@
                     store.state.popup.displayForMilliSecond(response.data.message, 2000)
                 }
             } else {
-                // get employee id from employee name
-                employeeId.value = employees.value.find(e => (e.firstName + " " + e.lastName) === employeeName.value).id 
                 const task = {
                     title: title.value,
                     description: description.value,
@@ -176,7 +190,8 @@
                     endDate: endDate.value,
                     employeeId: employeeId.value,
                     estimateHours: estimateHours.value,
-                    parentId: parentId.value
+                    parentId: parentId.value,
+                    projectId: projectId.value
                 }
 
                 isValidInput()
@@ -222,8 +237,16 @@
 
 <template>
     <div class="wrapper">
-        <header>
-            <h1>Project's Name</h1>
+        <header class="project">
+            <div class="project_field">
+                <h1>Project</h1>
+                <select v-model="projectId" :disabled="isDisabled">
+                    <option disabled value="">Please select one</option>
+                    <option v-if="store.state.user.role==='EMPLOYEE'" :value="projectId">{{ projectName }}</option>
+                    <option v-for="project of projects" :value="project.id">{{ project.name }}</option>
+                </select>
+            </div>
+            <ErrorText v-if="!isValidProjectId" :errorMessage="errorMessage" class="project_error-text"/>
         </header>
         <main>
             <div class="row-1">
@@ -272,10 +295,10 @@
                     </div>
                     <div class="in-charge">
                         <div>In-Charge</div>
-                        <select v-model="employeeName" :disabled="isDisabled">
+                        <select v-model="employeeId" :disabled="isDisabled">
                             <option disabled value="">Please select one</option>
-                            <option v-if="store.state.user.role==='EMPLOYEE'">{{ employeeName }}</option>
-                            <option v-for="employee of employees">{{ employee.firstName + " " + employee.lastName }}</option>
+                            <option v-if="store.state.user.role==='EMPLOYEE'" :value="employeeId">{{ employeeName }}</option>
+                            <option v-for="employee of employees" :value="employee.id">{{ employee.firstName + " " + employee.lastName }}</option>
                         </select>
                         <ErrorText v-if="!isValidEmployeeName" :errorMessage="errorMessage"/>
                     </div>
@@ -344,6 +367,22 @@
         flex-direction: column;
         gap:34px;
         padding: 20px;
+
+        .project {
+            display: flex;
+            flex-direction: column;
+
+            .project_field {
+                width: 95%;
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .project_error-text {
+                margin-left: 115px;
+            }
+        }
     }
     
     main {
