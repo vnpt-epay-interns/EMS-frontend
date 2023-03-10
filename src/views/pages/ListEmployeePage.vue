@@ -1,5 +1,6 @@
 <script setup>
 import '../../assets/employeeTable.scss'
+import EmployeeVue from '../components/Employee.vue';
 // import { RouterLink } from 'vue-router';
 
 // import { inject } from 'vue';
@@ -26,6 +27,7 @@ onMounted(async () => {
   const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-employees`, config)
   store.state.isLoading = false;
   employeeList.value = response.data.data;
+  
 });
 
 </script>
@@ -34,10 +36,9 @@ onMounted(async () => {
 <template>
   <div class="view-all-employee-page">
     <div class="header">
-      <h2>Overview</h2>
-      <h4>Employee List</h4>
+      <h2>Employee List</h2>
     </div>
-
+<!-- 
     <table class="table"> 
       <thead class="thead-light">
         <tr>
@@ -55,50 +56,36 @@ onMounted(async () => {
           <td>{{ employee.email }}</td>
         </tr>
       </tbody>
-    </table>
+    </table> -->
+    <div class="employee-container">
+      <div>
+        <EmployeeVue v-for="employee in employeeList" :key="employee.id" :employee="employee" />
+      </div>
+    </div>
   </div>
 
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 // Import the library
 
 .view-all-employee-page {
+  width: 100%;
   padding: 10px;
   margin: 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
 
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    border-spacing: 0;
-    font-size: 14px;
-
-    .thead-light {
-      background-color: #e9ecef;
-      color: var(--primary)
-    }
-
-    th, td {
-      padding: 8px;
-      text-align: left;
-      border: 1px solid black;
-      padding: 5px 10px;
-      
-    }
-
-  
-
-    .top-left {
-      border-top-left-radius: 10px;
-    }
-
-    .top-right {
-      border-top-right-radius: 10px;
+  .header {
+    h2 {
+      background: var(--primary);
+      color: white;
+      padding: 5px 5px 5px 10px;
+      border-radius: 5px;
     }
   }
+
 }
 
 </style> 
