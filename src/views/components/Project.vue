@@ -57,6 +57,7 @@ const {project} = defineProps(['project'])
         line-height: 24px;
         letter-spacing: 0.01em;
         text-transform: capitalize;
+        padding: 20px;
     }
 
     .created__at {
@@ -74,6 +75,10 @@ const {project} = defineProps(['project'])
         letter-spacing: 0.01em;
         text-transform: capitalize;
     }
+}
+
+.project__content__title {
+    padding: 10px;
 }
 
 .task__status__container {
