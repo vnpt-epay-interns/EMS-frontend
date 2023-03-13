@@ -121,7 +121,7 @@ const addReport = () => {
 <template>
     <AdminPage v-if="store.state.user.role == 'ADMIN'" />
     <div v-else class="dashboard">
-        <div class="heading">
+        <!-- <div class="heading">
             <div class="left__side">
                 <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
                 <input type="text" placeholder="Search items">
@@ -132,7 +132,7 @@ const addReport = () => {
             <div class="right__side" v-show="store.state.user.role === 'EMPLOYEE'">
                 <button class="add__task__btn" @click="addReport()">New Report</button>
             </div>
-        </div>
+        </div> -->
 
         <div class="column-container">
             <div class="column" v-for="[status, tasks] of Object.entries(tasksByStatus)">
@@ -140,8 +140,7 @@ const addReport = () => {
                     <h2 class="status__name">{{ status }}</h2>
                     <p class="status__amount">{{ tasks.length }}</p>
                 </div>
-                <Draggable class="draggable-area" :list="tasks" group="task" itemKey="status" @change="onChange"
-                    :id="status">
+                <Draggable class="draggable-area" :list="tasks" group="task" itemKey="status" @change="onChange" :id="status">
                     <template #item="{ element }">
                         <Task :task="element" />
                     </template>
@@ -153,7 +152,7 @@ const addReport = () => {
 
 <style lang="scss" scoped>
 .dashboard {
-    padding: 10px;
+    padding: 20px;
 
     // padding: 20px;
     .heading {
@@ -211,7 +210,7 @@ const addReport = () => {
             background: #E6ECF0;
             width: fit-content;
             padding: 10px;
-            min-height: 70vh;
+            min-height: 90vh;
             min-width: 250px;
             border-radius: 10px;
 

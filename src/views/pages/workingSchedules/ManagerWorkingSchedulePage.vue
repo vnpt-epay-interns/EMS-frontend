@@ -1,7 +1,7 @@
 <template>
     <div class="calendar">
         <header>
-            <p class="year">{{ new Date().getFullYear() }}</p>
+            <p class="year">{{ year }}</p>
             <button @click="prevMonth" class="btn btn-">
                 <font-awesome-icon icon="fa-solid fa-chevron-left" />
             </button>

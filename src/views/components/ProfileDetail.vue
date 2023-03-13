@@ -80,10 +80,12 @@ watchEffect(async () => {
         },
     };
 
-    store.state.isLoading = true;
-    const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-referenced-code`, config)
-    referenceCode.value = response.data.data.referenceCode
-    store.state.isLoading = false;
+    if (store.state.user.role === 'MANAGER') {
+        store.state.isLoading = true;
+        const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-referenced-code`, config)
+        referenceCode.value = response.data.data.referenceCode
+        store.state.isLoading = false;
+    }
 }
 
 )

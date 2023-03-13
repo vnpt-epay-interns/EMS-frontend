@@ -1,5 +1,5 @@
 <script setup>
-import { ref, inject } from 'vue';
+import { ref, inject, computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -19,8 +19,6 @@ const shorthand = (projectName) => {
 }
 
 shortProjectName.value = shorthand(props.task.projectName)
-
-flag.value = props.task.priority === 'LOW' ? 'priority-low' : props.task.priority === 'HIGH' ? 'priority-high' : 'priority-medium'
 
 // delete task feature
 // const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
@@ -70,7 +68,8 @@ const viewReports = () => {
                 <div class="reports" title="Report" @click.stop="viewReports">
                     <font-awesome-icon icon="fa-solid fa-newspaper" /> {{ task.numberReports }}
                 </div>
-                <div class="priority" :id="flag" :title="task.priority">
+                <div class="priority" 
+                :id="flag = task.priority === 'LOW' ? 'priority-low' : task.priority === 'HIGH' ? 'priority-high' : 'priority-medium'" :title="task.priority">
                     <font-awesome-icon class="fa" icon="fa-solid fa-flag" />
                 </div>
 

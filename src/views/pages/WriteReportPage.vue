@@ -42,7 +42,7 @@
     }
     const submit = async () => {
         validateField()
-        if (errorMessage !== '') return
+        if (errorMessage.value !== '') return
 
         const body = {
             content: content.value,
