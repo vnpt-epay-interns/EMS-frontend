@@ -30,11 +30,11 @@
         >Working Schedule</RouterLink
       >
       <RouterLink
-        to="/task"
+        to="/new-task"
         class="nav__item"
         active-class="highlight"
         v-if="store.state.user.role == 'MANAGER'"
-        :class="path.startsWith('/task') ? 'highlight' : ''"
+        :class="path.startsWith('/new-task') ? 'highlight' : ''"
         >Task
       </RouterLink>
       <RouterLink

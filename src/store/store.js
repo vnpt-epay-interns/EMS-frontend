@@ -30,6 +30,7 @@ const state = reactive({
     showSidebar: false,
     tasks: null,
     task: null,
+    subtask: null,
     report: null
 }) 
 
