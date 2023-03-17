@@ -134,8 +134,6 @@ const router = createRouter({
 
 
 export const doRouting = () => {
-
-
     if (store.state.user) {
 
         // check if user has verified email
