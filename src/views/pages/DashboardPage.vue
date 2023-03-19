@@ -123,6 +123,8 @@ const fetchTasks = async () => {
       options
     );
     tasks.value = allEmployeesResponse.data.data;
+    console.log('tasks.value', tasks.value);
+    
   }
   store.state.isLoading = false;
 
@@ -154,52 +156,34 @@ watchEffect(async () => {
   <AdminPage v-if="store.state.user.role == 'ADMIN'" />
   <div v-else class="dashboard">
     <!-- <div class="heading">
-            <div class="left__side">
-                <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
-                <input type="text" placeholder="Search items">
-            </div>
-            <div class="right__side" v-if="store.state.user?.role === 'MANAGER'">
-                <button class="add__task__btn" @click="navigateNewTaskPage()">New Task</button>
-            </div>
-            <div class="right__side" v-show="store.state.user.role === 'EMPLOYEE'">
-                <button class="add__task__btn" @click="addReport()">New Report</button>
-            </div>
-        </div> -->
+              <div class="left__side">
+                  <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+                  <input type="text" placeholder="Search items">
+              </div>
+              <div class="right__side" v-if="store.state.user?.role === 'MANAGER'">
+                  <button class="add__task__btn" @click="navigateNewTaskPage()">New Task</button>
+              </div>
+              <div class="right__side" v-show="store.state.user.role === 'EMPLOYEE'">
+                  <button class="add__task__btn" @click="addReport()">New Report</button>
+              </div>
+          </div> -->
 
     <div class="column-container">
-      <div
-        class="column"
-        v-for="[status, tasks] of Object.entries(tasksByStatus)"
-      >
+      <div class="column" v-for="[status, tasks] of Object.entries(tasksByStatus)">
         <div class="status__info">
           <h2 class="status__name">{{ status }}</h2>
           <p class="status__amount">{{ tasks.length }}</p>
         </div>
-        <Draggable
-          class="draggable-area"
-          :list="tasks"
-          group="task"
-          itemKey="status"
-          @change="onChange"
-          :id="status"
-        >
+        <Draggable class="draggable-area" :list="tasks" group="task" itemKey="status" @change="onChange" :id="status">
           <template #item="{ element }">
-            <Task
-              :task="element"
-              @click="openModal(element)"
-              
-            />
+            <Task :task="element" @click="openModal(element)" />
           </template>
         </Draggable>
       </div>
     </div>
   </div>
 
-  <TaskModal
-    @closeModal="closeModal"
-    v-if="showModal && currentTask"
-    :task="currentTask"
-  />
+  <TaskModal @closeModal="closeModal" v-if="showModal && currentTask" :task="currentTask" />
 </template>
 
 <style lang="scss" scoped>
@@ -263,7 +247,6 @@ watchEffect(async () => {
       min-height: 90vh;
       min-width: 250px;
       border-radius: 10px;
-
       .status__info {
         display: flex;
         align-items: center;
@@ -288,9 +271,11 @@ watchEffect(async () => {
       }
 
       .draggable-area {
-        height: 100%;
-        min-height: 70vh;
+        // background: red;
+
+        min-height: 80vh;
         height: 450px;
+
         overflow-y: auto;
         display: flex;
         flex-direction: column;
@@ -298,10 +283,12 @@ watchEffect(async () => {
         gap: 10px;
         // cursor: pointer;
 
+
         &::-webkit-scrollbar-track {
-          -webkit-box-shadow: inset 0 0 6px rgb(169, 169, 169);
-          background-color: white;
+          -webkit-box-shadow: inset 0 0 6px rgb(255, 255, 255);
+          background-color: white
         }
+
 
         &::-webkit-scrollbar {
           width: 6px;
@@ -348,3 +335,64 @@ watchEffect(async () => {
   }
 }
 </style>
+
+.column {
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #E6ECF0;
+  width: fit-content;
+  padding: 10px;
+  height: 90vh;
+  min-width: 250px;
+  border-radius: 10px;
+
+  .status__info {
+      display: flex;
+      align-items: center;
+      align-items: center;
+      gap: 20px;
+
+      .status__name {
+          font-size: 15px;
+          font-weight: 700;
+      }
+
+      .status__amount {
+          font-size: 13px;
+          width: 30px;
+          height: 30px;
+          text-align: center;
+          line-height: 30px;
+          font-weight: 500;
+          background: #D5D5D5;
+          border-radius: 50%;
+      }
+  }
+
+  .draggable-area {
+      height: 100%;
+      min-height: 70vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      padding: 0 10px 10px 0;
+      gap: 10px;
+      // cursor: pointer;
+
+      &::-webkit-scrollbar-track {
+          -webkit-box-shadow: inset 0 0 6px rgb(169, 169, 169);
+          background-color: white
+      }
+
+      &::-webkit-scrollbar {
+          width: 6px;
+          background-color: white;
+      }
+
+      &::-webkit-scrollbar-thumb {
+          background-color: var(--primary);
+      }
+
+  }
