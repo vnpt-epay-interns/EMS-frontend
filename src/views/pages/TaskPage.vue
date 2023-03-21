@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, inject, watchEffect } from 'vue'
+    import { ref, inject, watchEffect, computed } from 'vue'
     import { useRoute, useRouter } from 'vue-router'
     import { VUE_APP_BACKEND_URL } from '../../../env'
     import ErrorText from '../components/ErrorText.vue'
@@ -11,7 +11,6 @@
     // list selected employees for manager
     const employees = ref([])
     const projects = ref([])
-    const isDisabled = ref(false)
     const errorMessage = ref('')
     const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
     const options = {
@@ -20,7 +19,8 @@
         }
     }
 
-    const task = store.state.task
+    const task = ref()
+    const subtask = ref(store.state.subtask)
 
     const title = ref('')
     const parentId = ref(null)
@@ -38,7 +38,6 @@
 
     const resetTask = () => {
         title.value = null
-        parentId.value = null
         description.value = null
         priority.value = null
         status.value = null
@@ -47,7 +46,10 @@
         completion.value = null           
         startDate.value = new Date().toISOString().substring(0, 10)
         endDate.value = new Date().toISOString().substring(0, 10)
-        projectId.value = null
+        if (!route.path.includes('/add-subtask')) {
+            parentId.value = null
+            projectId.value = null
+        }
     }
 
     const isValidTitle = ref(true)
@@ -119,32 +121,42 @@
         }, 1500)
     }
 
-    if (store.state.user.role === 'EMPLOYEE') {
-        isDisabled.value = true
-    }
-    
-    if (task !== null) {
-        title.value = task.title
-        parentId.value = task.parentId
-        description.value = task.description
-        priority.value = task.priority
-        status.value = task.status
-        employeeId.value = task.employeeId
-        estimateHours.value = task.estimateHours
-        completion.value = task.completion
-        startDate.value = task.startDate
-        endDate.value = task.endDate
-        employeeName.value = task.employeeName
-        projectId.value = task.projectId
-        projectName.value = task.projectName
-    }
+    const isDisabled = computed(() => {
+        if (store.state.user.role === 'EMPLOYEE') {
+            return true
+        }
 
-    if (window.location.pathname === '/task') {
+        return false
+    })
+
+    if (window.location.pathname === '/new-task' || window.location.pathname.includes('add-subtask')) {
         resetTask()
     }   
 
+    if (subtask.value !== null) {
+        parentId.value = subtask.value.parentId
+        projectName.value = subtask.value.projectName
+        projectId.value = subtask.value.projectId
+    }
+
     watchEffect( async () => {
-        if (store.state.user.role !== 'MANAGER') {
+        if (store.state.user.role === 'EMPLOYEE') {
+            const taskByIdResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/employee/get-task/${route.params.id}`, options)
+            task.value = taskByIdResponse.data.data 
+
+            title.value = task.value.title
+            parentId.value = task.value.parentId
+            description.value = task.value.description
+            priority.value = task.value.priority
+            status.value = task.value.status
+            employeeId.value = task.value.employeeId
+            estimateHours.value = task.value.estimateHours
+            completion.value = task.value.completion
+            startDate.value = task.value.startDate
+            endDate.value = task.value.endDate
+            employeeName.value = task.value.employeeName
+            projectId.value = task.value.projectId
+            projectName.value = task.value.projectName
             return
         }
         store.state.isLoading = true
@@ -155,6 +167,29 @@
         // get all projects for manager in TaskPage
         const allProjectsResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-projects`, options)
         projects.value = allProjectsResponse.data.data
+
+        if (route.path.includes('/task-details')) {
+            console.log('task details');
+            if (store.state.user.role === 'MANAGER') {
+                // get task by id for manager in TaskPage
+                const taskByIdResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-task/${route.params.id}`, options)
+                task.value = taskByIdResponse.data.data 
+            }
+
+            title.value = task.value.title
+            parentId.value = task.value.parentId
+            description.value = task.value.description
+            priority.value = task.value.priority
+            status.value = task.value.status
+            employeeId.value = task.value.employeeId
+            estimateHours.value = task.value.estimateHours
+            completion.value = task.value.completion
+            startDate.value = task.value.startDate
+            endDate.value = task.value.endDate
+            employeeName.value = task.value.employeeName
+            projectId.value = task.value.projectId
+            projectName.value = task.value.projectName
+        }
 
         store.state.isLoading = false
     })
@@ -179,7 +214,8 @@
                 } else {
                     store.state.popup.displayForMilliSecond(response.data.message, 2000)
                 }
-            } else {
+            } else {             
+
                 const task = {
                     title: title.value,
                     description: description.value,
@@ -199,7 +235,7 @@
                     return
                 }
 
-                if (route.params.id !== undefined) {
+                if (route.path.includes('/task-details')) {
                     const response = await axios.put(`${VUE_APP_BACKEND_URL}/api/manager/update-task/${route.params.id}`, task, {
                         headers: {
                             "Authorization": `Bearer ${token}`,
@@ -212,8 +248,9 @@
                     } else {
                         store.state.popup.displayForMilliSecond(response.data.message, 2000)
                     }
-                } else {
+                } else if (route.path.includes('/new-task') || route.path.includes('/add-subtask')) {
                     const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/manager/create-task`, task, options)
+                    console.log(response.data);
                     if (response.data.status === 200) {
                         store.state.popup.displayForMilliSecond(response.data.message, 2000, true)
                         // after creating successfully, reset all fields
@@ -240,7 +277,7 @@
         <header class="project">
             <div class="project_field">
                 <h1>Project</h1>
-                <select v-model="projectId" :disabled="isDisabled">
+                <select v-model="projectId" :disabled="isDisabled || route.path.includes('/add-subtask')">
                     <option disabled value="">Please select one</option>
                     <option v-if="store.state.user.role==='EMPLOYEE'" :value="projectId">{{ projectName }}</option>
                     <option v-for="project of projects" :value="project.id">{{ project.name }}</option>
@@ -258,7 +295,7 @@
 
                 <div class="parent_task-Field">
                     <label for="parent-task">Parent Task</label>
-                    <input type="text" id="parent-task" v-model="parentId" :disabled="isDisabled">
+                    <input type="text" id="parent-task" v-model="parentId" :disabled="isDisabled || route.path.includes('/add-subtask')">
                     <ErrorText v-if="!isValidParentId" :errorMessage="errorMessage"/>
                 </div>
             </div>
@@ -284,7 +321,7 @@
                     </div>
                     <div class="status">
                         <div>Status</div>
-                        <select v-model="status" >
+                        <select v-model="status" :disabled="isDisabled && employeeId !== store.state.user.id && parentId !== ''">
                             <option disabled value="">Please select one</option>
                             <option>NEW</option>
                             <option value="IN_PROGRESS">IN-PROGRESS</option>
@@ -307,8 +344,9 @@
                 <div class="additional-field">
                     <div class="done">
                         <div>Completion(%)</div>
-                        <select v-model="completion">
+                        <select v-model="completion" :disabled="isDisabled && employeeId !== store.state.user.id && parentId !== ''">
                             <option disabled value="">Please select one</option>
+                            <option>0</option>
                             <option>10</option>
                             <option>20</option>
                             <option>30</option>
@@ -340,7 +378,7 @@
             </div>
             <footer>
                 <button @click="addReportForTask" v-show="store.state.user.role==='EMPLOYEE'">Add Report</button>
-                <button @click="handleClick">Save</button>
+                <button @click="handleClick" :disabled="isDisabled && employeeId !== store.state.user.id && parentId !== ''">Save</button>
             </footer>
         </main>
     </div>

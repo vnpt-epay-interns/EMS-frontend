@@ -21,10 +21,15 @@ const togglePassword = () => {
 
 const formLogin = async () => {
 
-    if (recaptcha.value === null) {
+    if (password.value === '') {
+        errorMessage.value = 'Password is required'
+        return
+    }
+    else if (recaptcha.value === null) {
         errorMessage.value = 'Please verify the captcha'
         return
     }
+
 
     // login to get the accessToken
     const body = {

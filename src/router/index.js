@@ -86,13 +86,18 @@ const router = createRouter({
             component: ViewAllReports
         },
         {
-            path: '/task',
+            path: '/new-task',
             name: "TaskPage",
             component: TaskPage
         },
         {
-            path: '/task/:id',
+            path: '/task-details/:id',
             name: "TaskDetailsPage",
+            component: TaskPage
+        },
+        {
+            path: '/task/:id/add-subtask',
+            name: "AddSubtaskPage",
             component: TaskPage
         },
         {
@@ -129,8 +134,6 @@ const router = createRouter({
 
 
 export const doRouting = () => {
-
-
     if (store.state.user) {
 
         // check if user has verified email
