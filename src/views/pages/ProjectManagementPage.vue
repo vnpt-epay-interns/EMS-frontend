@@ -2,8 +2,10 @@
     <div class="project__management__page">
         <h1>Projects</h1>
         <div class="add__project__form">
-            <input type="text" placeholder="Enter new project name">
-            <button>+</button>
+            <input type="text" placeholder="Enter new project name" v-model="name">
+            <div @click="handleSave">
+                <button type="submit" @keyup.enter="submit">+</button>
+            </div>
         </div>
         <div class="project__container" v-for="project in projectList">
             <project :project="project" />
@@ -34,11 +36,33 @@ watchEffect(async () => {
     store.state.isLoading = true;
     const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-projects`, config);
     store.state.isLoading = false;
-    console.log(response.data);
     projectList.value = response.data.data;
-    console.log(projectList.value);
 
-    })
+})
+
+const name = ref()
+
+const handleSave = async () => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${store.state.accessToken}`,
+        },
+    };
+    const body = {
+        name: name.value,
+    }
+
+    store.state.isLoading = true;
+    const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/manager/create-project`, body, config)
+    store.state.isLoading = false;
+    if (response.data.status == 200) {
+        store.state.popup.displayForMilliSecond(response.data.message, 2000, true);
+    }
+    else {
+        store.state.popup.displayForMilliSecond(response.data.message, 2000, false);
+    }
+}
 </script>
 
 <style lang="scss" scoped>

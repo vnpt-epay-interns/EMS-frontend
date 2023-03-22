@@ -115,7 +115,7 @@ const handleVerifyCaptca = (response) => {
             </div>
 
             <div class="login__container__body__form__group">
-                <button type="submit" class="login__container__body__form__group__button">Sign in</button>
+                <button type="submit" class="login__container__body__form__group__button" @keyup.enter="submit">Sign in</button>
             </div>
 
             <GoogleLogin :callback="googleLogin" class="login__container__body__form__group">

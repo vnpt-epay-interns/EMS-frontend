@@ -64,11 +64,11 @@ const handleSave = async () => {
             'Content-Type': 'multipart/form-data'
         }
     };
-
+    console.log('asd');
     store.state.isLoading = true;
     const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/auth/change-avatar`, formData, config);
     store.state.isLoading = false;
-
+    console.log('after hhihi'); 
 
     if (response.data.status != 200) {
         store.state.popup.displayForMilliSecond(response.data.message, 2000, false);
