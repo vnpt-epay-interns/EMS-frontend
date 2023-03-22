@@ -1,17 +1,14 @@
 <script setup>
-import { ref, inject, watchEffect } from "vue";
-import Task from "../components/Task.vue";
-import { useRouter } from "vue-router";
-import axios from "axios";
-import { VUE_APP_BACKEND_URL } from "../../../env";
-import Draggable from "vueDraggable";
-import TaskModal from "../components/TaskModal.vue";
-const store = inject("store");
-const router = useRouter();
-const token =
-  localStorage.getItem("accessToken") === null
-    ? store.state.accessToken
-    : localStorage.getItem("accessToken");
+import { ref, onMounted, inject, watch, watchEffect } from 'vue'
+import Task from '../components/Task.vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+import { VUE_APP_BACKEND_URL } from '../../../env'
+import Draggable from 'vuedraggable';
+
+const store = inject('store')
+const router = useRouter()
+const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
 const options = {
   headers: {
     Authorization: `Bearer ${token}`,
