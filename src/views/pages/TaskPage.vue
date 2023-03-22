@@ -250,10 +250,10 @@
                     }
                 } else if (route.path.includes('/new-task') || route.path.includes('/add-subtask')) {
                     const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/manager/create-task`, task, options)
-                    console.log(response.data);
+
                     if (response.data.status === 200) {
                         store.state.popup.displayForMilliSecond(response.data.message, 2000, true)
-                        // after creating successfully, reset all fields
+                        // reset task if create new task successfully
                         resetTask()
                     } else {
                         store.state.popup.displayForMilliSecond(response.data.message, 2000)

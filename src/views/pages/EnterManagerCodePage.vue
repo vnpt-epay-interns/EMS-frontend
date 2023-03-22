@@ -80,7 +80,7 @@ const handleSubmit = async () => {
     </main>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 main {
     background-color: var(--primary);
     display: flex;
@@ -152,6 +152,8 @@ main {
 }
 
 header {
+    display: flex;
+    flex-direction: column;
     margin-bottom: 56px;
     font-style: normal;
 }

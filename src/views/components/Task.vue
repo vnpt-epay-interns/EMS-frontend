@@ -46,7 +46,7 @@ const viewReports = () => {
     <div class="task__content" :title="task.description">
       <h1 class="task__title">
         <span class="project-name" title="Project name">{{
-          shortProjectName
+          props.task.projectName
         }}</span>
         <span class="title" title="Title">{{ task.title }}</span>
       </h1>

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, inject, watch, watchEffect } from 'vue'
 import Task from '../components/Task.vue';
+import TaskModal from '../components/TaskModal.vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { VUE_APP_BACKEND_URL } from '../../../env'
