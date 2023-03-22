@@ -86,13 +86,18 @@ const router = createRouter({
             component: ViewAllReports
         },
         {
-            path: '/task',
+            path: '/new-task',
             name: "TaskPage",
             component: TaskPage
         },
         {
-            path: '/task/:id',
+            path: '/task-details/:id',
             name: "TaskDetailsPage",
+            component: TaskPage
+        },
+        {
+            path: '/task/:id/add-subtask',
+            name: "AddSubtaskPage",
             component: TaskPage
         },
         {
@@ -129,8 +134,6 @@ const router = createRouter({
 
 
 export const doRouting = () => {
-
-
     if (store.state.user) {
 
         // check if user has verified email
@@ -177,9 +180,6 @@ export const fetchUserInfoAndDoRouting = async () => {
     store.state.isLoading = true
     const userInfoResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/auth/user-info`, options);
     store.state.user = userInfoResponse.data.data;
-    console.log('after fetching');
-
-    console.log(store.state.user);
     store.state.isLoading = false
 
     // do routing based on user info

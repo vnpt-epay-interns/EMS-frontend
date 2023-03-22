@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, inject, watchEffect } from 'vue'
+    import { ref, inject, watchEffect, computed } from 'vue'
     import { useRoute, useRouter } from 'vue-router'
     import { VUE_APP_BACKEND_URL } from '../../../env'
     import ErrorText from '../components/ErrorText.vue'
@@ -10,7 +10,7 @@
     const router = useRouter()
     // list selected employees for manager
     const employees = ref([])
-    const isDisabled = ref(false)
+    const projects = ref([])
     const errorMessage = ref('')
     const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
     const options = {
@@ -19,7 +19,8 @@
         }
     }
 
-    const task = store.state.task
+    const task = ref()
+    const subtask = ref(store.state.subtask)
 
     const title = ref('')
     const parentId = ref(null)
@@ -32,10 +33,11 @@
     const startDate = ref(new Date().toISOString().substring(0, 10))
     const endDate = ref(new Date().toISOString().substring(0, 10))
     const employeeName = ref('')
+    const projectId = ref('')
+    const projectName = ref('')
 
     const resetTask = () => {
         title.value = null
-        parentId.value = null
         description.value = null
         priority.value = null
         status.value = null
@@ -44,7 +46,10 @@
         completion.value = null           
         startDate.value = new Date().toISOString().substring(0, 10)
         endDate.value = new Date().toISOString().substring(0, 10)
-        employeeName.value = null
+        if (!route.path.includes('/add-subtask')) {
+            parentId.value = null
+            projectId.value = null
+        }
     }
 
     const isValidTitle = ref(true)
@@ -55,6 +60,7 @@
     const isValidEstimateHours = ref(true)
     const isValidCompletion = ref(true)
     const isValidEndDate = ref(true)
+    const isValidProjectId = ref(true)
 
     const resetValid = () => {
         isValidTitle.value = true
@@ -65,10 +71,15 @@
         isValidEstimateHours.value = true
         isValidCompletion.value = true
         isValidEndDate.value = true
+        isValidProjectId.value = true
     }
 
     const isValidInput = () => {
-        if (title.value === null || title.value === '') {
+        if (projectId.value === null || projectId.value === '') {
+            errorMessage.value = 'Project is required'
+            isValidProjectId.value = false
+        }
+        else if (title.value === null || title.value === '') {
             errorMessage.value = 'Title is required'
             isValidTitle.value = false
         }
@@ -84,7 +95,7 @@
             errorMessage.value = 'Status is required'
             isValidStatus.value = false
         }
-        else if (employeeName.value === null || employeeName.value === '') {
+        else if (employeeId.value === null || employeeId.value === '') {
             errorMessage.value = 'Employee is required'
             isValidEmployeeName.value = false
         }
@@ -103,43 +114,83 @@
         else if (Date.parse(endDate.value) - Date.parse(startDate.value) < 0) {
             errorMessage.value = 'End date must be greater than start date'
             isValidEndDate.value = false
-        }   
+        } 
         setTimeout(() => {
             errorMessage.value = ''
             resetValid()
         }, 1500)
     }
 
-    if (store.state.user.role === 'EMPLOYEE') {
-        isDisabled.value = true
-    }
-    
-    if (task !== null) {
-        title.value = task.title
-        parentId.value = task.parentId
-        description.value = task.description
-        priority.value = task.priority
-        status.value = task.status
-        employeeId.value = task.employeeId
-        estimateHours.value = task.estimateHours
-        completion.value = task.completion
-        startDate.value = task.startDate
-        endDate.value = task.endDate
-        employeeName.value = task.employeeName
-    }
+    const isDisabled = computed(() => {
+        if (store.state.user.role === 'EMPLOYEE') {
+            return true
+        }
 
-    if (window.location.pathname === '/task') {
+        return false
+    })
+
+    if (window.location.pathname === '/new-task' || window.location.pathname.includes('add-subtask')) {
         resetTask()
     }   
 
+    if (subtask.value !== null) {
+        parentId.value = subtask.value.parentId
+        projectName.value = subtask.value.projectName
+        projectId.value = subtask.value.projectId
+    }
+
     watchEffect( async () => {
-        if (store.state.user.role !== 'MANAGER') {
+        if (store.state.user.role === 'EMPLOYEE') {
+            const taskByIdResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/employee/get-task/${route.params.id}`, options)
+            task.value = taskByIdResponse.data.data 
+
+            title.value = task.value.title
+            parentId.value = task.value.parentId
+            description.value = task.value.description
+            priority.value = task.value.priority
+            status.value = task.value.status
+            employeeId.value = task.value.employeeId
+            estimateHours.value = task.value.estimateHours
+            completion.value = task.value.completion
+            startDate.value = task.value.startDate
+            endDate.value = task.value.endDate
+            employeeName.value = task.value.employeeName
+            projectId.value = task.value.projectId
+            projectName.value = task.value.projectName
             return
         }
         store.state.isLoading = true
         // get all employees for manager in TaskPage
         const allEmployeesResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-employees`, options)
         employees.value = allEmployeesResponse.data.data
+
+        // get all projects for manager in TaskPage
+        const allProjectsResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-projects`, options)
+        projects.value = allProjectsResponse.data.data
+
+        if (route.path.includes('/task-details')) {
+            console.log('task details');
+            if (store.state.user.role === 'MANAGER') {
+                // get task by id for manager in TaskPage
+                const taskByIdResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-task/${route.params.id}`, options)
+                task.value = taskByIdResponse.data.data 
+            }
+
+            title.value = task.value.title
+            parentId.value = task.value.parentId
+            description.value = task.value.description
+            priority.value = task.value.priority
+            status.value = task.value.status
+            employeeId.value = task.value.employeeId
+            estimateHours.value = task.value.estimateHours
+            completion.value = task.value.completion
+            startDate.value = task.value.startDate
+            endDate.value = task.value.endDate
+            employeeName.value = task.value.employeeName
+            projectId.value = task.value.projectId
+            projectName.value = task.value.projectName
+        }
+
         store.state.isLoading = false
     })
 
@@ -163,9 +214,8 @@
                 } else {
                     store.state.popup.displayForMilliSecond(response.data.message, 2000)
                 }
-            } else {
-                // get employee id from employee name
-                employeeId.value = employees.value.find(e => (e.firstName + " " + e.lastName) === employeeName.value).id 
+            } else {             
+
                 const task = {
                     title: title.value,
                     description: description.value,
@@ -176,7 +226,8 @@
                     endDate: endDate.value,
                     employeeId: employeeId.value,
                     estimateHours: estimateHours.value,
-                    parentId: parentId.value
+                    parentId: parentId.value,
+                    projectId: projectId.value
                 }
 
                 isValidInput()
@@ -184,7 +235,7 @@
                     return
                 }
 
-                if (route.params.id !== undefined) {
+                if (route.path.includes('/task-details')) {
                     const response = await axios.put(`${VUE_APP_BACKEND_URL}/api/manager/update-task/${route.params.id}`, task, {
                         headers: {
                             "Authorization": `Bearer ${token}`,
@@ -197,8 +248,9 @@
                     } else {
                         store.state.popup.displayForMilliSecond(response.data.message, 2000)
                     }
-                } else {
+                } else if (route.path.includes('/new-task') || route.path.includes('/add-subtask')) {
                     const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/manager/create-task`, task, options)
+                    console.log(response.data);
                     if (response.data.status === 200) {
                         store.state.popup.displayForMilliSecond(response.data.message, 2000, true)
                         // after creating successfully, reset all fields
@@ -222,8 +274,16 @@
 
 <template>
     <div class="wrapper">
-        <header>
-            <h1>Project's Name</h1>
+        <header class="project">
+            <div class="project_field">
+                <h1>Project</h1>
+                <select v-model="projectId" :disabled="isDisabled || route.path.includes('/add-subtask')">
+                    <option disabled value="">Please select one</option>
+                    <option v-if="store.state.user.role==='EMPLOYEE'" :value="projectId">{{ projectName }}</option>
+                    <option v-for="project of projects" :value="project.id">{{ project.name }}</option>
+                </select>
+            </div>
+            <ErrorText v-if="!isValidProjectId" :errorMessage="errorMessage" class="project_error-text"/>
         </header>
         <main>
             <div class="row-1">
@@ -235,7 +295,7 @@
 
                 <div class="parent_task-Field">
                     <label for="parent-task">Parent Task</label>
-                    <input type="text" id="parent-task" v-model="parentId" :disabled="isDisabled">
+                    <input type="text" id="parent-task" v-model="parentId" :disabled="isDisabled || route.path.includes('/add-subtask')">
                     <ErrorText v-if="!isValidParentId" :errorMessage="errorMessage"/>
                 </div>
             </div>
@@ -261,7 +321,7 @@
                     </div>
                     <div class="status">
                         <div>Status</div>
-                        <select v-model="status" >
+                        <select v-model="status" :disabled="isDisabled && employeeId !== store.state.user.id && parentId !== ''">
                             <option disabled value="">Please select one</option>
                             <option>NEW</option>
                             <option value="IN_PROGRESS">IN-PROGRESS</option>
@@ -272,10 +332,10 @@
                     </div>
                     <div class="in-charge">
                         <div>In-Charge</div>
-                        <select v-model="employeeName" :disabled="isDisabled">
+                        <select v-model="employeeId" :disabled="isDisabled">
                             <option disabled value="">Please select one</option>
-                            <option v-if="store.state.user.role==='EMPLOYEE'">{{ employeeName }}</option>
-                            <option v-for="employee of employees">{{ employee.firstName + " " + employee.lastName }}</option>
+                            <option v-if="store.state.user.role==='EMPLOYEE'" :value="employeeId">{{ employeeName }}</option>
+                            <option v-for="employee of employees" :value="employee.id">{{ employee.firstName + " " + employee.lastName }}</option>
                         </select>
                         <ErrorText v-if="!isValidEmployeeName" :errorMessage="errorMessage"/>
                     </div>
@@ -284,8 +344,9 @@
                 <div class="additional-field">
                     <div class="done">
                         <div>Completion(%)</div>
-                        <select v-model="completion">
+                        <select v-model="completion" :disabled="isDisabled && employeeId !== store.state.user.id && parentId !== ''">
                             <option disabled value="">Please select one</option>
+                            <option>0</option>
                             <option>10</option>
                             <option>20</option>
                             <option>30</option>
@@ -301,7 +362,7 @@
                     </div>
                     <div class="estimate-field">
                         <label for="estimate">Estimate Time</label>
-                        <input type="text" id="estimate" v-model="estimateHours" :disabled="isDisabled">
+                        <input type="number" id="estimate" v-model="estimateHours" :disabled="isDisabled">
                         <ErrorText v-if="!isValidEstimateHours" :errorMessage="errorMessage"/>
                     </div>
                     <div class="start_date-field">
@@ -317,7 +378,7 @@
             </div>
             <footer>
                 <button @click="addReportForTask" v-show="store.state.user.role==='EMPLOYEE'">Add Report</button>
-                <button @click="handleClick">Save</button>
+                <button @click="handleClick" :disabled="isDisabled && employeeId !== store.state.user.id && parentId !== ''">Save</button>
             </footer>
         </main>
     </div>
@@ -344,6 +405,22 @@
         flex-direction: column;
         gap:34px;
         padding: 20px;
+
+        .project {
+            display: flex;
+            flex-direction: column;
+
+            .project_field {
+                width: 95%;
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .project_error-text {
+                margin-left: 115px;
+            }
+        }
     }
     
     main {
