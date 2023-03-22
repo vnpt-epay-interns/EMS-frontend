@@ -65,7 +65,15 @@ const handleSave = async () => {
 
     store.state.isLoading = true;
     await axios.put(`${VUE_APP_BACKEND_URL}/api/auth/update-user-info`, body, config)
+    const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/auth/user-info`, config)
+    store.state.user = response.data.data
+
+    firstName.value = store.state.user.firstName
+    lastName.value = store.state.user.lastName
+    email.value = store.state.user.email
+
     store.state.isLoading = false;
+
 }
 
 const closeModal = () => {
