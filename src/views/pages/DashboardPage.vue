@@ -241,10 +241,11 @@ watchEffect(async () => {
       flex-direction: column;
       gap: 10px;
       background: #e6ecf0;
-      width: fit-content;
       padding: 10px;
-      min-height: 90vh;
       min-width: 250px;
+      min-height: 90vh;
+      width: fit-content;
+      max-width: 250px;
       border-radius: 10px;
       .status__info {
         display: flex;
@@ -334,64 +335,3 @@ watchEffect(async () => {
   }
 }
 </style>
-
-.column {
-
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  background: #E6ECF0;
-  width: fit-content;
-  padding: 10px;
-  height: 90vh;
-  min-width: 250px;
-  border-radius: 10px;
-
-  .status__info {
-      display: flex;
-      align-items: center;
-      align-items: center;
-      gap: 20px;
-
-      .status__name {
-          font-size: 15px;
-          font-weight: 700;
-      }
-
-      .status__amount {
-          font-size: 13px;
-          width: 30px;
-          height: 30px;
-          text-align: center;
-          line-height: 30px;
-          font-weight: 500;
-          background: #D5D5D5;
-          border-radius: 50%;
-      }
-  }
-
-  .draggable-area {
-      height: 100%;
-      min-height: 70vh;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      padding: 0 10px 10px 0;
-      gap: 10px;
-      // cursor: pointer;
-
-      &::-webkit-scrollbar-track {
-          -webkit-box-shadow: inset 0 0 6px rgb(169, 169, 169);
-          background-color: white
-      }
-
-      &::-webkit-scrollbar {
-          width: 6px;
-          background-color: white;
-      }
-
-      &::-webkit-scrollbar-thumb {
-          background-color: var(--primary);
-      }
-
-  }
