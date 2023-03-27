@@ -1,8 +1,7 @@
 <template>
   <div class="subtask"  @click="viewSubtaskDetails">
     <header>
-      <p>{{ subtask.title }}</p>
-      |
+      <p>{{ subtask.title }}</p>  
       <div>{{ subtask.employeeName }}</div>
     </header>
     <div class="info">
@@ -73,8 +72,11 @@ const viewSubtaskDetails = () => {
   header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     div {
       font-size: 10px;
+      width: 80px;
+      text-align: right;
     }
   }
 

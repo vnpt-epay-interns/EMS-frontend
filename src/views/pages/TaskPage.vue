@@ -249,8 +249,8 @@
                         store.state.popup.displayForMilliSecond(response.data.message, 2000)
                     }
                 } else if (route.path.includes('/new-task') || route.path.includes('/add-subtask')) {
+                    
                     const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/manager/create-task`, task, options)
-
                     if (response.data.status === 200) {
                         store.state.popup.displayForMilliSecond(response.data.message, 2000, true)
                         // reset task if create new task successfully
@@ -265,9 +265,25 @@
         }
         store.state.isLoading= false
     }
-
     const addReportForTask = () => {
         router.push({ name: "WriteReportForTaskPage", params: { id: route.params.id } })
+    }
+
+    const hideTask = async () => {
+        const id = route.params.id
+        store.state.isLoading = true
+        try {
+            const response = await axios.delete(`${VUE_APP_BACKEND_URL}/api/manager/hide-task/${id}`, options)
+            if (response.data.status === 200) {
+                store.state.popup.displayForMilliSecond(response.data.message, 2000, true)
+                router.push('/dashboard')
+            } else {
+                store.state.popup.displayForMilliSecond(response.data.message, 2000)
+            }
+        } catch (error) {
+            store.state.popup.displayForMilliSecond("Action failed", 2000)
+        }
+        store.state.isLoading = false
     }
     
 </script>
@@ -377,6 +393,7 @@
                 </div>
             </div>
             <footer>
+                <button @click="hideTask" v-show="route.path.includes('/task-details') && store.state.user.role === 'MANAGER'">Hide it and its subtasks</button>
                 <button @click="addReportForTask" v-show="store.state.user.role==='EMPLOYEE'">Add Report</button>
                 <button @click="handleClick" :disabled="isDisabled && employeeId !== store.state.user.id && parentId !== ''">Save</button>
             </footer>

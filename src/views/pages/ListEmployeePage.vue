@@ -27,6 +27,17 @@ watchEffect(async () => {
   const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-employees`, config)
   store.state.isLoading = false;
   employeeList.value = response.data.data;
+
+  // Sort employeeList by id
+  employeeList.value.sort((a, b) => {
+    if (a.id < b.id) {
+      return -1;
+    }
+    if (a.id > b.id) {
+      return 1;
+    }
+    return 0;
+  })
   
 });
 

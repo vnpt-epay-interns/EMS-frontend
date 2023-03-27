@@ -112,7 +112,7 @@ const viewReports = () => {
 
     .task__title {
       font-size: 15px;
-      font-weight: 700;
+      font-weight: 400;
 
       .project-name {
         color: #e96479;
@@ -130,7 +130,7 @@ const viewReports = () => {
     .task__assignee {
       font-size: 12px;
       font-weight: 500;
-      background: #0013fe;
+      background: var(--primary);
       min-width: 70px;
       border-radius: 5px;
       text-align: center;
