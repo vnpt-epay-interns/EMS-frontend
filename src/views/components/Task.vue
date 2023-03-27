@@ -249,4 +249,31 @@ const viewReports = () => {
     }
   }
 }
+
+@media (max-width: 1600px) {
+  .task {
+    .task__content {
+      .task__title {
+        font-size: 12px;
+      }
+
+      .task__assignee {
+        font-size: 10px;
+        border-radius: 3px;
+        min-width: 50px;
+      }
+    }
+
+    .task-info {
+      width: 100%;
+      display: flex;
+      gap: 10px;
+      border-top: 1px solid #ccc;
+
+      div {
+        font-size: 12px;
+      }
+    }
+  }
+}
 </style>
