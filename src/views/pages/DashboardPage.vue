@@ -292,6 +292,16 @@ watchEffect(async () => {
   }
 }
 
+@media (max-width: 1600px) {
+  .dashboard {
+
+    .column-container {
+      .column {
+        min-width: 275px;
+      }
+    }
+  }
+}
 @media (max-width: 1400px) {
   .dashboard {
     .heading {
@@ -324,14 +334,4 @@ watchEffect(async () => {
   }
 }
 
-@media (max-width: 1600px) {
-  .dashboard {
-
-    .column-container {
-      .column {
-        min-width: 275px;
-      }
-    }
-  }
-}
 </style>
