@@ -35,12 +35,6 @@ const openModal = (task) => {
   currentTask.value = task;
 };
 
-// const navigateNewTaskPage = () => {
-//     router.push({
-//         name: "TaskPage"
-//     })
-// }
-
 const onChange = (e) => {
   let item = e.added || e.moved;
   if (!item) return;
@@ -144,9 +138,6 @@ watchEffect(async () => {
   fetchTasks();
 });
 
-// const addReport = () => {
-//     router.push({ name: "WriteReportPage" })
-// }
 </script>
 
 <template>

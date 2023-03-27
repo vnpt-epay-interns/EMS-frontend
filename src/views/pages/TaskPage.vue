@@ -140,40 +140,28 @@
     }
 
     watchEffect( async () => {
+        store.state.isLoading = true
+
         if (store.state.user.role === 'EMPLOYEE') {
             const taskByIdResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/employee/get-task/${route.params.id}`, options)
             task.value = taskByIdResponse.data.data 
-
-            title.value = task.value.title
-            parentId.value = task.value.parentId
-            description.value = task.value.description
-            priority.value = task.value.priority
-            status.value = task.value.status
-            employeeId.value = task.value.employeeId
-            estimateHours.value = task.value.estimateHours
-            completion.value = task.value.completion
-            startDate.value = task.value.startDate
-            endDate.value = task.value.endDate
-            employeeName.value = task.value.employeeName
-            projectId.value = task.value.projectId
-            projectName.value = task.value.projectName
-            return
         }
-        store.state.isLoading = true
-        // get all employees for manager in TaskPage
-        const allEmployeesResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-employees`, options)
-        employees.value = allEmployeesResponse.data.data
-
-        // get all projects for manager in TaskPage
-        const allProjectsResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-projects`, options)
-        projects.value = allProjectsResponse.data.data
+        
+        if (store.state.user.role === 'MANAGER') {
+            // get all employees for manager in TaskPage
+            const allEmployeesResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-employees`, options)
+            employees.value = allEmployeesResponse.data.data
+    
+            // get all projects for manager in TaskPage
+            const allProjectsResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-projects`, options)
+            projects.value = allProjectsResponse.data.data
+        }
 
         if (route.path.includes('/task-details')) {
-            console.log('task details');
             if (store.state.user.role === 'MANAGER') {
                 // get task by id for manager in TaskPage
                 const taskByIdResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-task/${route.params.id}`, options)
-                task.value = taskByIdResponse.data.data 
+                task.value = taskByIdResponse.data.data
             }
 
             title.value = task.value.title

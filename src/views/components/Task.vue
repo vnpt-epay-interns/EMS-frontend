@@ -20,18 +20,6 @@ const shorthand = (projectName) => {
 
 shortProjectName.value = shorthand(props.task.projectName);
 
-// delete task feature
-// const token = localStorage.getItem('accessToken') === null ? store.state.accessToken : localStorage.getItem('accessToken')
-// const closeModal = async () => {
-//     await axios.delete(`${VUE_APP_BACKEND_URL}/manager/tasks/delete/${props.task.id}`, {
-//         headers: {
-//             "Authorization": `Bearer ${token}`,
-//             'Content-Type': 'application/json'
-//         }
-//     })
-
-// }
-
 const viewReports = () => {
   router.push({
     name: "ViewAllReportsForTaskPage",
@@ -42,7 +30,6 @@ const viewReports = () => {
 
 <template>
   <div class="task">
-    <!-- <div class="close__modal__btn" @click="closeModal">&times;</div> -->
     <div class="task__content" :title="task.description">
       <h1 class="task__title">
         <span class="project-name" title="Project name">{{

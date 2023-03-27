@@ -36,6 +36,11 @@ watchEffect(async () => {
   
   store.state.isLoading= true;
   let response;
+  if (task.numberSubtasks === 0) {
+    store.state.isLoading = false;
+    return;
+  }
+
   if (store.state.user.role === 'MANAGER') {
     response = await axios.get(
       `${VUE_APP_BACKEND_URL}/api/manager/get-all-subtasks/${task.id}`,
