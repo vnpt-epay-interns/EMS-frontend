@@ -111,7 +111,7 @@ const handleVerifyCaptca = (response) => {
                 </div>
             </div>
             <div class="recaptcha-container">
-                <VueRecaptcha class="recaptcha" sitekey="6LfQf90kAAAAAPzEvbUPR9wb4QC7qcCY-YIIEDOt" @verify="handleVerifyCaptca"/>
+                <VueRecaptcha class="recaptcha" sitekey="6LdQzD4lAAAAADiQ-TgbWUqMWhb-rFvYmC0SC_2O" @verify="handleVerifyCaptca"/>
             </div>
 
             <div class="login__container__body__form__group">
@@ -119,7 +119,6 @@ const handleVerifyCaptca = (response) => {
             </div>
 
             <GoogleLogin :callback="googleLogin" class="login__container__body__form__group">
-
                 <img src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png" alt="">
                 Sign in with Google
             </GoogleLogin>
