@@ -21,6 +21,6 @@ const app = createApp(App)
 app
     .use(router)
     .provide("store", store)
-    .use(vue3GoogleLogin, {clientId: '828625326282-k8fksboqf7e2q62j8i4s3o0kne477ovi.apps.googleusercontent.com'})
+    .use(vue3GoogleLogin, {clientId: '462456379026-lqaidolcunt933qhms2v2ir1ak26ts0t.apps.googleusercontent.com'})
     .component('font-awesome-icon', FontAwesomeIcon)
     .mount('#app')
