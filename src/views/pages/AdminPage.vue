@@ -33,10 +33,6 @@ const verifyManager = async (managerId) => {
     store.state.isLoading = false;
     fetchUnApprovedManagers()
 }
-watchEffect(() => {
-    fetchUnApprovedManagers();
-
-});
 
 const fetchUnApprovedManagers = async () => {
     const config = {
@@ -50,6 +46,10 @@ const fetchUnApprovedManagers = async () => {
     store.state.isLoading = false;
     unApprovedManagerList.value = response.data.data;
 }
+
+watchEffect(() => {
+    fetchUnApprovedManagers();
+});
 </script>
 
 <style lang="scss" scoped>

@@ -26,6 +26,7 @@
         Employee</RouterLink
       >
       <RouterLink to="/schedule" class="nav__item" active-class="highlight"
+      v-if="store.state.user.role !== 'ADMIN'"
       :class="path.startsWith('/schedule') ? 'highlight' : ''"
         >Working Schedule</RouterLink
       >
