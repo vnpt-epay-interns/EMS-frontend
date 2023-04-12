@@ -24,12 +24,6 @@ pipeline {
             }
         }
 
-        stage('Push') {
-            steps {
-                sh 'docker push $DOCKER_IMAGE:$DOCKER_TAG'
-            }
-        }
-
         stage('Deploy') {
             steps {
                 sh 'docker stop ems-fe || true'
