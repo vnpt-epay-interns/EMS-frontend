@@ -39,11 +39,11 @@
     const resetTask = () => {
         title.value = null
         description.value = null
-        priority.value = null
-        status.value = null
+        priority.value = 'LOW'
+        status.value = 'NEW'
         employeeId.value = null
         estimateHours.value = null
-        completion.value = null           
+        completion.value = 0           
         startDate.value = new Date().toISOString().substring(0, 10)
         endDate.value = new Date().toISOString().substring(0, 10)
         if (!route.path.includes('/add-subtask')) {

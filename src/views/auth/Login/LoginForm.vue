@@ -13,7 +13,7 @@ const email = ref('')
 const password = ref('')
 const showPassword = ref(false)
 const rememberMe = ref(true)
-const recaptcha = ref(true)
+const recaptcha = ref(null)
 
 const togglePassword = () => {
     showPassword.value = !showPassword.value
@@ -25,7 +25,7 @@ const formLogin = async () => {
         errorMessage.value = 'Password is required'
         return
     }
-    else if (recaptcha.value === null) {
+    else if (!recaptcha.value) {
         errorMessage.value = 'Please verify the captcha'
         return
     }
@@ -111,7 +111,7 @@ const handleVerifyCaptca = (response) => {
                 </div>
             </div>
             <div class="recaptcha-container">
-                <VueRecaptcha class="recaptcha" sitekey="6Lco1D4lAAAAAAajvJ3pmoBnwKktxW7iNNrh3ao4" @verify="handleVerifyCaptca"/>
+                <VueRecaptcha class="recaptcha" sitekey="6LfQf90kAAAAAPzEvbUPR9wb4QC7qcCY-YIIEDOt" @verify="handleVerifyCaptca"/>
             </div>
 
             <div class="login__container__body__form__group">
@@ -119,6 +119,7 @@ const handleVerifyCaptca = (response) => {
             </div>
 
             <GoogleLogin :callback="googleLogin" class="login__container__body__form__group">
+
                 <img src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png" alt="">
                 Sign in with Google
             </GoogleLogin>
