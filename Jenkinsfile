@@ -27,7 +27,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh 'docker stop ems-fe || true'
-                sh 'docker run $DOCKER_IMAGE:$DOCKER_TAG'
+                sh 'docker rm ems-fe || true'
             }
         }
     }
