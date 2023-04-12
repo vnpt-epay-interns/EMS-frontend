@@ -19,6 +19,7 @@ pipeline {
 
         stage('Test') {
             steps {
+                sh 'docker rm -f ems-fe || true'
                 sh 'docker run -d --name ems-fe -p 5174:5173 $DOCKER_IMAGE:$DOCKER_TAG'
             }
         }
@@ -32,7 +33,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh 'docker stop ems-fe || true'
-                sh 'docker rm -f ems-fe || true'
                 sh 'docker run $DOCKER_IMAGE:$DOCKER_TAG'
             }
         }
