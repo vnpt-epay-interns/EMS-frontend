@@ -96,7 +96,7 @@ const addSubtask = () => {
         <div class="header">
           <p><strong>Subtasks</strong>:</p>
 
-          <button class="add-btn" @click="addSubtask" v-if="store.state.user.role === 'MANAGER'">
+          <button class="add-btn" @click="addSubtask" v-if="['MANAGER', 'EMPLOYEE'].includes(store.state.user.role)">
             <font-awesome-icon class="fa" icon="fa-solid fa-plus" />
           </button>
         </div>

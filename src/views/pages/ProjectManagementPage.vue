@@ -34,7 +34,7 @@ watchEffect(async () => {
     };
 
     store.state.isLoading = true;
-    const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-projects`, config);
+    const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-project-information`, config);
     store.state.isLoading = false;
     projectList.value = response.data.data;
 
@@ -121,6 +121,7 @@ const handleSave = async () => {
         display: flex;
         flex-direction: column;
         gap: 25px;
+        width: 700px;
     }
 
 }

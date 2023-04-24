@@ -13,7 +13,7 @@ const email = ref('')
 const password = ref('')
 const showPassword = ref(false)
 const rememberMe = ref(true)
-const recaptcha = ref(null)
+const recaptcha = ref(true)
 
 const togglePassword = () => {
     showPassword.value = !showPassword.value
