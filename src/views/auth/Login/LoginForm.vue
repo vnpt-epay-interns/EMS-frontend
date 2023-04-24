@@ -111,7 +111,7 @@ const handleVerifyCaptca = (response) => {
                 </div>
             </div>
             <div class="recaptcha-container">
-                <VueRecaptcha class="recaptcha" sitekey="6LfQf90kAAAAAPzEvbUPR9wb4QC7qcCY-YIIEDOt" @verify="handleVerifyCaptca"/>
+                <VueRecaptcha class="recaptcha" sitekey="6Lfp93clAAAAAC-eWdE58zkZyiFPl7jUpPFt3W_B" @verify="handleVerifyCaptca"/>
             </div>
 
             <div class="login__container__body__form__group">
