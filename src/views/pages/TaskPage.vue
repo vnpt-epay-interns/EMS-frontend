@@ -297,10 +297,6 @@
         store.state.isLoading= false
     }
 
-    const addReportForTask = () => {
-        router.push({ name: "WriteReportForTaskPage", params: { id: route.params.id } })
-    }
-
     const hideTask = async () => {
         const id = route.params.id
         store.state.isLoading = true
@@ -426,7 +422,6 @@
             </div>
             <footer>
                 <button @click="hideTask" v-show="route.path.includes('/task-details') && store.state.user.role === 'MANAGER'">Hide it and its subtasks</button>
-                <button @click="addReportForTask" v-show="store.state.user.role==='EMPLOYEE'">Add Report</button>
                 <button @click="handleClick" :disabled="isDisabled && employeeId !== store.state.user.id && parentId !== ''">Save</button>
             </footer>
         </main>

@@ -1,6 +1,6 @@
 <script setup>
 import Subtask from "./Subtask.vue";
-import { ref, inject, computed, watchEffect } from "vue";
+import { ref, inject, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import { VUE_APP_BACKEND_URL } from '../../../env'

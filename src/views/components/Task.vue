@@ -1,31 +1,11 @@
 <script setup>
 import { ref, inject } from "vue";
-import { useRouter } from "vue-router";
 
-const router = useRouter();
 const flag = ref("");
 const store = inject("store");
 const props = defineProps({
   task: Object
 });
-const shortProjectName = ref("");
-const shorthand = (projectName) => {
-  let shortName = "";
-  let words = projectName.split(" ");
-  words.forEach((word) => {
-    shortName += word[0];
-  });
-  return shortName;
-};
-
-shortProjectName.value = shorthand(props.task.projectName);
-
-const viewReports = () => {
-  router.push({
-    name: "ViewAllReportsForTaskPage",
-    params: { id: props.task.id },
-  });
-};
 </script>
 
 <template>
@@ -61,10 +41,6 @@ const viewReports = () => {
         :title="task.priority"
       >
         <font-awesome-icon class="fa" icon="fa-solid fa-flag" />
-      </div>
-      <div class="reports" title="Report" @click.stop="viewReports" :class="task.numberReports ? '' : 'blur'"> 
-        <font-awesome-icon icon="fa-solid fa-newspaper" />
-        {{ task.numberReports }}
       </div>
       <div class="subtask-count" :class="task.numberSubtasks ? '' : 'blur'" title="Subtask">
         <font-awesome-icon class="fa" icon="fa-solid fa-list-check" />
