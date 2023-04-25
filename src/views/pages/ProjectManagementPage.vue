@@ -53,6 +53,11 @@ const handleSave = async () => {
         name: name.value,
     }
 
+    if (name.value == null || name.value == '') {
+        store.state.popup.displayForMilliSecond('Please enter project name', 2000, false);
+        return;
+    }
+
     store.state.isLoading = true;
     const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/manager/create-project`, body, config)
     store.state.isLoading = false;

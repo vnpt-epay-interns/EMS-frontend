@@ -71,19 +71,9 @@ const router = createRouter({
             component: ViewReportDetails
         },
         {
-            path: '/write-report/task/:id',
-            name: "WriteReportForTaskPage",
-            component: WriteReportPage
-        },
-        {
             path: '/write-report',
             name: "WriteReportPage",
             component: WriteReportPage
-        },
-        {
-            path: '/reports/task/:id',
-            name: "ViewAllReportsForTaskPage",
-            component: ViewAllReports
         },
         {
             path: '/new-task',

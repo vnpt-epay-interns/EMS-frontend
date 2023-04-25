@@ -203,7 +203,7 @@
         store.state.isLoading= true;
         try {
             if (store.state.user.role === 'EMPLOYEE') {
-                const response = null;
+                let response = null;
                 if (route.path.includes('task-details')) {
                         const task = {
                         status: status.value,
@@ -300,10 +300,6 @@
             store.state.popup.displayForMilliSecond("Action failed", 2000)
         }
         store.state.isLoading= false
-    }
-
-    const addReportForTask = () => {
-        router.push({ name: "WriteReportForTaskPage", params: { id: route.params.id } })
     }
 
     const hideTask = async () => {
@@ -450,9 +446,6 @@
             </div>
             <footer>
                 <button @click="hideTask" v-show="route.path.includes('/task-details') && store.state.user.role === 'MANAGER'">Hide it and its subtasks</button>
-                <button @click="addReportForTask" v-show="store.state.user.role==='EMPLOYEE'">Add Report</button>
-                <!-- TODO: view report button -->
-                <button @click="addReportForTask" v-show="store.state.user.role==='MANGER'">View Report (0)</button>
                 <button @click="handleClick" :disabled="isDisabled && employeeId !== store.state.user.id && parentId !== ''">Save</button>
             </footer>
         </main>
