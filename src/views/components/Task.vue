@@ -9,16 +9,7 @@ const props = defineProps({
   task: Object
 });
 const shortProjectName = ref("");
-const shorthand = (projectName) => {
-  let shortName = "";
-  let words = projectName.split(" ");
-  words.forEach((word) => {
-    shortName += word[0];
-  });
-  return shortName;
-};
 
-shortProjectName.value = shorthand(props.task.projectName);
 
 const viewReports = () => {
   router.push({
@@ -75,7 +66,7 @@ const viewReports = () => {
         <font-awesome-icon class="fa" icon="fa-solid fa-clock" />
         {{ task.endDate.substring(5) }}
       </div>
-
+      
       <div class="completion" title="Completion">
         <font-awesome-icon class="fa" icon="fa-solid fa-circle-check" />
         {{ task.completion }}%

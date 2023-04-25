@@ -35,6 +35,9 @@
     const employeeName = ref('')
     const projectId = ref('')
     const projectName = ref('')
+    const employeeReview = ref('')
+    const managerReview = ref('')
+
 
     const resetTask = () => {
         title.value = null
@@ -204,7 +207,8 @@
                 if (route.path.includes('task-details')) {
                         const task = {
                         status: status.value,
-                        completion: completion.value
+                        completion: completion.value,
+                        employeeReview: employeeReview.value,
                     }
                     response = await axios.put(`${VUE_APP_BACKEND_URL}/api/employee/update-task/${route.params.id}`, task , options)
                 
@@ -215,7 +219,6 @@
                         store.state.popup.displayForMilliSecond(response.data.message, 2000)
                     }
                 } else {
-                    // TODO: create task for employee
                     const task = {
                         title: title.value,
                         description: description.value,
@@ -227,7 +230,8 @@
                         employeeId: employeeId.value,
                         estimateHours: estimateHours.value,
                         parentId: parentId.value,
-                        projectId: projectId.value
+                        projectId: projectId.value,
+                        employeeReview: employeeReview.value,
                     }
 
                     isValidInput()
@@ -258,7 +262,8 @@
                     employeeId: employeeId.value,
                     estimateHours: estimateHours.value,
                     parentId: parentId.value,
-                    projectId: projectId.value
+                    projectId: projectId.value,
+                    managerReview: managerReview.value
                 }
 
                 isValidInput()
@@ -355,6 +360,25 @@
                 </div>
             </div>
 
+
+            <div class="row-3">
+                <!-- TODO: change the state -->
+                <div class="review-field">
+                    <label for="review">Employeee Review</label>
+                    <textarea name="review" id="review" v-model="employeeReview" :disabled="store.state.user.role === 'MANAGER'"></textarea>
+                </div>
+            </div>
+            
+
+            <div class="row-3">
+                <div class="review-field">
+                    <label for="review">Manger Review</label>
+                    <textarea name="review" id="review" v-model="managerReview" :disabled="store.state.user.role === 'EMPLOYEE'"></textarea>
+                </div>
+            </div>
+            
+            
+
             <div class="footer-field">
                 <div class="selected-field">
                     <div class="priority">
@@ -427,6 +451,8 @@
             <footer>
                 <button @click="hideTask" v-show="route.path.includes('/task-details') && store.state.user.role === 'MANAGER'">Hide it and its subtasks</button>
                 <button @click="addReportForTask" v-show="store.state.user.role==='EMPLOYEE'">Add Report</button>
+                <!-- TODO: view report button -->
+                <button @click="addReportForTask" v-show="store.state.user.role==='MANGER'">View Report (0)</button>
                 <button @click="handleClick" :disabled="isDisabled && employeeId !== store.state.user.id && parentId !== ''">Save</button>
             </footer>
         </main>

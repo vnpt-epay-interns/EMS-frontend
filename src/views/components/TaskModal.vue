@@ -89,8 +89,18 @@ const addSubtask = () => {
         <p><strong>Due date</strong>: {{ task.endDate }}</p>
       </div>
       <div class="description">
-        <p><strong>Description</strong>:</p>
+        <p><strong>Description:</strong>:</p>
         {{ task.description }}
+      </div>
+
+      <div class="employee-review" v-if="task.employeeReview">
+        <p><strong>Employee Review:</strong>:</p>
+        {{ task.employeeReview }}
+      </div>
+
+      <div class="manager-review" v-if="task.managerReview">
+        <p><strong>Manager Review:</strong>:</p>
+        {{ task.managerReview }}
       </div>
       <div class="subtask-container">
         <div class="header">
@@ -152,7 +162,8 @@ const addSubtask = () => {
         align-items: center;
         gap: 10px;
 
-        .edit-btn {
+        .edit-btn,
+        .write-review-btn {
           border: none;
           background: var(--primary);
           color: #ffffff;
