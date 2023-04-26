@@ -189,6 +189,8 @@
             employeeName.value = task.value.employeeName
             projectId.value = task.value.projectId
             projectName.value = task.value.projectName
+            managerReview.value = task.value.managerReview
+            employeeReview.value = task.value.employeeReview
         }
 
         store.state.isLoading = false
