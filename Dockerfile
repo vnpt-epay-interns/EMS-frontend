@@ -1,4 +1,4 @@
-FROM node:current-alpine3.17
+FROM node:latest
 WORKDIR /app
 COPY package.json .
 RUN npm install -f
