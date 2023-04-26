@@ -20,8 +20,6 @@ import { VUE_APP_BACKEND_URL } from '../../../env'
 import axios from 'axios';
 import { ref, watchEffect, inject } from 'vue';
 
-const name = ref()
-
 const store = inject('store');
 
 const projectList = ref([])
@@ -36,19 +34,13 @@ watchEffect(async () => {
     };
 
     store.state.isLoading = true;
-    const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-projects`, config);
+    const response = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-project-information`, config);
     store.state.isLoading = false;
     projectList.value = response.data.data;
 
 })
 
-const validate = () => {
-    if (name.value.trim() == '' || name.value.trim() == null) {
-        store.state.popup.displayForMilliSecond('Please enter project name', 2000, false);
-        return false;
-    }
-    return true;
-}
+const name = ref()
 
 const handleSave = async () => {
     const config = {
@@ -61,7 +53,10 @@ const handleSave = async () => {
         name: name.value,
     }
 
-    if (validate() == false) return;
+    if (name.value == null || name.value == '') {
+        store.state.popup.displayForMilliSecond('Please enter project name', 2000, false);
+        return;
+    }
 
     store.state.isLoading = true;
     const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/manager/create-project`, body, config)
@@ -131,6 +126,7 @@ const handleSave = async () => {
         display: flex;
         flex-direction: column;
         gap: 25px;
+        width: 700px;
     }
 
 }

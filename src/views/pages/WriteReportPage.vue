@@ -52,11 +52,9 @@
 
         let response = null;
         store.state.isLoading = true
-        if (window.location.pathname === '/write-report') {
-            response = await axios.post(`${VUE_APP_BACKEND_URL}/api/employee/write-report`, body , options)
-        } else {
-            response = await axios.post(`${VUE_APP_BACKEND_URL}/api/employee/write-report/task/${route.params.id}`, body , options)
-        }
+
+        response = await axios.post(`${VUE_APP_BACKEND_URL}/api/employee/write-report`, body , options)
+        
         store.state.isLoading = false
 
         if (response.data.status === 200) {

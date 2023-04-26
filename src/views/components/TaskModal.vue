@@ -1,6 +1,6 @@
 <script setup>
 import Subtask from "./Subtask.vue";
-import { ref, inject, computed, watchEffect } from "vue";
+import { ref, inject, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import { VUE_APP_BACKEND_URL } from '../../../env'
@@ -89,14 +89,24 @@ const addSubtask = () => {
         <p><strong>Due date</strong>: {{ task.endDate }}</p>
       </div>
       <div class="description">
-        <p><strong>Description</strong>:</p>
+        <p><strong>Description:</strong>:</p>
         {{ task.description }}
+      </div>
+
+      <div class="employee-review" v-if="task.employeeReview">
+        <p><strong>Employee Review:</strong>:</p>
+        {{ task.employeeReview }}
+      </div>
+
+      <div class="manager-review" v-if="task.managerReview">
+        <p><strong>Manager Review:</strong>:</p>
+        {{ task.managerReview }}
       </div>
       <div class="subtask-container">
         <div class="header">
           <p><strong>Subtasks</strong>:</p>
 
-          <button class="add-btn" @click="addSubtask" v-if="store.state.user.role === 'MANAGER'">
+          <button class="add-btn" @click="addSubtask" v-if="['MANAGER', 'EMPLOYEE'].includes(store.state.user.role)">
             <font-awesome-icon class="fa" icon="fa-solid fa-plus" />
           </button>
         </div>
@@ -152,7 +162,8 @@ const addSubtask = () => {
         align-items: center;
         gap: 10px;
 
-        .edit-btn {
+        .edit-btn,
+        .write-review-btn {
           border: none;
           background: var(--primary);
           color: #ffffff;

@@ -143,19 +143,6 @@ watchEffect(async () => {
 <template>
   <AdminPage v-if="store.state.user.role == 'ADMIN'" />
   <div v-else class="dashboard">
-    <!-- <div class="heading">
-              <div class="left__side">
-                  <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
-                  <input type="text" placeholder="Search items">
-              </div>
-              <div class="right__side" v-if="store.state.user?.role === 'MANAGER'">
-                  <button class="add__task__btn" @click="navigateNewTaskPage()">New Task</button>
-              </div>
-              <div class="right__side" v-show="store.state.user.role === 'EMPLOYEE'">
-                  <button class="add__task__btn" @click="addReport()">New Report</button>
-              </div>
-          </div> -->
-
     <div class="column-container">
       <div class="column" v-for="[status, tasks] of Object.entries(tasksByStatus)">
         <div class="status__info">

@@ -34,7 +34,7 @@
         to="/new-task"
         class="nav__item"
         active-class="highlight"
-        v-if="store.state.user.role == 'MANAGER'"
+        v-if="store.state.user.role == 'MANAGER' || store.state.user.role == 'EMPLOYEE'"
         :class="path.startsWith('/new-task') || path.startsWith('/task-details') || path.startsWith('/task')? 'highlight' : ''"
         >Task
       </RouterLink>

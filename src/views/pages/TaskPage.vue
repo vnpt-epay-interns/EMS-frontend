@@ -35,6 +35,9 @@
     const employeeName = ref('')
     const projectId = ref('')
     const projectName = ref('')
+    const employeeReview = ref('')
+    const managerReview = ref('')
+
 
     const resetTask = () => {
         title.value = null
@@ -122,7 +125,7 @@
     }
 
     const isDisabled = computed(() => {
-        if (store.state.user.role === 'EMPLOYEE') {
+        if (store.state.user.role === 'EMPLOYEE' && route.path.includes('/task-details')) {
             return true
         }
 
@@ -142,9 +145,13 @@
     watchEffect( async () => {
         store.state.isLoading = true
 
-        if (store.state.user.role === 'EMPLOYEE') {
-            const taskByIdResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/employee/get-task/${route.params.id}`, options)
-            task.value = taskByIdResponse.data.data 
+        if (store.state.user.role === 'EMPLOYEE' && (route.path.includes('/new-task') || route.path.includes('/add-subtask'))) {
+            // get all projects for employee in TaskPage
+            const allProjectsResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/employee/get-all-project-names`, options)
+            projects.value = allProjectsResponse.data.data
+
+            employeeName.value = store.state.user.firstName + ' ' + store.state.user.lastName
+            employeeId.value = store.state.user.id
         }
         
         if (store.state.user.role === 'MANAGER') {
@@ -153,7 +160,7 @@
             employees.value = allEmployeesResponse.data.data
     
             // get all projects for manager in TaskPage
-            const allProjectsResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-projects`, options)
+            const allProjectsResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-all-project-names`, options)
             projects.value = allProjectsResponse.data.data
         }
 
@@ -162,6 +169,11 @@
                 // get task by id for manager in TaskPage
                 const taskByIdResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/manager/get-task/${route.params.id}`, options)
                 task.value = taskByIdResponse.data.data
+            }
+
+            if (store.state.user.role === 'EMPLOYEE') {
+                const taskByIdResponse = await axios.get(`${VUE_APP_BACKEND_URL}/api/employee/get-task/${route.params.id}`, options)
+                task.value = taskByIdResponse.data.data 
             }
 
             title.value = task.value.title
@@ -191,19 +203,54 @@
         store.state.isLoading= true;
         try {
             if (store.state.user.role === 'EMPLOYEE') {
-                const task = {
-                    status: status.value,
-                    completion: completion.value
-                }
-                const response = await axios.put(`${VUE_APP_BACKEND_URL}/api/employee/update-task/${route.params.id}`, task , options)
-
-                if (response.data.status === 200) {
-                    store.state.popup.displayForMilliSecond(response.data.message, 2000, true)
+                let response = null;
+                if (route.path.includes('task-details')) {
+                        const task = {
+                        status: status.value,
+                        completion: completion.value,
+                        employeeReview: employeeReview.value,
+                    }
+                    response = await axios.put(`${VUE_APP_BACKEND_URL}/api/employee/update-task/${route.params.id}`, task , options)
+                
+                
+                    if (response.data.status === 200) {
+                        store.state.popup.displayForMilliSecond(response.data.message, 2000, true)
+                    } else {
+                        store.state.popup.displayForMilliSecond(response.data.message, 2000)
+                    }
                 } else {
-                    store.state.popup.displayForMilliSecond(response.data.message, 2000)
+                    const task = {
+                        title: title.value,
+                        description: description.value,
+                        status: status.value,
+                        completion: completion.value,
+                        priority: priority.value,
+                        startDate: startDate.value,
+                        endDate: endDate.value,
+                        employeeId: employeeId.value,
+                        estimateHours: estimateHours.value,
+                        parentId: parentId.value,
+                        projectId: projectId.value,
+                        employeeReview: employeeReview.value,
+                    }
+
+                    isValidInput()
+                    if (errorMessage.value !== '') {
+                        return
+                    }
+
+                    const response = await axios.post(`${VUE_APP_BACKEND_URL}/api/employee/create-task`, task, options)
+                    if (response.data.status === 200) {
+                        store.state.popup.displayForMilliSecond(response.data.message, 2000, true)
+                        // reset task if create new task successfully
+                        resetTask()
+                    } else {
+                        store.state.popup.displayForMilliSecond(response.data.message, 2000)
+                    }
+
                 }
             } else {             
-
+                // for manager
                 const task = {
                     title: title.value,
                     description: description.value,
@@ -215,7 +262,8 @@
                     employeeId: employeeId.value,
                     estimateHours: estimateHours.value,
                     parentId: parentId.value,
-                    projectId: projectId.value
+                    projectId: projectId.value,
+                    managerReview: managerReview.value
                 }
 
                 isValidInput()
@@ -252,9 +300,6 @@
             store.state.popup.displayForMilliSecond("Action failed", 2000)
         }
         store.state.isLoading= false
-    }
-    const addReportForTask = () => {
-        router.push({ name: "WriteReportForTaskPage", params: { id: route.params.id } })
     }
 
     const hideTask = async () => {
@@ -310,6 +355,25 @@
                     <textarea name="description" id="description" v-model="description" :disabled="isDisabled"></textarea>
                 </div>
             </div>
+
+
+            <div class="row-3">
+                <!-- TODO: change the state -->
+                <div class="review-field">
+                    <label for="review">Employeee Review</label>
+                    <textarea name="review" id="review" v-model="employeeReview" :disabled="store.state.user.role === 'MANAGER'"></textarea>
+                </div>
+            </div>
+            
+
+            <div class="row-3">
+                <div class="review-field">
+                    <label for="review">Manger Review</label>
+                    <textarea name="review" id="review" v-model="managerReview" :disabled="store.state.user.role === 'EMPLOYEE'"></textarea>
+                </div>
+            </div>
+            
+            
 
             <div class="footer-field">
                 <div class="selected-field">
@@ -382,7 +446,6 @@
             </div>
             <footer>
                 <button @click="hideTask" v-show="route.path.includes('/task-details') && store.state.user.role === 'MANAGER'">Hide it and its subtasks</button>
-                <button @click="addReportForTask" v-show="store.state.user.role==='EMPLOYEE'">Add Report</button>
                 <button @click="handleClick" :disabled="isDisabled && employeeId !== store.state.user.id && parentId !== ''">Save</button>
             </footer>
         </main>
